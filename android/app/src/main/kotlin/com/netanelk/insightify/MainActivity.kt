@@ -1,4 +1,4 @@
-package com.example.spotify_analyzer
+package com.netanelk.insightify
 
 import io.flutter.embedding.android.FlutterActivity
 

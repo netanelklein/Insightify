@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_analyzer/src/screens/welcome.dart';
+import 'src/screens/welcome.dart';
 
 import 'src/utils/database_helper.dart';
 import 'src/screens/loading_screen.dart';
-import 'package:spotify_analyzer/src/widgets/navigation/root_navigation.dart';
+import 'src/widgets/navigation/root_navigation.dart';
 import 'src/styles/color_schemes.g.dart';
 import 'app_state.dart';
 

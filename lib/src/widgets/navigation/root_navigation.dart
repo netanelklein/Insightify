@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotify_analyzer/src/screens/stats.dart';
-import 'package:spotify_analyzer/src/screens/top_albums.dart';
+import '../../screens/stats.dart';
+import '../../screens/top_albums.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../screens/top_artists.dart';
 import '../../screens/top_tracks.dart';
@@ -30,17 +30,14 @@ class _RootNavigationState extends State<RootNavigation> {
   Widget build(BuildContext context) {
     _minTime = context.watch<AppState>().minTime.toDouble();
     return Scaffold(
-      appBar: AppBar(
-          elevation: 2,
-          title: const Text('Spotify Data Analyzer'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () {
-                showSettingsModal(context);
-              },
-            ),
-          ]),
+      appBar: AppBar(elevation: 2, title: const Text('Insightify'), actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            showSettingsModal(context);
+          },
+        ),
+      ]),
       body: <Widget>[
         Stats(),
         const TopArtists(),

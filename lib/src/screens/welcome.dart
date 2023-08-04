@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Spotify Data Analyzer'),
+        title: const Text('Insightify'),
         elevation: 2,
       ),
       body: Padding(

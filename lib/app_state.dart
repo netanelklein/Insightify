@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spotify_analyzer/src/models/stream_history.dart';
+import 'src/models/stream_history.dart';
 import 'src/services/spotify_api_fetch.dart';
 import 'src/models/history.dart';
 import 'src/utils/database_helper.dart';

@@ -1,4 +1,4 @@
-import 'package:spotify_analyzer/src/services/spotify_api_fetch.dart';
+import 'package:insightify/src/services/spotify_api_fetch.dart';
 
 import '../utils/functions.dart';
 import 'track.dart';
