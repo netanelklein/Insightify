@@ -74,6 +74,34 @@ class DatabaseHelper {
     }
   }
 
+  Future<int> insertDataBatch(List<dynamic> data) async {
+    // Validate all data is of the same type
+    final type = _getDataType(data[0]);
+    for (final Map<String, dynamic> item in data) {
+      if (_getDataType(item) != type) {
+        return 0;
+      }
+    }
+
+    Batch batch = _database.batch();
+    switch (type) {
+      case 'extended':
+        for (final Map<String, dynamic> item in data) {
+          _insertExtendedData(item, batch);
+        }
+        break;
+      case 'non-extended':
+        for (final Map<String, dynamic> item in data) {
+          _insertNonExtendedData(item, batch);
+        }
+        break;
+      default:
+        return 0;
+    }
+    await batch.commit(noResult: true);
+    return 1;
+  }
+
   Future<int> insertData(Map<String, dynamic> data) async {
     final type = _getDataType(data);
     switch (type) {
@@ -86,7 +114,8 @@ class DatabaseHelper {
     }
   }
 
-  Future<int> _insertExtendedData(Map<String, dynamic> data) async {
+  Future<int> _insertExtendedData(Map<String, dynamic> data,
+      [Batch? batch]) async {
     Map<String, dynamic> mappedData = {
       'timestamp': data['ts'],
       'ms_played': data['ms_played'],
@@ -100,6 +129,31 @@ class DatabaseHelper {
       'skipped': (data['skipped'] != null && data['skipped']) ? 1 : 0,
       'offline': (data['offline'] != null && data['offline']) ? 1 : 0
     };
+
+    if (batch != null) {
+      batch.insert(
+          'artists',
+          {
+            'artist_name': data['master_metadata_album_artist_name'],
+            'image': null,
+            'spotify_id': null
+          },
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+
+      batch.insert(
+          'albums',
+          {
+            'album_name': data['master_metadata_album_album_name'],
+            'artist_name': data['master_metadata_album_artist_name'],
+            'cover_art': null,
+            'spotify_id': null
+          },
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+
+      batch.insert('stream_history', mappedData,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      return 1;
+    }
 
     await _database.insert(
         'artists',
@@ -124,7 +178,8 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<int> _insertNonExtendedData(Map<String, dynamic> data) async {
+  Future<int> _insertNonExtendedData(Map<String, dynamic> data,
+      [Batch? batch]) async {
     Map<String, dynamic> mappedData = {
       'timestamp': data['endTime'],
       'ms_played': data['msPlayed'],
@@ -132,6 +187,21 @@ class DatabaseHelper {
       'artist_name': data['artistName'],
       'skipped': data['msPlayed'] < 30000 ? 1 : 0
     };
+
+    if (batch != null) {
+      batch.insert(
+          'artists',
+          {
+            'artist_name': data['artistName'],
+            'image': null,
+            'spotify_id': null
+          },
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+
+      batch.insert('stream_history', mappedData,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      return 1;
+    }
 
     await _database.insert('artists',
         {'artist_name': data['artistName'], 'image': null, 'spotify_id': null},

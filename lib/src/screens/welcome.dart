@@ -24,12 +24,7 @@ class WelcomeScreen extends StatelessWidget {
         final contents = jsonDecode(File(file.path!).readAsStringSync());
         data.addAll(contents);
       }
-      state.dataLength = data.length;
-      state.dataProgress = 0;
-      for (var entry in data) {
-        await DatabaseHelper().insertData(entry);
-        state.setDataProgress = state.dataProgress + 1;
-      }
+      await DatabaseHelper().insertDataBatch(data);
       state.setLoading = false;
       state.setDataReady = true;
     }
