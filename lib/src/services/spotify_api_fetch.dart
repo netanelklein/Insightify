@@ -129,7 +129,7 @@ Future<List<String>> getTrackData(
 
 Future<Map<String, dynamic>> fetchMetadata(AccessToken token,
     List<String> trackIds, Map<String, String> trackAlbumMap) async {
-  if (token.accessToken == '' || trackIds.length > 50) {
+  if (token.accessToken == '' || trackIds.length > 50 || trackIds.isEmpty) {
     return {};
   }
 

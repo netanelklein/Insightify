@@ -17,7 +17,7 @@ class TrackTile extends StatelessWidget {
       required this.timesSkipped});
   final String trackName;
   final String artistName;
-  final String albumName;
+  final String? albumName;
   final int index;
   final int timePlayed;
   final int timesSkipped;
@@ -32,6 +32,14 @@ class TrackTile extends StatelessWidget {
         future: trackMetadata,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return ListTile(
+                leading: const Icon(Icons.music_note, size: 50),
+                title: Text('${index + 1}. $trackName - $artistName'),
+                subtitle: Text(
+                    'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+              );
+            }
             return ListTile(
               leading: (snapshot.data![0]['cover_art'] == null ||
                       snapshot.data![0]['cover_art'] == '')

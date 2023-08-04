@@ -19,6 +19,9 @@ class _TopAlbumsState extends State<TopAlbums> {
         future: topAlbums,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return const Center(child: Text('No albums found'));
+            }
             return Scaffold(
               body: Scrollbar(
                 thumbVisibility: true,

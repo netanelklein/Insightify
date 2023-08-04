@@ -327,7 +327,10 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getTrackMetadata(String artistName,
-      String albumName, String trackName, AccessToken token) async {
+      String? albumName, String trackName, AccessToken token) async {
+    if (albumName == null) {
+      return [];
+    }
     final metadata = await _database.rawQuery(
         'SELECT stream_history.track_uri, albums.cover_art FROM stream_history INNER JOIN albums ON stream_history.album_name = albums.album_name AND stream_history.artist_name = albums.artist_name WHERE stream_history.artist_name = ? AND stream_history.album_name = ? AND stream_history.track_name = ? LIMIT 1',
         [artistName, albumName, trackName]);
