@@ -236,10 +236,10 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getTopAlbums([String? artistName]) async {
     if (artistName == null) {
       return await _database.rawQuery(
-          'SELECT album_name, artist_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name IS NOT NULL GROUP BY album_name ORDER BY total_ms_played DESC');
+          'SELECT album_name, artist_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name IS NOT NULL GROUP BY artist_name, album_name ORDER BY total_ms_played DESC');
     }
     return await _database.rawQuery(
-        'SELECT album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name IS NOT NULL GROUP BY album_name ORDER BY total_ms_played DESC',
+        'SELECT album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name IS NOT NULL GROUP BY artist_name, album_name ORDER BY total_ms_played DESC',
         [artistName]);
   }
 
@@ -247,20 +247,20 @@ class DatabaseHelper {
       [String? artistName, String? albumName]) async {
     if (artistName == null && albumName == null) {
       return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE track_name IS NOT NULL GROUP BY track_name ORDER BY total_ms_played DESC');
+          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC');
     }
     if (artistName != null && albumName == null) {
       return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND track_name IS NOT NULL GROUP BY track_name ORDER BY total_ms_played DESC',
+          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
           [artistName]);
     }
     if (artistName == null && albumName != null) {
       return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name = ? AND track_name IS NOT NULL GROUP BY track_name ORDER BY total_ms_played DESC',
+          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
           [albumName]);
     }
     return await _database.rawQuery(
-        'SELECT track_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name = ? AND track_name IS NOT NULL GROUP BY track_name ORDER BY total_ms_played DESC',
+        'SELECT track_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
         [artistName, albumName]);
   }
 
