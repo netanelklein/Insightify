@@ -21,11 +21,19 @@ class ArtistTile extends StatelessWidget {
     final token = Provider.of<AppState>(context).accessToken;
     final artistMetadata =
         DatabaseHelper().getArtistMetadata(artistName, token);
+
     return FutureBuilder(
         future: artistMetadata,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListTile(
+              enabled: true,
+              onTap: () => showBottomSheet(
+                  // showDragHandle: true,
+                  context: context,
+                  builder: (context) {
+                    return Container();
+                  }),
               leading: (snapshot.data![0]['image'] == null ||
                       snapshot.data![0]['image'] == '')
                   ? const Icon(Icons.person, size: 50)
@@ -56,7 +64,12 @@ class ArtistTile extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return ListTile(
+              leading: const Icon(Icons.person, size: 50),
+              title: Text('${index + 1}. $artistName'),
+              subtitle: Text(
+                  'You listened to them for ${msToTimeString(timePlayed)}'),
+            );
           }
         });
   }

@@ -11,7 +11,6 @@ class TopArtists extends StatefulWidget {
 
 class _TopArtistsState extends State<TopArtists> {
   final topArtists = DatabaseHelper().getTopArtists();
-  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +18,29 @@ class _TopArtistsState extends State<TopArtists> {
       future: topArtists,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Scaffold(
-            body: Scrollbar(
-              thumbVisibility: true,
-              radius: const Radius.circular(10),
-              interactive: true,
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                      child: ArtistTile(
-                          artistName: snapshot.data![index]['artist_name'],
-                          index: index,
-                          timePlayed: snapshot.data![index]
-                              ['total_ms_played']));
-                },
-              ),
-            ),
-          );
+          return SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return Column(
+                children: [
+                  ArtistTile(
+                      artistName: snapshot.data![index]['artist_name'],
+                      index: index,
+                      timePlayed: snapshot.data![index]['total_ms_played']),
+                  const Divider(
+                    height: 0,
+                    thickness: 1,
+                    indent: 8,
+                    endIndent: 8,
+                  ),
+                ],
+              );
+            },
+            childCount: snapshot.data!.length,
+          ));
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()));
         }
       },
     );

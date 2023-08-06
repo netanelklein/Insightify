@@ -11,7 +11,6 @@ class TopAlbums extends StatefulWidget {
 
 class _TopAlbumsState extends State<TopAlbums> {
   final topAlbums = DatabaseHelper().getTopAlbums();
-  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,31 +21,30 @@ class _TopAlbumsState extends State<TopAlbums> {
             if (snapshot.data!.isEmpty) {
               return const Center(child: Text('No albums found'));
             }
-            return Scaffold(
-              body: Scrollbar(
-                thumbVisibility: true,
-                radius: const Radius.circular(10),
-                interactive: true,
-                controller: _scrollController,
-                child: ListView.builder(
-                  controller: _scrollController,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                        child: AlbumTile(
-                            artistName: snapshot.data![index]['artist_name'],
-                            albumName: snapshot.data![index]['album_name'],
-                            timePlayed: snapshot.data![index]
-                                ['total_ms_played'],
-                            index: index));
-                  },
-                ),
-              ),
-            );
+            return SliverList(
+                delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Column(
+                  children: [
+                    AlbumTile(
+                        artistName: snapshot.data![index]['artist_name'],
+                        albumName: snapshot.data![index]['album_name'],
+                        timePlayed: snapshot.data![index]['total_ms_played'],
+                        index: index),
+                    const Divider(
+                      height: 0,
+                      thickness: 1,
+                      indent: 8,
+                      endIndent: 8,
+                    ),
+                  ],
+                );
+              },
+              childCount: snapshot.data!.length,
+            ));
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator()));
           }
         });
   }

@@ -34,7 +34,7 @@ class AlbumTile extends StatelessWidget {
                 : Material(
                     elevation: 7,
                     child: Image.network(snapshot.data![0]['cover_art'])),
-            title: Text('${index + 1}. $albumName'),
+            title: Text('${index + 1}. $albumName - $artistName'),
             subtitle: Text(
                 'You listened to this album for ${msToTimeString(timePlayed)}'),
             trailing: PopupMenuButton<String>(
@@ -58,7 +58,12 @@ class AlbumTile extends StatelessWidget {
             ),
           );
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return ListTile(
+            leading: const Icon(Icons.album, size: 50),
+            title: Text('${index + 1}. $albumName - $artistName'),
+            subtitle: Text(
+                'You listened to this album for ${msToTimeString(timePlayed)}'),
+          );
         }
       },
     );

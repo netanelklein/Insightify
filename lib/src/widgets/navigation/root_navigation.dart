@@ -30,20 +30,38 @@ class _RootNavigationState extends State<RootNavigation> {
   Widget build(BuildContext context) {
     _minTime = context.watch<AppState>().minTime.toDouble();
     return Scaffold(
-      appBar: AppBar(elevation: 2, title: const Text('Insightify'), actions: [
-        IconButton(
-          icon: const Icon(Icons.settings),
-          onPressed: () {
-            showSettingsModal(context);
-          },
+      // appBar: AppBar(elevation: 2, title: const Text('Insightify'), actions: [
+      //   IconButton(
+      //     icon: const Icon(Icons.settings),
+      //     onPressed: () {
+      //       showSettingsModal(context);
+      //     },
+      //   ),
+      // ]),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Text('Insightify'),
+              floating: true,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    showSettingsModal(context);
+                  },
+                ),
+              ],
+            ),
+            <Widget>[
+              Stats(),
+              const TopArtists(),
+              const TopAlbums(),
+              const TopTracks()
+            ][_selectedIndex],
+          ],
         ),
-      ]),
-      body: <Widget>[
-        Stats(),
-        const TopArtists(),
-        const TopAlbums(),
-        const TopTracks()
-      ][_selectedIndex],
+      ),
       bottomNavigationBar: BottomNavigator(
         selectedIndex: _selectedIndex,
         onChange: setSelecteIndex,

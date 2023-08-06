@@ -70,43 +70,13 @@ class TrackTile extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return ListTile(
+              leading: const Icon(Icons.music_note, size: 50),
+              title: Text('${index + 1}. $trackName - $artistName'),
+              subtitle: Text(
+                  'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+            );
           }
         });
-    // Album album = history.getArtist(track.artistName).getAlbum(track.album);
-    // if (album.coverArtUrl == null) {
-    //   fetchAlbumCover(album, token, track.id);
-    // }
-    // String? coverUrl =
-    //     history.getArtist(track.artistName).getAlbum(track.album).coverArtUrl;
-    // return ListTile(
-    //   leading: coverUrl == null
-    //       ? const Icon(
-    //           Icons.music_note,
-    //           size: 50,
-    //         )
-    //       : ClipRRect(
-    //           borderRadius: BorderRadius.circular(5.0),
-    //           child: Image.network(coverUrl)),
-    //   title: Text('${index + 1}. ${track.title} - ${track.artistName}'),
-    //   subtitle: Text(track.toString()),
-    //   isThreeLine: true,
-    //   trailing: PopupMenuButton<String>(
-    //     onSelected: (String result) async {
-    //       Uri url = Uri.parse("spotify:track:${track.id}");
-    //       if (await canLaunchUrl(url)) {
-    //         await launchUrl(url);
-    //       } else {
-    //         // throw 'Could not launch $url';
-    //       }
-    //     },
-    //     itemBuilder: (context) => <PopupMenuEntry<String>>[
-    //       const PopupMenuItem<String>(
-    //         value: '1',
-    //         child: Text('Play in Spotify'),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }
