@@ -44,10 +44,17 @@ dependencies:
   localstorage: ^4.0.1+4
   sqflite: ^2.3.0
   path: ^1.8.3
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  image_path: "assets/icons/icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -68,13 +75,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-    - assets/json/StreamingHistory.json
-    - assets/json/Streaming_History_Audio_2017-2021_0.json
-    - assets/json/Streaming_History_Audio_2021-2023_1.json
-    - assets/json/Streaming_History_Audio_2023_2.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
