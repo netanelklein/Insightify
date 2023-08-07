@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Provider.of<AppState>(context).isDataReady) {
+    if (Provider.of<AppState>(context).isAppReady) {
       FlutterNativeSplash.remove();
     }
     return MaterialApp(
