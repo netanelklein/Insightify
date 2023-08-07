@@ -31,12 +31,6 @@ class _TopAlbumsState extends State<TopAlbums> {
                         albumName: snapshot.data![index]['album_name'],
                         timePlayed: snapshot.data![index]['total_ms_played'],
                         index: index),
-                    const Divider(
-                      height: 0,
-                      thickness: 1,
-                      indent: 8,
-                      endIndent: 8,
-                    ),
                   ],
                 );
               },

@@ -30,12 +30,6 @@ class _TopTracksState extends State<TopTracks> {
                         timePlayed: snapshot.data![index]['total_ms_played'],
                         timesSkipped: snapshot.data![index]['times_skipped'],
                         index: index),
-                    const Divider(
-                      height: 0,
-                      thickness: 1,
-                      indent: 8,
-                      endIndent: 8,
-                    ),
                   ],
                 );
               },

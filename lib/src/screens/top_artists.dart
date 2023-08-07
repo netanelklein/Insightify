@@ -27,12 +27,6 @@ class _TopArtistsState extends State<TopArtists> {
                       artistName: snapshot.data![index]['artist_name'],
                       index: index,
                       timePlayed: snapshot.data![index]['total_ms_played']),
-                  const Divider(
-                    height: 0,
-                    thickness: 1,
-                    indent: 8,
-                    endIndent: 8,
-                  ),
                 ],
               );
             },
