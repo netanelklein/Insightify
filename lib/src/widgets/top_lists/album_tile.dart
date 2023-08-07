@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
-import '../utils/database_helper.dart';
-import '../utils/functions.dart';
-import '../../app_state.dart';
+import '../../utils/database_helper.dart';
+import '../../utils/functions.dart';
+import '../../../app_state.dart';
 
 class AlbumTile extends StatelessWidget {
   const AlbumTile(

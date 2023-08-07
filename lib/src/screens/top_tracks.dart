@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/database_helper.dart';
-import '../widgets/track_tile.dart';
+import '../widgets/top_lists/track_tile.dart';
 
 class TopTracks extends StatefulWidget {
   const TopTracks({super.key});
@@ -28,6 +28,7 @@ class _TopTracksState extends State<TopTracks> {
                         albumName: snapshot.data![index]['album_name'],
                         trackName: snapshot.data![index]['track_name'],
                         timePlayed: snapshot.data![index]['total_ms_played'],
+                        timesPlayed: snapshot.data![index]['times_played'],
                         timesSkipped: snapshot.data![index]['times_skipped'],
                         index: index),
                   ],

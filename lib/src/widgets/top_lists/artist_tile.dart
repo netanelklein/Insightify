@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../screens/artist_page.dart';
-import '../utils/functions.dart';
-import '../utils/database_helper.dart';
-import '../../app_state.dart';
+import '../../screens/artist_page.dart';
+import '../../utils/functions.dart';
+import '../../utils/database_helper.dart';
+import '../../../app_state.dart';
 
 class ArtistTile extends StatelessWidget {
   const ArtistTile(

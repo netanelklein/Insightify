@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/artist_tile.dart';
+import '../widgets/top_lists/artist_tile.dart';
 import '../utils/database_helper.dart';
 
 class TopArtists extends StatefulWidget {

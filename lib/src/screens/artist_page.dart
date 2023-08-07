@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:insightify/src/utils/database_helper.dart';
-import 'package:insightify/src/widgets/album_tile.dart';
+import 'package:insightify/src/widgets/top_lists/album_tile.dart';
 
 import '../utils/functions.dart';
 

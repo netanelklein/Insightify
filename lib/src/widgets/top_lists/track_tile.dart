@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../app_state.dart';
-import '../utils/database_helper.dart';
-import '../utils/functions.dart';
+import '../../../app_state.dart';
+import '../../utils/database_helper.dart';
+import '../../utils/functions.dart';
 
 class TrackTile extends StatelessWidget {
   const TrackTile(
@@ -14,12 +14,14 @@ class TrackTile extends StatelessWidget {
       required this.albumName,
       required this.index,
       required this.timePlayed,
+      required this.timesPlayed,
       required this.timesSkipped});
   final String trackName;
   final String artistName;
   final String? albumName;
   final int index;
   final int timePlayed;
+  final int timesPlayed;
   final int timesSkipped;
 
   @override
@@ -48,7 +50,7 @@ class TrackTile extends StatelessWidget {
                   ],
                 ),
                 subtitle: Text(
-                    'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+                    'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
               );
             }
             return ListTile(
@@ -71,7 +73,7 @@ class TrackTile extends StatelessWidget {
                 ],
               ),
               subtitle: Text(
-                  'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+                  'You listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
               trailing: PopupMenuButton<String>(
                 onSelected: (String result) async {
                   Uri url = Uri.parse("${snapshot.data![0]['track_uri']}");
@@ -107,7 +109,7 @@ class TrackTile extends StatelessWidget {
                 ],
               ),
               subtitle: Text(
-                  'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+                  'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
             );
           }
         });

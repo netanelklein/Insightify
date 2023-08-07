@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/album_tile.dart';
+import '../widgets/top_lists/album_tile.dart';
 import '../utils/database_helper.dart';
 
 class TopAlbums extends StatefulWidget {
