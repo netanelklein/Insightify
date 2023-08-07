@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 
 import '../services/spotify_api_fetch.dart';
 
+enum OrderBy { total_ms_played, times_played }
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
 
@@ -13,6 +15,22 @@ class DatabaseHelper {
   static late Database _database;
 
   DatabaseHelper._internal();
+
+  int _minTime = 0;
+
+  int get getMinTime => _minTime;
+
+  set setMinTime(int value) {
+    _minTime = value;
+  }
+
+  OrderBy _orderBy = OrderBy.total_ms_played;
+
+  OrderBy get getOrderBy => _orderBy;
+
+  set setOrderBy(OrderBy value) {
+    _orderBy = value;
+  }
 
   static Future<void> initDatabase() async {
     _database = await openDatabase(
@@ -335,9 +353,10 @@ class DatabaseHelper {
         'SELECT stream_history.track_uri, albums.cover_art FROM stream_history INNER JOIN albums ON stream_history.album_name = albums.album_name AND stream_history.artist_name = albums.artist_name WHERE stream_history.artist_name = ? AND stream_history.album_name = ? AND stream_history.track_name = ? LIMIT 1',
         [artistName, albumName, trackName]);
     if (metadata[0]['cover_art'] == null) {
-      final albumMetadata =
-          await getAlbumMetadata(artistName, albumName, token);
-      metadata[0]['cover_art'] = albumMetadata[0]['cover_art'];
+      await getAlbumMetadata(artistName, albumName, token);
+      return await _database.rawQuery(
+          'SELECT stream_history.track_uri, albums.cover_art FROM stream_history INNER JOIN albums ON stream_history.album_name = albums.album_name AND stream_history.artist_name = albums.artist_name WHERE stream_history.artist_name = ? AND stream_history.album_name = ? AND stream_history.track_name = ? LIMIT 1',
+          [artistName, albumName, trackName]);
     }
     return metadata;
   }
