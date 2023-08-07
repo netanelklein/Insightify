@@ -38,6 +38,9 @@ Insightify includes the following features:
 - Search your top lists.
 - View your top lists by time period.
 - View your entire listening history.
+- Time of the Day statistics.
+- Avarage listening time per day statistics.
+- Filter your top lists by time period.
 
 ## Contributing
 
