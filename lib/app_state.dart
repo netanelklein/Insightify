@@ -19,6 +19,8 @@ class AppState extends ChangeNotifier {
 
   bool appReady = false;
 
+  bool get isAppReady => appReady;
+
   bool loading = false;
 
   int minTime = 0;
