@@ -30,19 +30,35 @@ class _RootNavigationState extends State<RootNavigation> {
   Widget build(BuildContext context) {
     _minTime = context.watch<AppState>().minTime.toDouble();
     return Scaffold(
-      // appBar: AppBar(elevation: 2, title: const Text('Insightify'), actions: [
-      //   IconButton(
-      //     icon: const Icon(Icons.settings),
-      //     onPressed: () {
-      //       showSettingsModal(context);
-      //     },
-      //   ),
-      // ]),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
             SliverAppBar(
-              title: const Text('Insightify'),
+              title: Row(
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                        gradient: RadialGradient(colors: [
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Theme.of(context).colorScheme.onBackground
+                              : Colors.transparent,
+                          Colors.transparent
+                        ], stops: [
+                          0.95,
+                          1
+                        ]),
+                        color: Colors.white),
+                    child: Image.asset(
+                      'assets/icons/ChalkLogoR.png',
+                      height: 40,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text('Insightify',
+                      style:
+                          TextStyle(fontFamily: 'DancingScript', fontSize: 30)),
+                ],
+              ),
               floating: true,
               actions: [
                 IconButton(

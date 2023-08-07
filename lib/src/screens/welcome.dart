@@ -34,7 +34,30 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insightify'),
+        title: Row(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                  gradient: RadialGradient(colors: [
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Theme.of(context).colorScheme.onBackground
+                        : Colors.transparent,
+                    Colors.transparent
+                  ], stops: [
+                    0.95,
+                    1
+                  ]),
+                  color: Colors.white),
+              child: Image.asset(
+                'assets/icons/ChalkLogoR.png',
+                height: 40,
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Text('Insightify',
+                style: TextStyle(fontFamily: 'DancingScript', fontSize: 30)),
+          ],
+        ),
         elevation: 2,
       ),
       body: Padding(
@@ -45,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                'Welcome to Spotify Data Analyzer!',
+                'Welcome to Insightify!',
                 style: TextStyle(fontSize: 20),
               ),
               const SizedBox(height: 20),
