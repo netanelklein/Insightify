@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/artist_page.dart';
 import '../utils/functions.dart';
 import '../utils/database_helper.dart';
 import '../../app_state.dart';
@@ -28,12 +29,13 @@ class ArtistTile extends StatelessWidget {
           if (snapshot.hasData) {
             return ListTile(
               enabled: true,
-              onTap: () => showBottomSheet(
-                  // showDragHandle: true,
-                  context: context,
-                  builder: (context) {
-                    return Container();
-                  }),
+              // onTap: () => Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => ArtistPage(
+              //             artistName: artistName,
+              //             artistImage: snapshot.data![0]['image'],
+              //             timePlayed: timePlayed))),
               leading: (snapshot.data![0]['image'] == null ||
                       snapshot.data![0]['image'] == '')
                   ? const Icon(Icons.person, size: 50)

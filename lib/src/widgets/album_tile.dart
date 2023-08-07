@@ -34,7 +34,18 @@ class AlbumTile extends StatelessWidget {
                 : Material(
                     elevation: 7,
                     child: Image.network(snapshot.data![0]['cover_art'])),
-            title: Text('${index + 1}. $albumName - $artistName'),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${index + 1}. $albumName'),
+                Text(
+                  'by ${artistName}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
             subtitle: Text(
                 'You listened to this album for ${msToTimeString(timePlayed)}'),
             trailing: PopupMenuButton<String>(
@@ -60,46 +71,23 @@ class AlbumTile extends StatelessWidget {
         } else {
           return ListTile(
             leading: const Icon(Icons.album, size: 50),
-            title: Text('${index + 1}. $albumName - $artistName'),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${index + 1}. $albumName'),
+                Text(
+                  'by ${artistName}',
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
             subtitle: Text(
                 'You listened to this album for ${msToTimeString(timePlayed)}'),
           );
         }
       },
     );
-
-    // if (album.coverArtUrl == null) {
-    //   fetchAlbumCover(album, token, album.tracks[0].id);
-    // }
-    // return ListTile(
-    //   leading: album.coverArtUrl == null
-    //       ? const Icon(
-    //           Icons.album,
-    //           size: 50,
-    //         )
-    //       : ClipRRect(
-    //           borderRadius: BorderRadius.circular(5.0),
-    //           child: Image.network(album.coverArtUrl!)),
-    //   title: Text('${index + 1}. ${album.name} - ${album.artistName}'),
-    //   subtitle: Text(album.toString()),
-    //   isThreeLine: true,
-    //   trailing: PopupMenuButton<String>(
-    //     onSelected: (String result) async {
-    //       Uri url = Uri.parse("spotify:album:${album.id}");
-    //       if (await canLaunchUrl(url)) {
-    //         await launchUrl(url);
-    //       } else {
-    //         // throw 'Could not launch $url';
-    //       }
-    //     },
-    //     itemBuilder: (context) => <PopupMenuEntry<String>>[
-    //       PopupMenuItem<String>(
-    //         value: '1',
-    //         enabled: album.id != null ? true : false,
-    //         child: const Text('Open in Spotify'),
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }

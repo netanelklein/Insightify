@@ -35,9 +35,20 @@ class TrackTile extends StatelessWidget {
             if (snapshot.data!.isEmpty) {
               return ListTile(
                 leading: const Icon(Icons.music_note, size: 50),
-                title: Text('${index + 1}. $trackName - $artistName'),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${index + 1}. $trackName'),
+                    Text(
+                      'by ${artistName}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
                 subtitle: Text(
-                    'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+                    'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
               );
             }
             return ListTile(
@@ -47,7 +58,18 @@ class TrackTile extends StatelessWidget {
                   : Material(
                       elevation: 7,
                       child: Image.network(snapshot.data![0]['cover_art'])),
-              title: Text('${index + 1}. $trackName - $artistName'),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${index + 1}. $trackName'),
+                  Text(
+                    'by ${artistName}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
               subtitle: Text(
                   'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
               trailing: PopupMenuButton<String>(
@@ -72,9 +94,20 @@ class TrackTile extends StatelessWidget {
           } else {
             return ListTile(
               leading: const Icon(Icons.music_note, size: 50),
-              title: Text('${index + 1}. $trackName - $artistName'),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${index + 1}. $trackName'),
+                  Text(
+                    'by ${artistName}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
               subtitle: Text(
-                  'You listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
+                  'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}. It was skipped $timesSkipped times.'),
             );
           }
         });
