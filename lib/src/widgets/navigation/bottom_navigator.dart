@@ -26,22 +26,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           label: 'Stats',
         ),
         NavigationDestination(
-          key: const Key('topArtistsNavigator'),
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person),
-          label: 'Top Artists',
-        ),
-        NavigationDestination(
-          key: const Key('topAlbumsNavigator'),
-          icon: Icon(Icons.album_outlined),
-          selectedIcon: Icon(Icons.album),
-          label: 'Top Albums',
-        ),
-        NavigationDestination(
-          key: const Key('topTracksNavigator'),
-          icon: Icon(Icons.music_note_outlined),
-          selectedIcon: Icon(Icons.music_note),
-          label: 'Top Tracks',
+          key: const Key('topListsNavigator'),
+          icon: Icon(Icons.list_alt_outlined),
+          selectedIcon: Icon(Icons.list_alt),
+          label: 'Top Lists',
         ),
       ],
     );

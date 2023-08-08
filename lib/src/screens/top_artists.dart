@@ -18,25 +18,18 @@ class _TopArtistsState extends State<TopArtists> {
       future: topArtists,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SliverList(
-              delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Column(
-                children: [
-                  ArtistTile(
-                      key: Key(
-                          "artistTile${snapshot.data![index]['artist_name']}"),
-                      artistName: snapshot.data![index]['artist_name'],
-                      index: index,
-                      timePlayed: snapshot.data![index]['total_ms_played']),
-                ],
-              );
+          return ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              return ArtistTile(
+                  key: Key("artistTile${snapshot.data![index]['artist_name']}"),
+                  artistName: snapshot.data![index]['artist_name'],
+                  index: index,
+                  timePlayed: snapshot.data![index]['total_ms_played']);
             },
-            childCount: snapshot.data!.length,
-          ));
+            itemCount: snapshot.data!.length,
+          );
         } else {
-          return const SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()));
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

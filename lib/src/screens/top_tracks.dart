@@ -18,29 +18,23 @@ class _TopTracksState extends State<TopTracks> {
         future: topTracks,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SliverList(
-                delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Column(
-                  children: [
-                    TrackTile(
-                        key: Key(
-                            "trackTile${snapshot.data![index]['track_name']}_${snapshot.data![index]['artist_name']}"),
-                        artistName: snapshot.data![index]['artist_name'],
-                        albumName: snapshot.data![index]['album_name'],
-                        trackName: snapshot.data![index]['track_name'],
-                        timePlayed: snapshot.data![index]['total_ms_played'],
-                        timesPlayed: snapshot.data![index]['times_played'],
-                        timesSkipped: snapshot.data![index]['times_skipped'],
-                        index: index),
-                  ],
-                );
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return TrackTile(
+                    key: Key(
+                        "trackTile${snapshot.data![index]['track_name']}_${snapshot.data![index]['artist_name']}"),
+                    artistName: snapshot.data![index]['artist_name'],
+                    albumName: snapshot.data![index]['album_name'],
+                    trackName: snapshot.data![index]['track_name'],
+                    timePlayed: snapshot.data![index]['total_ms_played'],
+                    timesPlayed: snapshot.data![index]['times_played'],
+                    timesSkipped: snapshot.data![index]['times_skipped'],
+                    index: index);
               },
-              childCount: snapshot.data!.length,
-            ));
+              itemCount: snapshot.data!.length,
+            );
           } else {
-            return SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()));
+            return Center(child: CircularProgressIndicator());
           }
         });
   }

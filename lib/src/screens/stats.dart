@@ -7,15 +7,17 @@ class Stats extends StatelessWidget {
 
   final totalPlayedTime = DatabaseHelper().getTotalTimePlayed();
   final mostStreamedDay = DatabaseHelper().getMostPlayedDay();
+  final averageListeningDay = DatabaseHelper().getAverageDay();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.wait([totalPlayedTime, mostStreamedDay]),
+      future:
+          Future.wait([totalPlayedTime, mostStreamedDay, averageListeningDay]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return SliverFillRemaining(
-              child: Column(
+          print(snapshot.data![2]);
+          return Column(
             children: [
               Card(
                 child: ListTile(
@@ -30,12 +32,17 @@ class Stats extends StatelessWidget {
                 title: const Text('Most Streamed Day:'),
                 subtitle: Text(
                     'The most streamed day was ${snapshot.data![1][0]['day']}.\nYou played ${msToTimeString(snapshot.data![1][0]['total_ms_played'])} on this day.'),
-              ))
+              )),
+              Card(
+                  child: ListTile(
+                title: const Text('Your Average Listening Day:'),
+                subtitle: Text(
+                    'You listen to music for ${msToTimeString(snapshot.data![2][0]['average_ms_played'])} on your average day.'),
+              )),
             ],
-          ));
+          );
         } else {
-          return SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()));
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

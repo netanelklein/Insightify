@@ -21,26 +21,20 @@ class _TopAlbumsState extends State<TopAlbums> {
             if (snapshot.data!.isEmpty) {
               return const Center(child: Text('No albums found'));
             }
-            return SliverList(
-                delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Column(
-                  children: [
-                    AlbumTile(
-                        key: Key(
-                            "albumTile${snapshot.data![index]['album_name']}_${snapshot.data![index]['artist_name']}"),
-                        artistName: snapshot.data![index]['artist_name'],
-                        albumName: snapshot.data![index]['album_name'],
-                        timePlayed: snapshot.data![index]['total_ms_played'],
-                        index: index),
-                  ],
-                );
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) {
+                return AlbumTile(
+                    key: Key(
+                        "albumTile${snapshot.data![index]['album_name']}_${snapshot.data![index]['artist_name']}"),
+                    artistName: snapshot.data![index]['artist_name'],
+                    albumName: snapshot.data![index]['album_name'],
+                    timePlayed: snapshot.data![index]['total_ms_played'],
+                    index: index);
               },
-              childCount: snapshot.data!.length,
-            ));
+              itemCount: snapshot.data!.length,
+            );
           } else {
-            return const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()));
+            return Center(child: CircularProgressIndicator());
           }
         });
   }
