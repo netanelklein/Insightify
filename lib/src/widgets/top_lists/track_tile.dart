@@ -50,7 +50,7 @@ class TrackTile extends StatelessWidget {
                   ],
                 ),
                 subtitle: Text(
-                    'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
+                    'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
               );
             }
             return ListTile(
@@ -73,7 +73,7 @@ class TrackTile extends StatelessWidget {
                 ],
               ),
               subtitle: Text(
-                  'You listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
+                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
               trailing: PopupMenuButton<String>(
                 onSelected: (String result) async {
                   Uri url = Uri.parse("${snapshot.data![0]['track_uri']}");
@@ -109,7 +109,7 @@ class TrackTile extends StatelessWidget {
                 ],
               ),
               subtitle: Text(
-                  'by $artistName\nYou listened to this track for ${msToTimeString(timePlayed)}.\nIt was played $timesPlayed times, and was skipped $timesSkipped times.'),
+                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
             );
           }
         });

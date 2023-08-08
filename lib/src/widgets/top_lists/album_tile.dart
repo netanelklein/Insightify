@@ -47,7 +47,7 @@ class AlbumTile extends StatelessWidget {
               ],
             ),
             subtitle: Text(
-                'You listened to this album for ${msToTimeString(timePlayed)}'),
+                'You listened to this album for ${msToTimeStringShort(timePlayed)}'),
             trailing: PopupMenuButton<String>(
               onSelected: (String result) async {
                 Uri url = Uri.parse(
@@ -84,7 +84,7 @@ class AlbumTile extends StatelessWidget {
               ],
             ),
             subtitle: Text(
-                'You listened to this album for ${msToTimeString(timePlayed)}'),
+                'You listened to this album for ${msToTimeStringShort(timePlayed)}'),
           );
         }
       },

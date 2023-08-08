@@ -21,3 +21,16 @@ String msToTimeString(int ms) {
     return '${time[3]} seconds';
   }
 }
+
+String msToTimeStringShort(int ms) {
+  List<int> time = msToTime(ms);
+  if (time[0] > 0) {
+    return '${time[0]} days and ${time[1]}:${time[2].toString().padLeft(2, '0')}:${time[3].toString().padLeft(2, '0')} hours';
+  } else if (time[1] > 0) {
+    return '${time[1]}:${time[2].toString().padLeft(2, '0')}:${time[3].toString().padLeft(2, '0')} hours';
+  } else if (time[2] > 0) {
+    return '${time[2].toString().padLeft(2, '0')}:${time[3].toString().padLeft(2, '0')} minutes';
+  } else {
+    return '${time[3].toString().padLeft(2, '0')} seconds';
+  }
+}

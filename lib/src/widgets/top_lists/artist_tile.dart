@@ -44,33 +44,36 @@ class ArtistTile extends StatelessWidget {
                       child: Image.network(snapshot.data![0]['image'])),
               title: Text('${index + 1}. $artistName'),
               subtitle: Text(
-                  'You listened to them for ${msToTimeString(timePlayed)}'),
-              trailing: PopupMenuButton<String>(
-                onSelected: (String result) async {
-                  Uri url = Uri.parse(
-                      "spotify:artist:${snapshot.data![0]['spotify_id']}");
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
-                  } else {
-                    // throw 'Could not launch $url';
-                  }
-                },
-                itemBuilder: (context) => <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: '1',
-                    enabled:
-                        snapshot.data![0]['spotify_id'] != null ? true : false,
-                    child: const Text('Open in Spotify'),
-                  ),
-                ],
-              ),
+                  'You listened to this artist for ${msToTimeStringShort(timePlayed)}'),
+              trailing: snapshot.data![0]['spotify_id'] != null
+                  ? PopupMenuButton<String>(
+                      onSelected: (String result) async {
+                        Uri url = Uri.parse(
+                            "spotify:artist:${snapshot.data![0]['spotify_id']}");
+                        if (await canLaunchUrl(url)) {
+                          await launchUrl(url);
+                        } else {
+                          // throw 'Could not launch $url';
+                        }
+                      },
+                      itemBuilder: (context) => <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: '1',
+                          enabled: snapshot.data![0]['spotify_id'] != null
+                              ? true
+                              : false,
+                          child: const Text('Open in Spotify'),
+                        ),
+                      ],
+                    )
+                  : null,
             );
           } else {
             return ListTile(
               leading: const Icon(Icons.person, size: 50),
               title: Text('${index + 1}. $artistName'),
               subtitle: Text(
-                  'You listened to them for ${msToTimeString(timePlayed)}'),
+                  'You listened to this artist for ${msToTimeStringShort(timePlayed)}'),
             );
           }
         });
