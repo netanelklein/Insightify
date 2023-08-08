@@ -12,11 +12,11 @@ List<int> msToTime(int ms) {
 String msToTimeString(int ms) {
   List<int> time = msToTime(ms);
   if (time[0] > 0) {
-    return '${time[0]} days, ${time[1]} hours, ${time[2]} minutes, ${time[3]} seconds';
+    return '${time[0]} days, ${time[1]} hours, ${time[2]} minutes and ${time[3]} seconds';
   } else if (time[1] > 0) {
-    return '${time[1]} hours, ${time[2]} minutes, ${time[3]} seconds';
+    return '${time[1]} hours, ${time[2]} minutes and ${time[3]} seconds';
   } else if (time[2] > 0) {
-    return '${time[2]} minutes, ${time[3]} seconds';
+    return '${time[2]} minutes and ${time[3]} seconds';
   } else {
     return '${time[3]} seconds';
   }
