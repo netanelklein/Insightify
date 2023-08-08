@@ -292,6 +292,11 @@ class DatabaseHelper {
         'SELECT strftime("%d/%m/%Y", timestamp) AS day, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played FROM stream_history WHERE track_name IS NOT NULL GROUP BY day ORDER BY times_played DESC LIMIT 1');
   }
 
+  Future<List<Map<String, dynamic>>> getAverageDay() async {
+    return await _database.rawQuery(
+        'SELECT CAST(AVG(total_ms_played) AS int) AS average_ms_played FROM (SELECT strftime("%d/%m/%Y", timestamp) AS day, SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL GROUP BY day)');
+  }
+
   Future<List<Map<String, dynamic>>> getArtistMetadata(
       String artistName, AccessToken token) async {
     final metadata = await _database.rawQuery(
