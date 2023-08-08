@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // const Divider(),
             // const SetOrderBy(),
             // const Divider(),
-            const ClearData(),
+            const ClearData(key: const Key('clearDataWidget')),
           ],
         ),
       ),

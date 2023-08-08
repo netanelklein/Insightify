@@ -18,11 +18,13 @@ class ClearData extends StatelessWidget {
                 'Are you sure you want to clear your personal data? This will remove all your saved data from the app.'),
             actions: [
               TextButton(
+                key: const Key('clearPersonalDataCancelButton'),
                 onPressed: () => Navigator.pop(context),
                 child: Text('Cancel'),
               ),
               Consumer<AppState>(builder: (context, appState, _) {
                 return TextButton(
+                  key: const Key('clearPersonalDataButton'),
                   onPressed: () async {
                     await DatabaseHelper().deleteData();
                     appState.dataProgress = 0;
@@ -51,11 +53,13 @@ class ClearData extends StatelessWidget {
                 'Are you sure you want to clear all data? This will remove all your saved data from the app, Including your personal data and artists and albums metadata.'),
             actions: [
               TextButton(
+                key: const Key('clearAllDataCancelButton'),
                 onPressed: () => Navigator.pop(context),
                 child: Text('Cancel'),
               ),
               Consumer<AppState>(builder: (context, appState, _) {
                 return TextButton(
+                  key: const Key('clearAllDataButton'),
                   onPressed: () async {
                     await DatabaseHelper().deleteDatabase();
                     await DatabaseHelper.initDatabase();
@@ -83,12 +87,14 @@ class ClearData extends StatelessWidget {
         SizedBox(height: 10),
         Text('Clear your personal data from the app:'),
         ElevatedButton(
+          key: const Key('clearPersonalDataButton'),
           onPressed: clearPersonalData,
           child: Text('Clear Personal Data'),
         ),
         SizedBox(height: 10),
         Text('Clear all data from the app:'),
         ElevatedButton(
+          key: const Key('clearAllDataButton'),
           onPressed: clearAllData,
           child: Text('Clear All Data'),
         ),

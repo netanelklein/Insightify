@@ -59,6 +59,7 @@ class _RootNavigationState extends State<RootNavigation> {
               floating: true,
               actions: [
                 PopupMenuButton(
+                  key: const Key('settings_menu'),
                   onSelected: (value) {
                     switch (value) {
                       case 'settings':
@@ -71,6 +72,7 @@ class _RootNavigationState extends State<RootNavigation> {
                         showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
+                                  key: const Key('about_dialog'),
                                   title: const Text('About'),
                                   content: RichText(
                                       text: TextSpan(children: [
@@ -118,6 +120,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                   ])),
                                   actions: [
                                     TextButton(
+                                        key: const Key('aboutCloseButton'),
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
@@ -129,10 +132,12 @@ class _RootNavigationState extends State<RootNavigation> {
                   },
                   itemBuilder: (context) => <PopupMenuEntry>[
                     PopupMenuItem(
+                      key: const Key('settings_menu_item'),
                       child: const Text('Settings'),
                       value: 'settings',
                     ),
                     PopupMenuItem(
+                      key: const Key('about_menu_item'),
                       child: const Text('About'),
                       value: 'about',
                     ),

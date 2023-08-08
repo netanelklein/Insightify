@@ -20,21 +20,25 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       selectedIndex: widget._selectedIndex,
       destinations: const <Widget>[
         NavigationDestination(
+          key: const Key('statsNavigator'),
           icon: Icon(Icons.analytics_outlined),
           selectedIcon: Icon(Icons.analytics),
           label: 'Stats',
         ),
         NavigationDestination(
+          key: const Key('topArtistsNavigator'),
           icon: Icon(Icons.person_outline),
           selectedIcon: Icon(Icons.person),
           label: 'Top Artists',
         ),
         NavigationDestination(
+          key: const Key('topAlbumsNavigator'),
           icon: Icon(Icons.album_outlined),
           selectedIcon: Icon(Icons.album),
           label: 'Top Albums',
         ),
         NavigationDestination(
+          key: const Key('topTracksNavigator'),
           icon: Icon(Icons.music_note_outlined),
           selectedIcon: Icon(Icons.music_note),
           label: 'Top Tracks',

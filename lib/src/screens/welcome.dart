@@ -79,9 +79,18 @@ class WelcomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Consumer<AppState>(
                   builder: (context, appState, _) => FilledButton(
+                      key: const Key('uploadDataButton'),
                       onPressed: () => _uploadData(appState),
-                      child: const Text('Upload Data'))),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.upload_file),
+                          const SizedBox(width: 5),
+                          const Text('Upload Data'),
+                        ],
+                      ))),
               TextButton(
+                  key: const Key('uploadHelpButton'),
                   onPressed: () => showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -91,6 +100,7 @@ class WelcomeScreen extends StatelessWidget {
                                 'It depends on the type of the data you chose to download.\n\nIf you have chosen to download your account data, you will need to upload all of the files named "StreamingHistoryX.json" where X is a number.\n\nIf you have chosen to download your extended streaming history, you will need to upload all of the files named "Streaming_History_Audio_Y_X.json" where Y is a year or a span of years and X is a number.'),
                             actions: [
                               TextButton(
+                                  key: const Key('helpOkButton'),
                                   onPressed: () => Navigator.pop(context),
                                   child: const Text('Got it!'))
                             ],

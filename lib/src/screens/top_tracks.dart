@@ -24,6 +24,8 @@ class _TopTracksState extends State<TopTracks> {
                 return Column(
                   children: [
                     TrackTile(
+                        key: Key(
+                            "trackTile${snapshot.data![index]['track_name']}_${snapshot.data![index]['artist_name']}"),
                         artistName: snapshot.data![index]['artist_name'],
                         albumName: snapshot.data![index]['album_name'],
                         trackName: snapshot.data![index]['track_name'],

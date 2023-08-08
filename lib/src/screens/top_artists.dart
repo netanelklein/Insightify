@@ -24,6 +24,8 @@ class _TopArtistsState extends State<TopArtists> {
               return Column(
                 children: [
                   ArtistTile(
+                      key: Key(
+                          "artistTile${snapshot.data![index]['artist_name']}"),
                       artistName: snapshot.data![index]['artist_name'],
                       index: index,
                       timePlayed: snapshot.data![index]['total_ms_played']),
