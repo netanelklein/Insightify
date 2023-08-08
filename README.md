@@ -52,6 +52,10 @@ If you would like to contribute to Insightify, please follow these steps:
 4. Push your changes to your fork.
 5. Submit a pull request to this repository.
 
+### Donations
+
+If you would like to support the development of Insightify, you can donate to me via [PayPal](https://paypal.me/kleinetanel).
+
 ## License
 
 Insightify is licensed under the MIT License. See `LICENSE` for more information.
