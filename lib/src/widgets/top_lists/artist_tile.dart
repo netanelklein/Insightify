@@ -29,13 +29,13 @@ class ArtistTile extends StatelessWidget {
           if (snapshot.hasData) {
             return ListTile(
               enabled: true,
-              // onTap: () => Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => ArtistPage(
-              //             artistName: artistName,
-              //             artistImage: snapshot.data![0]['image'],
-              //             timePlayed: timePlayed))),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ArtistPage(
+                          artistName: artistName,
+                          artistImage: snapshot.data![0]['image'],
+                          timePlayed: timePlayed))),
               leading: (snapshot.data![0]['image'] == null ||
                       snapshot.data![0]['image'] == '')
                   ? const Icon(Icons.person, size: 50)

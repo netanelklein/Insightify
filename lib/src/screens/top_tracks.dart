@@ -29,7 +29,8 @@ class _TopTracksState extends State<TopTracks> {
                     timePlayed: snapshot.data![index]['total_ms_played'],
                     timesPlayed: snapshot.data![index]['times_played'],
                     timesSkipped: snapshot.data![index]['times_skipped'],
-                    index: index);
+                    index: index,
+                    isTopList: true);
               },
               itemCount: snapshot.data!.length,
             );

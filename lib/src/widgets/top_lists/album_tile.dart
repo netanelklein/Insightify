@@ -11,11 +11,13 @@ class AlbumTile extends StatelessWidget {
       required this.artistName,
       required this.albumName,
       required this.timePlayed,
-      required this.index});
+      required this.index,
+      required this.isTopList});
   final String artistName;
   final String albumName;
   final int timePlayed;
   final int index;
+  final bool isTopList;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +40,14 @@ class AlbumTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${index + 1}. $albumName'),
-                Text(
-                  'by ${artistName}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
+                isTopList
+                    ? Text(
+                        'by ${artistName}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
             subtitle: Text(
@@ -75,12 +79,14 @@ class AlbumTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${index + 1}. $albumName'),
-                Text(
-                  'by ${artistName}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
+                isTopList
+                    ? Text(
+                        'by ${artistName}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
             subtitle: Text(

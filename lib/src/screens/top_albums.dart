@@ -24,12 +24,14 @@ class _TopAlbumsState extends State<TopAlbums> {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 return AlbumTile(
-                    key: Key(
-                        "albumTile${snapshot.data![index]['album_name']}_${snapshot.data![index]['artist_name']}"),
-                    artistName: snapshot.data![index]['artist_name'],
-                    albumName: snapshot.data![index]['album_name'],
-                    timePlayed: snapshot.data![index]['total_ms_played'],
-                    index: index);
+                  key: Key(
+                      "albumTile${snapshot.data![index]['album_name']}_${snapshot.data![index]['artist_name']}"),
+                  artistName: snapshot.data![index]['artist_name'],
+                  albumName: snapshot.data![index]['album_name'],
+                  timePlayed: snapshot.data![index]['total_ms_played'],
+                  index: index,
+                  isTopList: true,
+                );
               },
               itemCount: snapshot.data!.length,
             );

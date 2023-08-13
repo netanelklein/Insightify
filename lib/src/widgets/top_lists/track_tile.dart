@@ -15,7 +15,8 @@ class TrackTile extends StatelessWidget {
       required this.index,
       required this.timePlayed,
       required this.timesPlayed,
-      required this.timesSkipped});
+      required this.timesSkipped,
+      required this.isTopList});
   final String trackName;
   final String artistName;
   final String? albumName;
@@ -23,6 +24,7 @@ class TrackTile extends StatelessWidget {
   final int timePlayed;
   final int timesPlayed;
   final int timesSkipped;
+  final bool isTopList;
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +43,18 @@ class TrackTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${index + 1}. $trackName'),
-                    Text(
-                      'by ${artistName}',
-                      style: const TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
+                    isTopList
+                        ? Text(
+                            'by ${artistName}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
                 subtitle: Text(
-                    'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
+                    'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times'),
               );
             }
             return ListTile(
@@ -64,16 +68,18 @@ class TrackTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('${index + 1}. $trackName'),
-                  Text(
-                    'by ${artistName}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
+                  isTopList
+                      ? Text(
+                          'by ${artistName}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        )
+                      : SizedBox.shrink(),
                 ],
               ),
               subtitle: Text(
-                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
+                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times'),
               trailing: PopupMenuButton<String>(
                 onSelected: (String result) async {
                   Uri url = Uri.parse("${snapshot.data![0]['track_uri']}");
@@ -100,16 +106,18 @@ class TrackTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('${index + 1}. $trackName'),
-                  Text(
-                    'by ${artistName}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
+                  isTopList
+                      ? Text(
+                          'by ${artistName}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        )
+                      : SizedBox.shrink(),
                 ],
               ),
               subtitle: Text(
-                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times.'),
+                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times'),
             );
           }
         });
