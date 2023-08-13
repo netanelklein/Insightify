@@ -11,6 +11,62 @@ import '../../app_state.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
+  String _getDataType(List<dynamic> data) {
+    String type = '';
+    final List<String> extendedDataKeys = [
+      'ts',
+      'username',
+      'platform',
+      'ms_played',
+      'conn_country',
+      'ip_addr_decrypted',
+      'user_agent_decrypted',
+      'master_metadata_track_name',
+      'master_metadata_album_artist_name',
+      'master_metadata_album_album_name',
+      'spotify_track_uri',
+      'episode_name',
+      'episode_show_name',
+      'spotify_episode_uri',
+      'reason_start',
+      'reason_end',
+      'shuffle',
+      'skipped',
+      'offline',
+      'offline_timestamp',
+      'incognito_mode'
+    ];
+
+    final List<String> nonExtendedDataKeys = [
+      'endTime',
+      'artistName',
+      'trackName',
+      'msPlayed',
+    ];
+    for (var entry in data) {
+      // first item
+      if (type == '') {
+        if (entry.keys.toSet().containsAll(extendedDataKeys)) {
+          type = 'extended';
+        } else if (entry.keys.toSet().containsAll(nonExtendedDataKeys)) {
+          type = 'non-extended';
+        } else {
+          type = 'unknown';
+          return type;
+        }
+      } else {
+        if (type == 'extended' &&
+            !entry.keys.toSet().containsAll(extendedDataKeys)) {
+          return 'unknown';
+        } else if (type == 'non-extended' &&
+            !entry.keys.toSet().containsAll(nonExtendedDataKeys)) {
+          return 'unknown';
+        }
+      }
+    }
+    return type;
+  }
+
   void _uploadData(AppState state) async {
     final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -22,7 +78,12 @@ class WelcomeScreen extends StatelessWidget {
       List<dynamic> data = [];
       for (var file in result.files) {
         final contents = jsonDecode(File(file.path!).readAsStringSync());
-        data.addAll(contents);
+        if (contents is List<dynamic>) {
+          final type = _getDataType(contents);
+          if (type == 'extended' || type == 'non-extended') {
+            data.addAll(contents);
+          }
+        }
       }
       await DatabaseHelper().insertDataBatch(data);
       state.setLoading = false;
