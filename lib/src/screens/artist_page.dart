@@ -33,7 +33,8 @@ class ArtistPage extends StatelessWidget {
                       return [
                         SliverAppBar(
                           title: Text('$artistName'),
-                          pinned: true,
+                          floating: true,
+                          forceElevated: innerBoxIsScrolled,
                         ),
                         SliverToBoxAdapter(
                           child: Card(
@@ -45,53 +46,56 @@ class ArtistPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SliverToBoxAdapter(
-                          child: TabBar(
-                            tabs: [
-                              Tab(
-                                text: 'Top Albums',
-                              ),
-                              Tab(
-                                text: 'Top Tracks',
-                              ),
-                            ],
-                          ),
-                        )
                       ];
                     },
-                    body: TabBarView(children: [
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          return AlbumTile(
-                            index: index,
-                            albumName: snapshot.data![0][index]['album_name'],
-                            artistName: artistName,
-                            timePlayed: snapshot.data![0][index]
-                                ['total_ms_played'],
-                            isTopList: false,
-                          );
-                        },
-                        itemCount: snapshot.data![0].length,
+                    body: Scaffold(
+                      appBar: AppBar(
+                        automaticallyImplyLeading: false,
+                        title: TabBar(
+                          tabs: [
+                            Tab(
+                              text: 'Top Albums',
+                            ),
+                            Tab(
+                              text: 'Top Tracks',
+                            ),
+                          ],
+                        ),
                       ),
-                      ListView.builder(
-                        itemBuilder: (context, index) {
-                          return TrackTile(
-                            index: index,
-                            trackName: snapshot.data![1][index]['track_name'],
-                            albumName: snapshot.data![1][index]['album_name'],
-                            artistName: artistName,
-                            timePlayed: snapshot.data![1][index]
-                                ['total_ms_played'],
-                            timesPlayed: snapshot.data![1][index]
-                                ['times_played'],
-                            timesSkipped: snapshot.data![1][index]
-                                ['times_skipped'],
-                            isTopList: false,
-                          );
-                        },
-                        itemCount: snapshot.data![1].length,
-                      )
-                    ])),
+                      body: TabBarView(children: [
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            return AlbumTile(
+                              index: index,
+                              albumName: snapshot.data![0][index]['album_name'],
+                              artistName: artistName,
+                              timePlayed: snapshot.data![0][index]
+                                  ['total_ms_played'],
+                              isTopList: false,
+                            );
+                          },
+                          itemCount: snapshot.data![0].length,
+                        ),
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            return TrackTile(
+                              index: index,
+                              trackName: snapshot.data![1][index]['track_name'],
+                              albumName: snapshot.data![1][index]['album_name'],
+                              artistName: artistName,
+                              timePlayed: snapshot.data![1][index]
+                                  ['total_ms_played'],
+                              timesPlayed: snapshot.data![1][index]
+                                  ['times_played'],
+                              timesSkipped: snapshot.data![1][index]
+                                  ['times_skipped'],
+                              isTopList: false,
+                            );
+                          },
+                          itemCount: snapshot.data![1].length,
+                        )
+                      ]),
+                    )),
               );
             } else {
               return Center(child: CircularProgressIndicator());
