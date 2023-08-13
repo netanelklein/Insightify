@@ -36,46 +36,7 @@ class TopLists extends StatelessWidget {
             ],
           ),
         ),
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            TabBarView(children: [TopArtists(), TopAlbums(), TopTracks()]),
-            // BottomSearchBar()
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BottomSearchBar extends StatelessWidget {
-  const BottomSearchBar({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Flexible(
-              child: TextField(
-            onTapOutside: (event) => FocusScope.of(context).unfocus(),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(40),
-                  borderSide: BorderSide.none),
-              filled: true,
-              hintText: 'Search...',
-              prefixIcon: Icon(Icons.search),
-              constraints: BoxConstraints(maxHeight: 55),
-            ),
-          )),
-          IconButton(
-              onPressed: () => print('TODO: Implement sort functionality'),
-              icon: Icon(Icons.sort))
-        ],
+        body: TabBarView(children: [TopArtists(), TopAlbums(), TopTracks()]),
       ),
     );
   }
