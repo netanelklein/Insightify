@@ -16,7 +16,6 @@ class Stats extends StatelessWidget {
           Future.wait([totalPlayedTime, mostStreamedDay, averageListeningDay]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot.data![2]);
           return Column(
             children: [
               Card(

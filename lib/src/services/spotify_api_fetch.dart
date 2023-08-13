@@ -1,7 +1,5 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../models/album.dart';
-import '../models/artist.dart';
 import '../../auth/secrets.dart';
 
 class AccessToken {
@@ -40,62 +38,6 @@ Future<AccessToken> getAccessToken() async {
     return AccessToken.fromJson(json.decode(response.body));
   } else {
     throw Exception('Failed to load access token');
-  }
-}
-
-Future<void> fetchAlbumCover(
-    Album album, AccessToken token, String trackId) async {
-  if (token.accessToken == '') {
-    return;
-  }
-  var response = await http.get(
-      Uri.parse("https://api.spotify.com/v1/tracks/$trackId"),
-      headers: {"Authorization": "${token.tokenType} ${token.accessToken}"});
-  if (response.statusCode == 200) {
-    album.coverArt =
-        json.decode(response.body)['album']['images'][0]['url'].isNotEmpty
-            ? json.decode(response.body)['album']['images'][0]['url']
-            : null;
-    album.setId(json.decode(response.body)['album']['id']);
-  } else if (response.statusCode == 429) {
-    await Future.delayed(
-        Duration(seconds: int.parse(response.headers['retry-after']!)));
-  } else {
-    throw Exception('Failed to load album cover. ${response.body.toString()}');
-  }
-}
-
-Future<void> fetchArtistPhoto(
-    Artist artist, AccessToken token, String trackId) async {
-  if (token.accessToken == '') {
-    return;
-  }
-  var response = await http.get(
-      Uri.parse("https://api.spotify.com/v1/tracks/$trackId"),
-      headers: {"Authorization": "${token.tokenType} ${token.accessToken}"});
-  if (response.statusCode == 200) {
-    Map<String, dynamic> data = json.decode(response.body);
-    String artistId = data['artists'][0]['id'];
-    artist.setId(artistId);
-    response = await http.get(
-        Uri.parse("https://api.spotify.com/v1/artists/$artistId"),
-        headers: {"Authorization": "${token.tokenType} ${token.accessToken}"});
-    if (response.statusCode == 200) {
-      data = json.decode(response.body);
-      artist.image =
-          data['images'].isNotEmpty ? data['images'][0]['url'] : null;
-    } else if (response.statusCode == 429) {
-      await Future.delayed(
-          Duration(seconds: int.parse(response.headers['retry-after']!)));
-    } else {
-      throw Exception(
-          'Failed to load artist photo. ${response.body.toString()}');
-    }
-  } else if (response.statusCode == 429) {
-    await Future.delayed(
-        Duration(seconds: int.parse(response.headers['retry-after']!)));
-  } else {
-    throw Exception('Failed to load artist photo. ${response.toString()}');
   }
 }
 
