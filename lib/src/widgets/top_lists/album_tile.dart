@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../utils/database_helper.dart';
 import '../../utils/functions.dart';
 import '../../../app_state.dart';
+import '../../screens/album_page.dart';
 
 class AlbumTile extends StatelessWidget {
   const AlbumTile(
@@ -30,6 +31,14 @@ class AlbumTile extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListTile(
+            enabled: true,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AlbumPage(
+                        artistName: artistName,
+                        albumName: albumName,
+                        timePlayed: timePlayed))),
             leading: (snapshot.data![0]['cover_art'] == null ||
                     snapshot.data![0]['cover_art'] == '')
                 ? const Icon(Icons.album, size: 50)
