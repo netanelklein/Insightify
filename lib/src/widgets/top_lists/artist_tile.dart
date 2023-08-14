@@ -33,9 +33,7 @@ class ArtistTile extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ArtistPage(
-                          artistName: artistName,
-                          artistImage: snapshot.data![0]['image'],
-                          timePlayed: timePlayed))),
+                          artistName: artistName, timePlayed: timePlayed))),
               leading: (snapshot.data![0]['image'] == null ||
                       snapshot.data![0]['image'] == '')
                   ? const Icon(Icons.person, size: 50)
