@@ -31,17 +31,19 @@ Insightify includes the following features:
 - See the day you streamed the most.
 - If you imported the extended data, you can also view your top albums.
 - Clear your data to start fresh.
-- Dedicated page for each artist.
+- Dedicated page for each artist and album.
+- Avarage listening time per day statistics.
 
 ### Planned Features
 
-- Dedicated page for each track and album.
+- Dedicated page for each track.
 - Search your top lists.
 - View your top lists by time period.
 - View your entire listening history.
 - Time of the Day statistics.
-- Avarage listening time per day statistics.
 - View a timeline of your listening history.
+- Data visualizations in artist, album and track pages.
+- Connect to your Spotify account to continuously update your data.
 
 ## Contributing
 
