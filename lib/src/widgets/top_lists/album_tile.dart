@@ -20,6 +20,15 @@ class AlbumTile extends StatelessWidget {
   final int index;
   final bool isTopList;
 
+  openSpotify(String albumId) async {
+    Uri url = Uri.parse("spotify:album:$albumId");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      // throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final token = Provider.of<AppState>(context).accessToken;
@@ -31,56 +40,82 @@ class AlbumTile extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListTile(
-            enabled: true,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AlbumPage(
-                        artistName: artistName,
-                        albumName: albumName,
-                        timePlayed: timePlayed))),
-            leading: (snapshot.data![0]['cover_art'] == null ||
-                    snapshot.data![0]['cover_art'] == '')
-                ? const Icon(Icons.album, size: 50)
-                : Material(
-                    elevation: 7,
-                    child: Image.network(snapshot.data![0]['cover_art'])),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${index + 1}. $albumName'),
-                isTopList
-                    ? Text(
-                        'by ${artistName}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                        ),
-                      )
-                    : SizedBox.shrink(),
-              ],
-            ),
-            subtitle: Text(
-                'You listened to this album for ${msToTimeStringShort(timePlayed)}'),
-            trailing: PopupMenuButton<String>(
-              onSelected: (String result) async {
-                Uri url = Uri.parse(
-                    "spotify:album:${snapshot.data![0]['spotify_id']}");
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  // throw 'Could not launch $url';
-                }
-              },
-              itemBuilder: (context) => <PopupMenuEntry<String>>[
-                PopupMenuItem<String>(
-                  value: '1',
-                  enabled:
-                      snapshot.data![0]['spotify_id'] != null ? true : false,
-                  child: const Text('Open in Spotify'),
-                ),
-              ],
-            ),
-          );
+              enabled: true,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AlbumPage(
+                          artistName: artistName,
+                          albumName: albumName,
+                          timePlayed: timePlayed))),
+              leading: (snapshot.data![0]['cover_art'] == null ||
+                      snapshot.data![0]['cover_art'] == '')
+                  ? const Icon(Icons.album, size: 50)
+                  : Material(
+                      elevation: 7,
+                      child: Image.network(snapshot.data![0]['cover_art'])),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('${index + 1}. $albumName'),
+                  isTopList
+                      ? Text(
+                          'by ${artistName}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                          ),
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
+              subtitle: Text(
+                  'You listened to this album for ${msToTimeStringShort(timePlayed)}'),
+              trailing: snapshot.data![0]['spotify_id'] != null
+                  ? IconButton(
+                      tooltip: 'OPEN SPOTIFY',
+                      onPressed: () =>
+                          openSpotify(snapshot.data![0]['spotify_id']),
+                      icon: Image.asset(
+                        Theme.of(context).brightness == Brightness.light
+                            ? 'assets/icons/Spotify_Icon_RGB_Black.png'
+                            : 'assets/icons/Spotify_Icon_RGB_White.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                    )
+                  : null
+              // PopupMenuButton<String>(
+              //   onSelected: (String result) async {
+              //     Uri url = Uri.parse(
+              //         "spotify:album:${snapshot.data![0]['spotify_id']}");
+              //     if (await canLaunchUrl(url)) {
+              //       await launchUrl(url);
+              //     } else {
+              //       // throw 'Could not launch $url';
+              //     }
+              //   },
+              //   itemBuilder: (context) => <PopupMenuEntry<String>>[
+              //     PopupMenuItem<String>(
+              //       value: '1',
+              //       enabled:
+              //           snapshot.data![0]['spotify_id'] != null ? true : false,
+              //       child: Row(
+              //         children: [
+              //           Image.asset(
+              //             Theme.of(context).brightness == Brightness.light
+              //                 ? 'assets/icons/Spotify_Icon_RGB_Black.png'
+              //                 : 'assets/icons/Spotify_Icon_RGB_White.png',
+              //             height: 20,
+              //             width: 20,
+              //           ),
+              //           const SizedBox(width: 10),
+              //           const Text('Open in Spotify'),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              );
         } else {
           return ListTile(
             leading: const Icon(Icons.album, size: 50),

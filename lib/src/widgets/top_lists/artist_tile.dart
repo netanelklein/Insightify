@@ -17,6 +17,15 @@ class ArtistTile extends StatelessWidget {
   final int index;
   final int timePlayed;
 
+  openSpotify(String artistId) async {
+    Uri url = Uri.parse("spotify:artist:$artistId");
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      // throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final token = Provider.of<AppState>(context).accessToken;
@@ -44,26 +53,38 @@ class ArtistTile extends StatelessWidget {
               subtitle: Text(
                   'You listened to this artist for ${msToTimeStringShort(timePlayed)}'),
               trailing: snapshot.data![0]['spotify_id'] != null
-                  ? PopupMenuButton<String>(
-                      onSelected: (String result) async {
-                        Uri url = Uri.parse(
-                            "spotify:artist:${snapshot.data![0]['spotify_id']}");
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
-                        } else {
-                          // throw 'Could not launch $url';
-                        }
-                      },
-                      itemBuilder: (context) => <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
-                          value: '1',
-                          enabled: snapshot.data![0]['spotify_id'] != null
-                              ? true
-                              : false,
-                          child: const Text('Open in Spotify'),
-                        ),
-                      ],
+                  ? IconButton(
+                      tooltip: 'OPEN SPOTIFY',
+                      onPressed: () =>
+                          openSpotify(snapshot.data![0]['spotify_id']),
+                      icon: Image.asset(
+                        Theme.of(context).brightness == Brightness.light
+                            ? 'assets/icons/Spotify_Icon_RGB_Black.png'
+                            : 'assets/icons/Spotify_Icon_RGB_White.png',
+                        height: 24,
+                        width: 24,
+                      ),
                     )
+                  // PopupMenuButton<String>(
+                  //     onSelected: (String result) async {
+                  //       Uri url = Uri.parse(
+                  //           "spotify:artist:${snapshot.data![0]['spotify_id']}");
+                  //       if (await canLaunchUrl(url)) {
+                  //         await launchUrl(url);
+                  //       } else {
+                  //         // throw 'Could not launch $url';
+                  //       }
+                  //     },
+                  //     itemBuilder: (context) => <PopupMenuEntry<String>>[
+                  //       PopupMenuItem<String>(
+                  //         value: '1',
+                  //         enabled: snapshot.data![0]['spotify_id'] != null
+                  //             ? true
+                  //             : false,
+                  //         child: const Text('Open in Spotify'),
+                  //       ),
+                  //     ],
+                  //   )
                   : null,
             );
           } else {

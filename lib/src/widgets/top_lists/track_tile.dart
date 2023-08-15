@@ -26,6 +26,15 @@ class TrackTile extends StatelessWidget {
   final int timesSkipped;
   final bool isTopList;
 
+  openSpotify(String trackUri) async {
+    Uri url = Uri.parse(trackUri);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      // throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final token = Provider.of<AppState>(context).accessToken;
@@ -58,47 +67,61 @@ class TrackTile extends StatelessWidget {
               );
             }
             return ListTile(
-              leading: (snapshot.data![0]['cover_art'] == null ||
-                      snapshot.data![0]['cover_art'] == '')
-                  ? const Icon(Icons.music_note, size: 50)
-                  : Material(
-                      elevation: 7,
-                      child: Image.network(snapshot.data![0]['cover_art'])),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${index + 1}. $trackName'),
-                  isTopList
-                      ? Text(
-                          'by ${artistName}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                ],
-              ),
-              subtitle: Text(
-                  'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times'),
-              trailing: PopupMenuButton<String>(
-                onSelected: (String result) async {
-                  Uri url = Uri.parse("${snapshot.data![0]['track_uri']}");
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
-                  } else {
-                    // throw 'Could not launch $url';
-                  }
-                },
-                itemBuilder: (context) => <PopupMenuEntry<String>>[
-                  PopupMenuItem<String>(
-                    value: '1',
-                    enabled:
-                        snapshot.data![0]['track_uri'] != null ? true : false,
-                    child: const Text('Play in Spotify'),
-                  ),
-                ],
-              ),
-            );
+                leading: (snapshot.data![0]['cover_art'] == null ||
+                        snapshot.data![0]['cover_art'] == '')
+                    ? const Icon(Icons.music_note, size: 50)
+                    : Material(
+                        elevation: 7,
+                        child: Image.network(snapshot.data![0]['cover_art'])),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${index + 1}. $trackName'),
+                    isTopList
+                        ? Text(
+                            'by ${artistName}',
+                            style: const TextStyle(
+                              fontSize: 12,
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+                subtitle: Text(
+                    'You listened to this track for ${msToTimeStringShort(timePlayed)}.\nPlayed: $timesPlayed times\nSkipped: $timesSkipped times'),
+                trailing: snapshot.data![0]['track_uri'] != null
+                    ? IconButton(
+                        tooltip: 'PLAY IN SPOTIFY',
+                        onPressed: () =>
+                            openSpotify(snapshot.data![0]['track_uri']),
+                        icon: Image.asset(
+                          Theme.of(context).brightness == Brightness.light
+                              ? 'assets/icons/Spotify_Icon_RGB_Black.png'
+                              : 'assets/icons/Spotify_Icon_RGB_White.png',
+                          height: 24,
+                          width: 24,
+                        ),
+                      )
+                    : null
+                // PopupMenuButton<String>(
+                //   onSelected: (String result) async {
+                //     Uri url = Uri.parse("${snapshot.data![0]['track_uri']}");
+                //     if (await canLaunchUrl(url)) {
+                //       await launchUrl(url);
+                //     } else {
+                //       // throw 'Could not launch $url';
+                //     }
+                //   },
+                //   itemBuilder: (context) => <PopupMenuEntry<String>>[
+                //     PopupMenuItem<String>(
+                //       value: '1',
+                //       enabled:
+                //           snapshot.data![0]['track_uri'] != null ? true : false,
+                //       child: const Text('Play in Spotify'),
+                //     ),
+                //   ],
+                // ),
+                );
           } else {
             return ListTile(
               leading: const Icon(Icons.music_note, size: 50),

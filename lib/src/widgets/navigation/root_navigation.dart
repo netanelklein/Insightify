@@ -81,11 +81,18 @@ class _RootNavigationState extends State<RootNavigation> {
                                         text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              'Insightify is an app that analyzes your Spotify data and gives you insights about your listening habits.\n\n'),
+                                              'Insightify is an app that analyzes your Spotify data and gives you insights about your listening habits.\n\n',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground)),
                                       TextSpan(
-                                        text:
-                                            'This app is still in development. If you have any suggestions or feedback, please email me at: ',
-                                      ),
+                                          text:
+                                              'This app is still in development. If you have any suggestions or feedback, please email me at: ',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground)),
                                       TextSpan(
                                           text: 'netanel@netanelk.com',
                                           style: TextStyle(
@@ -99,9 +106,12 @@ class _RootNavigationState extends State<RootNavigation> {
                                                   'mailto:netanel@netanlk.com?subject=Insightify%20Feedback'));
                                             }),
                                       TextSpan(
-                                        text:
-                                            '.\n\nYou can also check out the source code on ',
-                                      ),
+                                          text:
+                                              '.\n\nYou can also check out the source code on ',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground)),
                                       TextSpan(
                                           text: 'GitHub',
                                           style: TextStyle(
@@ -118,8 +128,11 @@ class _RootNavigationState extends State<RootNavigation> {
                                                       .externalApplication);
                                             }),
                                       TextSpan(
-                                        text: '.',
-                                      ),
+                                          text: '.',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground)),
                                     ])),
                                     actions: [
                                       TextButton(
