@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:insightify/src/models/stream_history.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -244,6 +245,39 @@ class DatabaseHelper {
 
   Future<void> close() async {
     await _database.close();
+  }
+
+  Future<List<Map<String, dynamic>>> getStreamingHistory() async {
+    return await _database.rawQuery(
+        'SELECT * FROM stream_history WHERE track_name IS NOT NULL ORDER BY timestamp');
+  }
+
+  Future<Map<String, List<StreamHistoryDBEntry>>>
+      getStreamingHistoryByDay() async {
+    final List<Map<String, dynamic>> streamingHistory =
+        await getStreamingHistory();
+    final Map<String, List<StreamHistoryDBEntry>> streamingHistoryByDay = {};
+    for (var entry in streamingHistory) {
+      final DateTime date = DateTime.parse(entry['timestamp']);
+      final DateTime day = DateTime(date.year, date.month, date.day);
+      if (streamingHistoryByDay.containsKey(day.toString())) {
+        streamingHistoryByDay[day.toString()]
+            ?.add(StreamHistoryDBEntry.fromMap(entry));
+      } else {
+        streamingHistoryByDay[day.toString()] = [];
+        streamingHistoryByDay[day.toString()]
+            ?.add(StreamHistoryDBEntry.fromMap(entry));
+      }
+    }
+
+    // Sort by date (newest first)
+    List<String> keys = streamingHistoryByDay.keys.toList();
+    keys.sort((a, b) => DateTime.parse(b).compareTo(DateTime.parse(a)));
+    Map<String, List<StreamHistoryDBEntry>> sortedStreamingHistoryByDay = {};
+    for (var key in keys) {
+      sortedStreamingHistoryByDay[key] = streamingHistoryByDay[key]!;
+    }
+    return sortedStreamingHistoryByDay;
   }
 
   Future<List<Map<String, dynamic>>> getTopArtists() async {

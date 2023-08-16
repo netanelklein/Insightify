@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import '../widgets/top_lists/search_bar.dart';
+// import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+// import '../widgets/top_lists/search_bar.dart';
 import '../widgets/top_lists/artist_tile.dart';
 import '../utils/database_helper.dart';
 

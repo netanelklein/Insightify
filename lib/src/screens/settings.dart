@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/settings/min_count.dart';
-import '../widgets/settings/order_by.dart';
+// import '../widgets/settings/min_count.dart';
+// import '../widgets/settings/order_by.dart';
 import '../widgets/settings/clear_data.dart';
 
 class SettingsScreen extends StatefulWidget {
