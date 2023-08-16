@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/navigation/top_lists_navigation.dart';
 import '../../screens/settings.dart';
 import '../../screens/stats.dart';
+import '../../screens/history.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'bottom_navigator.dart';
 
@@ -163,7 +164,11 @@ class _RootNavigationState extends State<RootNavigation> {
               ),
             ];
           },
-          body: <Widget>[Stats(), const TopLists()][_selectedIndex],
+          body: <Widget>[
+            Stats(),
+            const TopLists(),
+            HistoryScreen()
+          ][_selectedIndex],
         ),
       ),
       bottomNavigationBar: BottomNavigator(

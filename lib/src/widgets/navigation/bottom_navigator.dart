@@ -31,6 +31,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           selectedIcon: Icon(Icons.list_alt),
           label: 'Top Lists',
         ),
+        NavigationDestination(
+          key: const Key('historyNavigator'),
+          icon: Icon(Icons.history_outlined),
+          selectedIcon: Icon(Icons.history),
+          label: 'History',
+        ),
       ],
     );
   }
