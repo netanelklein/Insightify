@@ -34,3 +34,90 @@ String msToTimeStringShort(int ms) {
     return '${time[3].toString().padLeft(2, '0')} seconds';
   }
 }
+
+bool isSameDay(DateTime first, DateTime second) {
+  return first.year == second.year &&
+      first.month == second.month &&
+      first.day == second.day;
+}
+
+String getDayString(DateTime date) {
+  if (isSameDay(date, DateTime.now())) {
+    return 'Today';
+  } else if (isSameDay(date, DateTime.now().subtract(Duration(days: 1)))) {
+    return 'Yesterday';
+  } else {
+    return DateFormat(date);
+  }
+}
+
+String DateFormat(DateTime date) {
+  String dateString = '';
+  // Get day of the week
+  switch (date.weekday) {
+    case 1:
+      dateString += 'Monday';
+      break;
+    case 2:
+      dateString += 'Tuesday';
+      break;
+    case 3:
+      dateString += 'Wednesday';
+      break;
+    case 4:
+      dateString += 'Thursday';
+      break;
+    case 5:
+      dateString += 'Friday';
+      break;
+    case 6:
+      dateString += 'Saturday';
+      break;
+    case 7:
+      dateString += 'Sunday';
+      break;
+  }
+  dateString += ', ';
+  // Get month
+  switch (date.month) {
+    case 1:
+      dateString += 'January';
+      break;
+    case 2:
+      dateString += 'February';
+      break;
+    case 3:
+      dateString += 'March';
+      break;
+    case 4:
+      dateString += 'April';
+      break;
+    case 5:
+      dateString += 'May';
+      break;
+    case 6:
+      dateString += 'June';
+      break;
+    case 7:
+      dateString += 'July';
+      break;
+    case 8:
+      dateString += 'August';
+      break;
+    case 9:
+      dateString += 'September';
+      break;
+    case 10:
+      dateString += 'October';
+      break;
+    case 11:
+      dateString += 'November';
+      break;
+    case 12:
+      dateString += 'December';
+      break;
+  }
+  dateString += ' ${date.day}, ${date.year}';
+
+  return dateString;
+}
