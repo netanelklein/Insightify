@@ -1,3 +1,28 @@
+const List<String> WEEKDAYS = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+];
+
+const List<String> MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'Oktober',
+  'November',
+  'December'
+];
+
 List<int> msToTime(int ms) {
   int seconds = (ms / 1000).round();
   int minutes = (seconds / 60).floor();
@@ -52,72 +77,5 @@ String getDayString(DateTime date) {
 }
 
 String DateFormat(DateTime date) {
-  String dateString = '';
-  // Get day of the week
-  switch (date.weekday) {
-    case 1:
-      dateString += 'Monday';
-      break;
-    case 2:
-      dateString += 'Tuesday';
-      break;
-    case 3:
-      dateString += 'Wednesday';
-      break;
-    case 4:
-      dateString += 'Thursday';
-      break;
-    case 5:
-      dateString += 'Friday';
-      break;
-    case 6:
-      dateString += 'Saturday';
-      break;
-    case 7:
-      dateString += 'Sunday';
-      break;
-  }
-  dateString += ', ';
-  // Get month
-  switch (date.month) {
-    case 1:
-      dateString += 'January';
-      break;
-    case 2:
-      dateString += 'February';
-      break;
-    case 3:
-      dateString += 'March';
-      break;
-    case 4:
-      dateString += 'April';
-      break;
-    case 5:
-      dateString += 'May';
-      break;
-    case 6:
-      dateString += 'June';
-      break;
-    case 7:
-      dateString += 'July';
-      break;
-    case 8:
-      dateString += 'August';
-      break;
-    case 9:
-      dateString += 'September';
-      break;
-    case 10:
-      dateString += 'October';
-      break;
-    case 11:
-      dateString += 'November';
-      break;
-    case 12:
-      dateString += 'December';
-      break;
-  }
-  dateString += ' ${date.day}, ${date.year}';
-
-  return dateString;
+  return '${WEEKDAYS[date.weekday - 1]}, ${date.day}. ${MONTHS[date.month - 1]} ${date.year}';
 }
