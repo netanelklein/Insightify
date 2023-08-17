@@ -63,15 +63,15 @@ class StreamHistoryDBEntry {
   final int id;
   final String timestamp;
   final int ms_played;
-  final String track_uri;
+  final String? track_uri;
   final String track_name;
   final String artist_name;
-  final String album_name;
-  final String reason_start;
-  final String reason_end;
-  final bool shuffle;
+  final String? album_name;
+  final String? reason_start;
+  final String? reason_end;
+  final bool? shuffle;
   final bool skipped;
-  final bool offline;
+  final bool? offline;
 
   StreamHistoryDBEntry(
       {required this.id,

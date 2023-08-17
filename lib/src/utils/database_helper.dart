@@ -247,18 +247,20 @@ class DatabaseHelper {
     await _database.close();
   }
 
-  Future<List<Map<String, dynamic>>> getStreamingHistory() async {
-    return await _database.rawQuery(
-        'SELECT * FROM stream_history WHERE track_name IS NOT NULL ORDER BY timestamp');
+  Future<List<Map<String, dynamic>>> getStreamingHistory(
+      bool descending) async {
+    return await _database.query('stream_history',
+        where: 'track_name IS NOT NULL',
+        orderBy: descending ? 'timestamp DESC' : 'timestamp ASC');
   }
 
-  Future<Map<String, List<StreamHistoryDBEntry>>>
-      getStreamingHistoryByDay() async {
+  Future<Map<String, List<StreamHistoryDBEntry>>> getStreamingHistoryByDay(
+      bool descending) async {
     final List<Map<String, dynamic>> streamingHistory =
-        await getStreamingHistory();
+        await getStreamingHistory(descending);
     final Map<String, List<StreamHistoryDBEntry>> streamingHistoryByDay = {};
     for (var entry in streamingHistory) {
-      final DateTime date = DateTime.parse(entry['timestamp']);
+      final DateTime date = DateTime.parse(entry['timestamp']).toLocal();
       final DateTime day = DateTime(date.year, date.month, date.day);
       if (streamingHistoryByDay.containsKey(day.toString())) {
         streamingHistoryByDay[day.toString()]
@@ -277,7 +279,7 @@ class DatabaseHelper {
     for (var key in keys) {
       sortedStreamingHistoryByDay[key] = streamingHistoryByDay[key]!;
     }
-    return sortedStreamingHistoryByDay;
+    return streamingHistoryByDay;
   }
 
   Future<List<Map<String, dynamic>>> getTopArtists() async {
