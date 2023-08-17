@@ -36,7 +36,8 @@ class TopLists extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(children: [TopArtists(), TopAlbums(), TopTracks()]),
+        body: const TabBarView(
+            children: [TopArtists(), TopAlbums(), TopTracks()]),
       ),
     );
   }

@@ -12,7 +12,7 @@ class _MinCountState extends State<MinCount> {
   double _value = DatabaseHelper().getMinTime.toDouble();
   void _onChanged(double value) {
     setState(() {
-      this._value = value;
+      _value = value;
       DatabaseHelper().setMinTime = value.toInt();
     });
   }
@@ -25,8 +25,8 @@ class _MinCountState extends State<MinCount> {
       children: [
         Text('Minimum Play Time',
             style: Theme.of(context).textTheme.titleLarge),
-        SizedBox(height: 10),
-        Text(
+        const SizedBox(height: 10),
+        const Text(
             'Set the minimum time (in seconds) a song must be played to be counted as a play:'),
         Slider(
             value: _value,

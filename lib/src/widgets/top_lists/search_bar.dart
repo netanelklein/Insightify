@@ -20,23 +20,22 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
   List<int> indexes = [];
 
   getIndexes(String value) {
-    widget.searchList.forEach((element) {
+    for (var element in widget.searchList) {
       if (element.toString().toLowerCase().startsWith(value.toLowerCase())) {
         indexes.add(widget.searchList.indexWhere((item) => item == element));
       }
-    });
+    }
   }
 
   scrollTo(int index) {
     widget.itemScrollController.scrollTo(
         index: index,
-        duration: Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 1000),
         curve: Curves.easeInOutCubic);
   }
 
   search(String value) {
     if (value.isNotEmpty) {
-      print('searching for $value');
       setState(() {
         indexes.clear();
         getIndexes(value);
@@ -47,7 +46,7 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
     }
   }
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
                   borderSide: BorderSide.none),
               filled: true,
               hintText: 'Search...',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               suffixIcon: _searchText.isNotEmpty
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
@@ -79,7 +78,7 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
                                 });
                               }
                             },
-                            icon: Icon(Icons.expand_less)),
+                            icon: const Icon(Icons.expand_less)),
                         IconButton(
                             onPressed: () {
                               if (_currentIndex < indexes.length - 1) {
@@ -89,10 +88,10 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
                                 });
                               }
                             },
-                            icon: Icon(Icons.expand_more)),
-                        indexes.length > 0
+                            icon: const Icon(Icons.expand_more)),
+                        indexes.isNotEmpty
                             ? Text('${_currentIndex + 1} of ${indexes.length}')
-                            : Text('No results'),
+                            : const Text('No results'),
                         IconButton(
                           onPressed: () => {
                             setState(() {
@@ -102,12 +101,12 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
                               _controller.clear();
                             })
                           },
-                          icon: Icon(Icons.clear),
+                          icon: const Icon(Icons.clear),
                         ),
                       ],
                     )
                   : null,
-              constraints: BoxConstraints(maxHeight: 65),
+              constraints: const BoxConstraints(maxHeight: 65),
             ),
             onChanged: (value) {
               if (value.isEmpty) {
@@ -123,8 +122,8 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
             },
           )),
           IconButton(
-              onPressed: () => print('TODO: Implement sort functionality'),
-              icon: Icon(Icons.sort))
+              onPressed: () {}, //TODO: Implement sorting
+              icon: const Icon(Icons.sort))
         ],
       ),
     );

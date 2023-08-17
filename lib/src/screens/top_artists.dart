@@ -34,7 +34,7 @@ class _TopArtistsState extends State<TopArtists> {
             itemCount: snapshot.data!.length,
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

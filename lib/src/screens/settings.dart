@@ -15,21 +15,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back)),
         elevation: 2,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: const Padding(
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
             // const MinCount(),
             // const Divider(),
             // const SetOrderBy(),
             // const Divider(),
-            const ClearData(key: const Key('clearDataWidget')),
+            ClearData(key: Key('clearDataWidget')),
           ],
         ),
       ),

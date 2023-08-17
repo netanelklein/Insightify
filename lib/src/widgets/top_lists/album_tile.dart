@@ -51,12 +51,12 @@ class AlbumTile extends StatelessWidget {
                   Text('${index + 1}. $albumName'),
                   isTopList
                       ? Text(
-                          'by ${artistName}',
+                          'by $artistName',
                           style: const TextStyle(
                             fontSize: 12,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                 ],
               ),
               subtitle: Text(
@@ -66,7 +66,7 @@ class AlbumTile extends StatelessWidget {
                       tooltip: 'OPEN SPOTIFY',
                       onPressed: () => openSpotify(
                           'spotify:album:${snapshot.data![0]['spotify_id']}'),
-                      icon: SpotifyButton())
+                      icon: const SpotifyButton())
                   : null
               // PopupMenuButton<String>(
               //   onSelected: (String result) async {
@@ -109,12 +109,12 @@ class AlbumTile extends StatelessWidget {
                 Text('${index + 1}. $albumName'),
                 isTopList
                     ? Text(
-                        'by ${artistName}',
+                        'by $artistName',
                         style: const TextStyle(
                           fontSize: 12,
                         ),
                       )
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
               ],
             ),
             subtitle: Text(

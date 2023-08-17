@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../services/spotify_api_fetch.dart';
 
-enum OrderBy { total_ms_played, times_played }
+enum OrderBy { totalMsPlayed, timesPlayed }
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -25,7 +25,7 @@ class DatabaseHelper {
     _minTime = value;
   }
 
-  OrderBy _orderBy = OrderBy.total_ms_played;
+  OrderBy _orderBy = OrderBy.totalMsPlayed;
 
   OrderBy get getOrderBy => _orderBy;
 

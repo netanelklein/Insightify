@@ -16,59 +16,59 @@ class ExtendedStreamHistoryEntry {
   final String ts;
   final String username;
   final String platform;
-  final num ms_played;
-  final String conn_country;
-  final String ip_addr_decrypted;
-  final String user_agent_decrypted;
-  final String master_metadata_track_name;
-  final String master_metadata_album_artist_name;
-  final String master_metadata_album_album_name;
-  final String spotify_track_uri;
-  final String? episode_name;
-  final String? episode_show_name;
-  final String? spotify_episode_uri;
-  final String reason_start;
-  final String reason_end;
+  final num msPlayed;
+  final String connCountry;
+  final String ipAddrDecrypted;
+  final String userAgentDecrypted;
+  final String masterMetadataTrackName;
+  final String masterMetadataAlbumArtistName;
+  final String masterMetadataAlbumAlbumName;
+  final String spotifyTrackUri;
+  final String? episodeName;
+  final String? episodeShowName;
+  final String? spotifyEpisodeUri;
+  final String reasonStart;
+  final String reasonEnd;
   final bool shuffle;
   final bool skipped;
   final bool offline;
-  final num offline_timestamp;
-  final bool incognito_mode;
+  final num offlineTimestamp;
+  final bool incognitoMode;
 
   ExtendedStreamHistoryEntry(
       {required this.ts,
       required this.username,
       required this.platform,
-      required this.ms_played,
-      required this.conn_country,
-      required this.ip_addr_decrypted,
-      required this.user_agent_decrypted,
-      required this.master_metadata_track_name,
-      required this.master_metadata_album_artist_name,
-      required this.master_metadata_album_album_name,
-      required this.spotify_track_uri,
-      required this.episode_name,
-      required this.episode_show_name,
-      required this.spotify_episode_uri,
-      required this.reason_start,
-      required this.reason_end,
+      required this.msPlayed,
+      required this.connCountry,
+      required this.ipAddrDecrypted,
+      required this.userAgentDecrypted,
+      required this.masterMetadataTrackName,
+      required this.masterMetadataAlbumArtistName,
+      required this.masterMetadataAlbumAlbumName,
+      required this.spotifyTrackUri,
+      required this.episodeName,
+      required this.episodeShowName,
+      required this.spotifyEpisodeUri,
+      required this.reasonStart,
+      required this.reasonEnd,
       required this.shuffle,
       required this.skipped,
       required this.offline,
-      required this.offline_timestamp,
-      required this.incognito_mode});
+      required this.offlineTimestamp,
+      required this.incognitoMode});
 }
 
 class StreamHistoryDBEntry {
   final int id;
   final String timestamp;
-  final int ms_played;
-  final String? track_uri;
-  final String track_name;
-  final String artist_name;
-  final String? album_name;
-  final String? reason_start;
-  final String? reason_end;
+  final int msPlayed;
+  final String? trackUri;
+  final String trackName;
+  final String artistName;
+  final String? albumName;
+  final String? reasonStart;
+  final String? reasonEnd;
   final bool? shuffle;
   final bool skipped;
   final bool? offline;
@@ -76,13 +76,13 @@ class StreamHistoryDBEntry {
   StreamHistoryDBEntry(
       {required this.id,
       required this.timestamp,
-      required this.ms_played,
-      required this.track_uri,
-      required this.track_name,
-      required this.artist_name,
-      required this.album_name,
-      required this.reason_start,
-      required this.reason_end,
+      required this.msPlayed,
+      required this.trackUri,
+      required this.trackName,
+      required this.artistName,
+      required this.albumName,
+      required this.reasonStart,
+      required this.reasonEnd,
       required this.shuffle,
       required this.skipped,
       required this.offline});
@@ -91,13 +91,13 @@ class StreamHistoryDBEntry {
     return StreamHistoryDBEntry(
       id: json['id'],
       timestamp: json['timestamp'],
-      ms_played: json['ms_played'],
-      track_uri: json['track_uri'],
-      track_name: json['track_name'],
-      artist_name: json['artist_name'],
-      album_name: json['album_name'],
-      reason_start: json['reason_start'],
-      reason_end: json['reason_end'],
+      msPlayed: json['ms_played'],
+      trackUri: json['track_uri'],
+      trackName: json['track_name'],
+      artistName: json['artist_name'],
+      albumName: json['album_name'],
+      reasonStart: json['reason_start'],
+      reasonEnd: json['reason_end'],
       shuffle: json['shuffle'] == 1,
       skipped: json['skipped'] == 1,
       offline: json['offline'] == 1,
@@ -106,6 +106,6 @@ class StreamHistoryDBEntry {
 
   @override
   String toString() {
-    return 'StreamHistoryDBEntry{id: $id, timestamp: $timestamp, ms_played: $ms_played, track_uri: $track_uri, track_name: $track_name, artist_name: $artist_name, album_name: $album_name, reason_start: $reason_start, reason_end: $reason_end, shuffle: $shuffle, skipped: $skipped, offline: $offline}';
+    return 'StreamHistoryDBEntry{id: $id, timestamp: $timestamp, ms_played: $msPlayed, track_uri: $trackUri, track_name: $trackName, artist_name: $artistName, album_name: $albumName, reason_start: $reasonStart, reason_end: $reasonEnd, shuffle: $shuffle, skipped: $skipped, offline: $offline}';
   }
 }

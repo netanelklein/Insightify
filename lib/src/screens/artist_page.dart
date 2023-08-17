@@ -23,12 +23,12 @@ class ArtistPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return DefaultTabController(
-                length: !snapshot.data![0].isEmpty ? 2 : 1,
+                length: snapshot.data![0].isNotEmpty ? 2 : 1,
                 child: NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
                         SliverAppBar(
-                          title: Text('$artistName'),
+                          title: Text(artistName),
                           floating: true,
                           forceElevated: innerBoxIsScrolled,
                         ),
@@ -47,8 +47,8 @@ class ArtistPage extends StatelessWidget {
                     body: Scaffold(
                       appBar: AppBar(
                           automaticallyImplyLeading: false,
-                          title: !snapshot.data![0].isEmpty
-                              ? TabBar(
+                          title: snapshot.data![0].isNotEmpty
+                              ? const TabBar(
                                   tabs: [
                                     Tab(
                                       text: 'Top Albums',
@@ -58,14 +58,14 @@ class ArtistPage extends StatelessWidget {
                                     ),
                                   ],
                                 )
-                              : TabBar(
+                              : const TabBar(
                                   tabs: [
                                     Tab(
                                       text: 'Top Tracks',
                                     ),
                                   ],
                                 )),
-                      body: !snapshot.data![0].isEmpty
+                      body: snapshot.data![0].isNotEmpty
                           ? TabBarView(children: [
                               ListView.builder(
                                 itemBuilder: (context, index) {
@@ -127,7 +127,7 @@ class ArtistPage extends StatelessWidget {
                     )),
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           }),
     ));

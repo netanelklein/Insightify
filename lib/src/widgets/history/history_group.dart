@@ -36,8 +36,8 @@ class DayBar extends StatelessWidget {
       constraints: BoxConstraints(
         maxWidth: MediaQuery.of(context).size.width - 100,
       ),
-      margin: EdgeInsets.fromLTRB(50, 10, 50, 0),
-      padding: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+      padding: const EdgeInsets.all(8.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onSecondary,

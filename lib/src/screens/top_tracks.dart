@@ -35,7 +35,7 @@ class _TopTracksState extends State<TopTracks> {
               itemCount: snapshot.data!.length,
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }

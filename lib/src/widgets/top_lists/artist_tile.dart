@@ -49,7 +49,7 @@ class ArtistTile extends StatelessWidget {
                       tooltip: 'OPEN SPOTIFY',
                       onPressed: () => openSpotify(
                           'spotify:artist:${snapshot.data![0]['spotify_id']}'),
-                      icon: SpotifyButton())
+                      icon: const SpotifyButton())
                   // PopupMenuButton<String>(
                   //     onSelected: (String result) async {
                   //       Uri url = Uri.parse(

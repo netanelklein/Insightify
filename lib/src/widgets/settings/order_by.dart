@@ -18,11 +18,11 @@ class _SetOrderByState extends State<SetOrderBy> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text('Order By', style: Theme.of(context).textTheme.titleLarge),
-        SizedBox(height: 10),
-        Text('Select the order in which the top lists are sorted:'),
+        const SizedBox(height: 10),
+        const Text('Select the order in which the top lists are sorted:'),
         RadioListTile(
-          title: Text('Total Play Time'),
-          value: OrderBy.total_ms_played,
+          title: const Text('Total Play Time'),
+          value: OrderBy.totalMsPlayed,
           groupValue: _value,
           onChanged: (value) {
             setState(() {
@@ -32,8 +32,8 @@ class _SetOrderByState extends State<SetOrderBy> {
           },
         ),
         RadioListTile(
-          title: Text('Number of Plays'),
-          value: OrderBy.times_played,
+          title: const Text('Number of Plays'),
+          value: OrderBy.timesPlayed,
           groupValue: _value,
           onChanged: (value) {
             setState(() {

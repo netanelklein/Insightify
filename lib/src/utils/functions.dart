@@ -48,7 +48,8 @@ bool isSameDay(DateTime first, DateTime second) {
 String getDayString(DateTime date) {
   if (isSameDay(date, DateTime.now())) {
     return 'Today';
-  } else if (isSameDay(date, DateTime.now().subtract(Duration(days: 1)))) {
+  } else if (isSameDay(
+      date, DateTime.now().subtract(const Duration(days: 1)))) {
     return 'Yesterday';
   } else {
     return dateFormat(date);

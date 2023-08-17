@@ -3,7 +3,7 @@ import '../utils/database_helper.dart';
 import '../widgets/history/history_group.dart';
 
 class HistoryScreen extends StatefulWidget {
-  HistoryScreen({super.key});
+  const HistoryScreen({super.key});
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
@@ -21,17 +21,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return FutureBuilder(
         future: streamingHistoryByDay,
         builder: (context, snapshot) {
-          print(snapshot.data);
           if (snapshot.hasData) {
             final keys = snapshot.data!.keys.toList();
             List<String> shownKeys = keys.sublist(fromIndex, toIndex);
 
             return Builder(builder: (context) {
               // final _controller = PrimaryScrollController.of(context);
-              final _controller = ScrollController();
-              _controller.addListener(() {
-                if (_controller.position.pixels ==
-                    _controller.position.maxScrollExtent) {
+              final controller = ScrollController();
+              controller.addListener(() {
+                if (controller.position.pixels ==
+                    controller.position.maxScrollExtent) {
                   setState(() {
                     toIndex += 1;
                     shownKeys = keys.sublist(fromIndex, toIndex);
@@ -42,12 +41,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
               return Scrollbar(
                 interactive: true,
                 thumbVisibility: true,
-                controller: _controller,
+                controller: controller,
                 radius: const Radius.circular(500),
                 child: Stack(
                   children: [
                     CustomScrollView(
-                        controller: _controller,
+                        controller: controller,
                         slivers: shownKeys
                             .map((day) => HistoryGroup(
                                 group: snapshot.data![day]!,
@@ -60,24 +59,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           icon: const Icon(Icons.sort),
                           itemBuilder: (context) => [
                             PopupMenuItem(
+                              value: 'desc',
                               child: Row(children: [
                                 Radio(
                                     value: true,
                                     groupValue: descending,
                                     onChanged: (_) {}),
-                                Text('Newest first')
+                                const Text('Newest first')
                               ]),
-                              value: 'desc',
                             ),
                             PopupMenuItem(
+                              value: 'asc',
                               child: Row(children: [
                                 Radio(
                                     value: false,
                                     groupValue: descending,
                                     onChanged: (_) {}),
-                                Text('Oldest first')
+                                const Text('Oldest first')
                               ]),
-                              value: 'asc',
                             ),
                           ],
                           onSelected: (value) {
@@ -86,8 +85,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               fromIndex = 0;
                               toIndex = 3;
                               shownKeys = keys.sublist(fromIndex, toIndex);
-                              _controller
-                                  .jumpTo(_controller.position.minScrollExtent);
+                              controller
+                                  .jumpTo(controller.position.minScrollExtent);
                             });
                           },
                         )),
@@ -97,8 +96,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         child: IconButton(
                           icon: const Icon(Icons.arrow_upward),
                           onPressed: () {
-                            _controller.animateTo(
-                                _controller.position.minScrollExtent,
+                            controller.animateTo(
+                                controller.position.minScrollExtent,
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut);
                           },
@@ -108,7 +107,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               );
             });
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }

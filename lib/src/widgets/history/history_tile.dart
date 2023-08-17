@@ -16,7 +16,7 @@ class HistoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final token = Provider.of<AppState>(context).accessToken;
     final trackMetadata = DatabaseHelper().getTrackMetadata(
-        entry.artist_name, entry.album_name, entry.track_name, token);
+        entry.artistName, entry.albumName, entry.trackName, token);
 
     return FutureBuilder(
       future: trackMetadata,
@@ -32,9 +32,9 @@ class HistoryTile extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${entry.track_name}'),
+                Text(entry.trackName),
                 Text(
-                  'by ${entry.artist_name}',
+                  'by ${entry.artistName}',
                   style: const TextStyle(
                     fontSize: 12,
                   ),
@@ -44,8 +44,8 @@ class HistoryTile extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Reason Started: ${entry.reason_start}'),
-                Text('Reason Ended: ${entry.reason_end}'),
+                Text('Reason Started: ${entry.reasonStart}'),
+                Text('Reason Ended: ${entry.reasonEnd}'),
                 Row(children: [
                   entry.shuffle!
                       ? Icon(
@@ -77,11 +77,11 @@ class HistoryTile extends StatelessWidget {
                     'Time Ended: ${timestampToString(entry.timestamp, false)}'),
               ],
             ),
-            trailing: entry.track_uri != '' && entry.track_uri != null
+            trailing: entry.trackUri != '' && entry.trackUri != null
                 ? IconButton(
                     tooltip: 'OPEN SPOTIFY',
-                    onPressed: () => openSpotify(entry.track_uri!),
-                    icon: SpotifyButton())
+                    onPressed: () => openSpotify(entry.trackUri!),
+                    icon: const SpotifyButton())
                 : null,
           );
         } else {
@@ -90,9 +90,9 @@ class HistoryTile extends StatelessWidget {
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${entry.track_name}'),
+                Text(entry.trackName),
                 Text(
-                  'by ${entry.artist_name}',
+                  'by ${entry.artistName}',
                   style: const TextStyle(
                     fontSize: 12,
                   ),
@@ -102,8 +102,8 @@ class HistoryTile extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Reason Started: ${entry.reason_start}'),
-                Text('Reason Ended: ${entry.reason_end}'),
+                Text('Reason Started: ${entry.reasonStart}'),
+                Text('Reason Ended: ${entry.reasonEnd}'),
                 Row(children: [
                   entry.shuffle!
                       ? Icon(

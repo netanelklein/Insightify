@@ -32,7 +32,7 @@ class AlbumPage extends StatelessWidget {
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
                         SliverAppBar(
-                          title: Text('$albumName'),
+                          title: Text(albumName),
                           floating: true,
                           forceElevated: innerBoxIsScrolled,
                         ),
@@ -51,7 +51,7 @@ class AlbumPage extends StatelessWidget {
                     body: Scaffold(
                       appBar: AppBar(
                         automaticallyImplyLeading: false,
-                        title: TabBar(
+                        title: const TabBar(
                           tabs: [
                             Tab(
                               text: 'Top Tracks',
@@ -82,7 +82,7 @@ class AlbumPage extends StatelessWidget {
                     )),
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           }),
     ));

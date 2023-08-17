@@ -4,23 +4,28 @@ import '../../../app_state.dart';
 import '../../utils/database_helper.dart';
 
 class ClearData extends StatelessWidget {
-  const ClearData({Key? key});
+  const ClearData({super.key});
 
   @override
   Widget build(BuildContext context) {
+    popNavigator() {
+      Navigator.pop(context);
+      Navigator.of(context).pop();
+    }
+
     Future<void> clearPersonalData() async {
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Clear Personal Data'),
-            content: Text(
+            title: const Text('Clear Personal Data'),
+            content: const Text(
                 'Are you sure you want to clear your personal data? This will remove all your saved data from the app.'),
             actions: [
               TextButton(
                 key: const Key('clearPersonalDataCancelButton'),
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
               Consumer<AppState>(builder: (context, appState, _) {
                 return TextButton(
@@ -31,10 +36,9 @@ class ClearData extends StatelessWidget {
                     appState.dataLength = 0;
                     appState.setLoading = false;
                     appState.setDataReady = false;
-                    Navigator.pop(context);
-                    Navigator.of(context).pop();
+                    popNavigator();
                   },
-                  child: Text('Clear'),
+                  child: const Text('Clear'),
                 );
               }),
             ],
@@ -48,14 +52,14 @@ class ClearData extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Clear All Data'),
-            content: Text(
+            title: const Text('Clear All Data'),
+            content: const Text(
                 'Are you sure you want to clear all data? This will remove all your saved data from the app, Including your personal data and artists and albums metadata.'),
             actions: [
               TextButton(
                 key: const Key('clearAllDataCancelButton'),
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
               Consumer<AppState>(builder: (context, appState, _) {
                 return TextButton(
@@ -67,10 +71,9 @@ class ClearData extends StatelessWidget {
                     appState.dataLength = 0;
                     appState.setLoading = false;
                     appState.setDataReady = false;
-                    Navigator.pop(context);
-                    Navigator.of(context).pop();
+                    popNavigator();
                   },
-                  child: Text('Clear'),
+                  child: const Text('Clear'),
                 );
               })
             ],
@@ -84,19 +87,19 @@ class ClearData extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text('Clear Data', style: Theme.of(context).textTheme.titleLarge),
-        SizedBox(height: 10),
-        Text('Clear your personal data from the app:'),
+        const SizedBox(height: 10),
+        const Text('Clear your personal data from the app:'),
         ElevatedButton(
           key: const Key('clearPersonalDataButton'),
           onPressed: clearPersonalData,
-          child: Text('Clear Personal Data'),
+          child: const Text('Clear Personal Data'),
         ),
-        SizedBox(height: 10),
-        Text('Clear all data from the app:'),
+        const SizedBox(height: 10),
+        const Text('Clear all data from the app:'),
         ElevatedButton(
           key: const Key('clearAllDataButton'),
           onPressed: clearAllData,
-          child: Text('Clear All Data'),
+          child: const Text('Clear All Data'),
         ),
       ],
     );

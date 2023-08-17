@@ -41,7 +41,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                 ? Theme.of(context).colorScheme.onBackground
                                 : Colors.transparent,
                             Colors.transparent
-                          ], stops: [
+                          ], stops: const [
                             0.95,
                             1
                           ]),
@@ -148,15 +148,15 @@ class _RootNavigationState extends State<RootNavigation> {
                       }
                     },
                     itemBuilder: (context) => <PopupMenuEntry>[
-                      PopupMenuItem(
-                        key: const Key('settings_menu_item'),
-                        child: const Text('Settings'),
+                      const PopupMenuItem(
+                        key: Key('settings_menu_item'),
                         value: 'settings',
+                        child: Text('Settings'),
                       ),
-                      PopupMenuItem(
-                        key: const Key('about_menu_item'),
-                        child: const Text('About'),
+                      const PopupMenuItem(
+                        key: Key('about_menu_item'),
                         value: 'about',
+                        child: Text('About'),
                       ),
                     ],
                   )
@@ -167,7 +167,7 @@ class _RootNavigationState extends State<RootNavigation> {
           body: <Widget>[
             Stats(),
             const TopLists(),
-            HistoryScreen()
+            const HistoryScreen()
           ][_selectedIndex],
         ),
       ),

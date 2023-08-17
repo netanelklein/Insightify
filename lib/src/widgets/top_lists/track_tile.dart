@@ -45,12 +45,12 @@ class TrackTile extends StatelessWidget {
                     Text('${index + 1}. $trackName'),
                     isTopList
                         ? Text(
-                            'by ${artistName}',
+                            'by $artistName',
                             style: const TextStyle(
                               fontSize: 12,
                             ),
                           )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ],
                 ),
                 subtitle: Text(
@@ -70,12 +70,12 @@ class TrackTile extends StatelessWidget {
                     Text('${index + 1}. $trackName'),
                     isTopList
                         ? Text(
-                            'by ${artistName}',
+                            'by $artistName',
                             style: const TextStyle(
                               fontSize: 12,
                             ),
                           )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   ],
                 ),
                 subtitle: Text(
@@ -85,7 +85,7 @@ class TrackTile extends StatelessWidget {
                         tooltip: 'PLAY IN SPOTIFY',
                         onPressed: () =>
                             openSpotify(snapshot.data![0]['track_uri']),
-                        icon: SpotifyButton())
+                        icon: const SpotifyButton())
                     : null
                 // PopupMenuButton<String>(
                 //   onSelected: (String result) async {
@@ -115,12 +115,12 @@ class TrackTile extends StatelessWidget {
                   Text('${index + 1}. $trackName'),
                   isTopList
                       ? Text(
-                          'by ${artistName}',
+                          'by $artistName',
                           style: const TextStyle(
                             fontSize: 12,
                           ),
                         )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                 ],
               ),
               subtitle: Text(

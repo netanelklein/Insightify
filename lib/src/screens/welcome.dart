@@ -104,7 +104,7 @@ class WelcomeScreen extends StatelessWidget {
                         ? Theme.of(context).colorScheme.onBackground
                         : Colors.transparent,
                     Colors.transparent
-                  ], stops: [
+                  ], stops: const [
                     0.95,
                     1
                   ]),
@@ -142,12 +142,12 @@ class WelcomeScreen extends StatelessWidget {
                   builder: (context, appState, _) => FilledButton(
                       key: const Key('uploadDataButton'),
                       onPressed: () => _uploadData(appState),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.upload_file),
-                          const SizedBox(width: 5),
-                          const Text('Upload Data'),
+                          Icon(Icons.upload_file),
+                          SizedBox(width: 5),
+                          Text('Upload Data'),
                         ],
                       ))),
               TextButton(

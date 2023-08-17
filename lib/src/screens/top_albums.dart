@@ -36,7 +36,7 @@ class _TopAlbumsState extends State<TopAlbums> {
               itemCount: snapshot.data!.length,
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         });
   }

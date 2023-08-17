@@ -20,19 +20,19 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       selectedIndex: widget._selectedIndex,
       destinations: const <Widget>[
         NavigationDestination(
-          key: const Key('statsNavigator'),
+          key: Key('statsNavigator'),
           icon: Icon(Icons.analytics_outlined),
           selectedIcon: Icon(Icons.analytics),
           label: 'Stats',
         ),
         NavigationDestination(
-          key: const Key('topListsNavigator'),
+          key: Key('topListsNavigator'),
           icon: Icon(Icons.list_alt_outlined),
           selectedIcon: Icon(Icons.list_alt),
           label: 'Top Lists',
         ),
         NavigationDestination(
-          key: const Key('historyNavigator'),
+          key: Key('historyNavigator'),
           icon: Icon(Icons.history_outlined),
           selectedIcon: Icon(Icons.history),
           label: 'History',
