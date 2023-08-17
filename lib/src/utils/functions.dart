@@ -1,27 +1,6 @@
-const List<String> WEEKDAYS = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday'
-];
+import 'package:url_launcher/url_launcher.dart';
 
-const List<String> MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'Oktober',
-  'November',
-  'December'
-];
+import 'constants.dart';
 
 List<int> msToTime(int ms) {
   int seconds = (ms / 1000).round();
@@ -72,10 +51,27 @@ String getDayString(DateTime date) {
   } else if (isSameDay(date, DateTime.now().subtract(Duration(days: 1)))) {
     return 'Yesterday';
   } else {
-    return DateFormat(date);
+    return dateFormat(date);
   }
 }
 
-String DateFormat(DateTime date) {
-  return '${WEEKDAYS[date.weekday - 1]}, ${date.day}. ${MONTHS[date.month - 1]} ${date.year}';
+String dateFormat(DateTime date) {
+  return '${weekdays[date.weekday - 1]}, ${date.day}. ${months[date.month - 1]} ${date.year}';
+}
+
+String timestampToString(String timestamp, bool withDate) {
+  final DateTime ts = DateTime.parse(timestamp).toLocal();
+  if (withDate) {
+    return '${ts.day.toString().padLeft(2, '0')}/${ts.month.toString().padLeft(2, '0')}/${ts.year.toString()} ${ts.hour.toString().padLeft(2, '0')}:${ts.minute.toString().padLeft(2, '0')}:${ts.second.toString().padLeft(2, '0')}';
+  }
+  return '${ts.hour.toString().padLeft(2, '0')}:${ts.minute.toString().padLeft(2, '0')}:${ts.second.toString().padLeft(2, '0')}';
+}
+
+openSpotify(String uri) async {
+  Uri url = Uri.parse(uri);
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
+  } else {
+    throw 'Could not launch $uri';
+  }
 }

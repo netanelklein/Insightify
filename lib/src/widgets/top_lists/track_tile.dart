@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../app_state.dart';
 import '../../utils/database_helper.dart';
 import '../../utils/functions.dart';
+import '../../widgets/common/spotify_button.dart';
 
 class TrackTile extends StatelessWidget {
   const TrackTile(
@@ -25,15 +25,6 @@ class TrackTile extends StatelessWidget {
   final int timesPlayed;
   final int timesSkipped;
   final bool isTopList;
-
-  openSpotify(String trackUri) async {
-    Uri url = Uri.parse(trackUri);
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      // throw 'Could not launch $url';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,14 +85,7 @@ class TrackTile extends StatelessWidget {
                         tooltip: 'PLAY IN SPOTIFY',
                         onPressed: () =>
                             openSpotify(snapshot.data![0]['track_uri']),
-                        icon: Image.asset(
-                          Theme.of(context).brightness == Brightness.light
-                              ? 'assets/icons/Spotify_Icon_RGB_Black.png'
-                              : 'assets/icons/Spotify_Icon_RGB_White.png',
-                          height: 24,
-                          width: 24,
-                        ),
-                      )
+                        icon: SpotifyButton())
                     : null
                 // PopupMenuButton<String>(
                 //   onSelected: (String result) async {

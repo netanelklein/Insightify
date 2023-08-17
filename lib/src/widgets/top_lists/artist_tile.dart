@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../../app_state.dart';
 import '../../screens/artist_page.dart';
 import '../../utils/functions.dart';
 import '../../utils/database_helper.dart';
-import '../../../app_state.dart';
+import '../../widgets/common/spotify_button.dart';
 
 class ArtistTile extends StatelessWidget {
   const ArtistTile(
@@ -16,15 +17,6 @@ class ArtistTile extends StatelessWidget {
   final String artistName;
   final int index;
   final int timePlayed;
-
-  openSpotify(String artistId) async {
-    Uri url = Uri.parse("spotify:artist:$artistId");
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      // throw 'Could not launch $url';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +47,9 @@ class ArtistTile extends StatelessWidget {
               trailing: snapshot.data![0]['spotify_id'] != null
                   ? IconButton(
                       tooltip: 'OPEN SPOTIFY',
-                      onPressed: () =>
-                          openSpotify(snapshot.data![0]['spotify_id']),
-                      icon: Image.asset(
-                        Theme.of(context).brightness == Brightness.light
-                            ? 'assets/icons/Spotify_Icon_RGB_Black.png'
-                            : 'assets/icons/Spotify_Icon_RGB_White.png',
-                        height: 24,
-                        width: 24,
-                      ),
-                    )
+                      onPressed: () => openSpotify(
+                          'spotify:artist:${snapshot.data![0]['spotify_id']}'),
+                      icon: SpotifyButton())
                   // PopupMenuButton<String>(
                   //     onSelected: (String result) async {
                   //       Uri url = Uri.parse(
