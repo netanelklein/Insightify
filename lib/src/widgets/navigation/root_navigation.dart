@@ -16,6 +16,7 @@ class RootNavigation extends StatefulWidget {
 
 class _RootNavigationState extends State<RootNavigation> {
   int _selectedIndex = 0;
+  SortBy _sortBy = SortBy.timePlayed;
 
   void setSelecteIndex(int index) {
     setState(() {
@@ -61,6 +62,46 @@ class _RootNavigationState extends State<RootNavigation> {
                 scrolledUnderElevation: 0,
                 forceElevated: innerBoxIsScrolled,
                 actions: [
+                  // TODO: Implement time range
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.date_range),
+                    tooltip: 'Time range',
+                  ),
+                  // TODO: Implement sorting
+                  _selectedIndex == 1
+                      ? PopupMenuButton(
+                          position: PopupMenuPosition.under,
+                          tooltip: 'Sort by',
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry>[
+                            PopupMenuItem(
+                              value: SortBy.timePlayed,
+                              child: Row(children: [
+                                Radio(
+                                    value: SortBy.timePlayed,
+                                    groupValue: _sortBy,
+                                    onChanged: (_) {}),
+                                const Text('Total play time')
+                              ]),
+                            ),
+                            PopupMenuItem(
+                              value: SortBy.timesPlayed,
+                              child: Row(children: [
+                                Radio(
+                                    value: SortBy.timesPlayed,
+                                    groupValue: _sortBy,
+                                    onChanged: (_) {}),
+                                const Text('Amount of times played')
+                              ]),
+                            ),
+                          ],
+                          onSelected: (value) => setState(() {
+                            _sortBy = value as SortBy;
+                          }),
+                          icon: const Icon(Icons.sort),
+                        )
+                      : const SizedBox(),
                   PopupMenuButton(
                     key: const Key('settings_menu'),
                     onSelected: (value) {
