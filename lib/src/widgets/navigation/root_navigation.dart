@@ -64,7 +64,13 @@ class _RootNavigationState extends State<RootNavigation> {
                 actions: [
                   // TODO: Implement time range
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2015),
+                          lastDate: DateTime.now());
+                    },
                     icon: const Icon(Icons.date_range),
                     tooltip: 'Time range',
                   ),
