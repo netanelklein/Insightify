@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:insightify/src/utils/database_helper.dart';
 import '../../widgets/navigation/top_lists_navigation.dart';
 import '../../screens/settings.dart';
 import '../../screens/stats.dart';
@@ -64,12 +65,24 @@ class _RootNavigationState extends State<RootNavigation> {
                 actions: [
                   // TODO: Implement time range
                   IconButton(
-                    onPressed: () {
-                      showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2015),
-                          lastDate: DateTime.now());
+                    onPressed: () async {
+                      await showDateRangePicker(
+                        context: context,
+                        initialEntryMode: DatePickerEntryMode.input,
+                        firstDate: await DatabaseHelper()
+                            .getMaxDateRange()
+                            .then((value) => value.start),
+                        lastDate: await DatabaseHelper()
+                            .getMaxDateRange()
+                            .then((value) => value.end),
+                        initialDateRange: DatabaseHelper().getDateRange,
+                        keyboardType: TextInputType.datetime,
+                        helpText: 'Select a time range to view your stats.',
+                      ).then((value) {
+                        if (value != null) {
+                          DatabaseHelper().setDateRange = value;
+                        }
+                      });
                     },
                     icon: const Icon(Icons.date_range),
                     tooltip: 'Time range',

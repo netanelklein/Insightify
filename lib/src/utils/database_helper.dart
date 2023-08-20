@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:insightify/src/models/stream_history.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -31,6 +32,16 @@ class DatabaseHelper {
 
   set setOrderBy(OrderBy value) {
     _orderBy = value;
+  }
+
+  DateTimeRange _dateRange = DateTimeRange(
+      start: DateTime.now().subtract(const Duration(days: 365)),
+      end: DateTime.now());
+
+  DateTimeRange get getDateRange => _dateRange;
+
+  set setDateRange(DateTimeRange value) {
+    _dateRange = value;
   }
 
   static Future<void> initDatabase() async {
@@ -245,6 +256,14 @@ class DatabaseHelper {
 
   Future<void> close() async {
     await _database.close();
+  }
+
+  Future<DateTimeRange> getMaxDateRange() async {
+    final List<Map<String, dynamic>> data = await _database.rawQuery(
+        'SELECT MIN(timestamp) AS min, MAX(timestamp) AS max FROM stream_history');
+    return DateTimeRange(
+        start: DateTime.parse(data[0]['min']).toLocal(),
+        end: DateTime.parse(data[0]['max']).toLocal());
   }
 
   Future<List<Map<String, dynamic>>> getStreamingHistory(

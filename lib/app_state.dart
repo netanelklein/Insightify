@@ -64,6 +64,7 @@ class AppState extends ChangeNotifier {
     if (await DatabaseHelper().isDatabaseEmpty()) {
       dataReady = false;
     } else {
+      DatabaseHelper().setDateRange = await DatabaseHelper().getMaxDateRange();
       dataReady = true;
     }
     appReady = true;

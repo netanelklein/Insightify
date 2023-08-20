@@ -86,6 +86,7 @@ class WelcomeScreen extends StatelessWidget {
         }
       }
       await DatabaseHelper().insertDataBatch(data);
+      DatabaseHelper().setDateRange = await DatabaseHelper().getMaxDateRange();
       state.setLoading = false;
       state.setDataReady = true;
     }
