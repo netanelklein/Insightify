@@ -25,6 +25,24 @@ class _RootNavigationState extends State<RootNavigation> {
     });
   }
 
+  void showPicker(DateTimeRange curr, DateTimeRange max) async {
+    await showDateRangePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.input,
+      firstDate: max.start,
+      lastDate: max.end,
+      initialDateRange: curr,
+      keyboardType: TextInputType.datetime,
+      helpText: 'Select a time range to view your stats.',
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          DatabaseHelper().setDateRange = value;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,26 +81,11 @@ class _RootNavigationState extends State<RootNavigation> {
                 scrolledUnderElevation: 0,
                 forceElevated: innerBoxIsScrolled,
                 actions: [
-                  // TODO: Implement time range
                   IconButton(
                     onPressed: () async {
-                      await showDateRangePicker(
-                        context: context,
-                        initialEntryMode: DatePickerEntryMode.input,
-                        firstDate: await DatabaseHelper()
-                            .getMaxDateRange()
-                            .then((value) => value.start),
-                        lastDate: await DatabaseHelper()
-                            .getMaxDateRange()
-                            .then((value) => value.end),
-                        initialDateRange: DatabaseHelper().getDateRange,
-                        keyboardType: TextInputType.datetime,
-                        helpText: 'Select a time range to view your stats.',
-                      ).then((value) {
-                        if (value != null) {
-                          DatabaseHelper().setDateRange = value;
-                        }
-                      });
+                      final curr = DatabaseHelper().getDateRange;
+                      final max = await DatabaseHelper().getMaxDateRange();
+                      showPicker(curr, max);
                     },
                     icon: const Icon(Icons.date_range),
                     tooltip: 'Time range',
@@ -155,7 +158,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                                   .colorScheme
                                                   .onBackground)),
                                       TextSpan(
-                                          text: 'netanel@netanelk.com',
+                                          text: 'insightify@netanelk.com',
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
@@ -164,7 +167,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                           recognizer: TapGestureRecognizer()
                                             ..onTap = () {
                                               launchUrl(Uri.parse(
-                                                  'mailto:netanel@netanlk.com?subject=Insightify%20Feedback'));
+                                                  'mailto:insightify@netanlk.com?subject=Insightify%20Feedback'));
                                             }),
                                       TextSpan(
                                           text:
@@ -224,11 +227,7 @@ class _RootNavigationState extends State<RootNavigation> {
               ),
             ];
           },
-          body: <Widget>[
-            Stats(),
-            const TopLists(),
-            const HistoryScreen()
-          ][_selectedIndex],
+          body: <Widget>[Stats(), TopLists(), HistoryScreen()][_selectedIndex],
         ),
       ),
       bottomNavigationBar: BottomNavigator(

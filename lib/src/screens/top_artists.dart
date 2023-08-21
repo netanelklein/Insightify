@@ -5,7 +5,7 @@ import '../widgets/top_lists/artist_tile.dart';
 import '../utils/database_helper.dart';
 
 class TopArtists extends StatefulWidget {
-  const TopArtists({Key? key}) : super(key: key);
+  const TopArtists({super.key});
 
   @override
   State<TopArtists> createState() => _TopArtistsState();

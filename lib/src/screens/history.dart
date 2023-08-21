@@ -23,6 +23,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final keys = snapshot.data!.keys.toList();
+            if (keys.length < toIndex) {
+              toIndex = keys.length;
+            }
             List<String> shownKeys = keys.sublist(fromIndex, toIndex);
 
             return Builder(builder: (context) {
@@ -32,8 +35,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 if (controller.position.pixels ==
                     controller.position.maxScrollExtent) {
                   setState(() {
-                    toIndex += 1;
-                    shownKeys = keys.sublist(fromIndex, toIndex);
+                    if (toIndex < keys.length) {
+                      toIndex += 1;
+                      shownKeys = keys.sublist(fromIndex, toIndex);
+                    }
                   });
                 }
               });
@@ -84,6 +89,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               descending = value == 'desc' ? true : false;
                               fromIndex = 0;
                               toIndex = 3;
+                              if (keys.length < toIndex) {
+                                toIndex = keys.length;
+                              }
                               shownKeys = keys.sublist(fromIndex, toIndex);
                               controller
                                   .jumpTo(controller.position.minScrollExtent);

@@ -269,8 +269,12 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getStreamingHistory(
       bool descending) async {
     return await _database.query('stream_history',
-        where: 'track_name IS NOT NULL',
-        orderBy: descending ? 'timestamp DESC' : 'timestamp ASC');
+        where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        orderBy: descending ? 'timestamp DESC' : 'timestamp ASC',
+        whereArgs: [
+          _dateRange.start.toUtc().toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+        ]);
   }
 
   Future<Map<String, List<StreamHistoryDBEntry>>> getStreamingHistoryByDay(
@@ -302,54 +306,181 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getTopArtists() async {
-    return await _database.rawQuery(
-        'SELECT artist_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name IS NOT NULL GROUP BY artist_name ORDER BY total_ms_played DESC');
+    return await _database.query('stream_history',
+        columns: ['artist_name', 'SUM(ms_played) AS total_ms_played'],
+        where: 'artist_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        groupBy: 'artist_name',
+        orderBy: 'total_ms_played DESC',
+        whereArgs: [
+          _dateRange.start.toUtc().toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getTopAlbums([String? artistName]) async {
     if (artistName == null) {
-      return await _database.rawQuery(
-          'SELECT album_name, artist_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name IS NOT NULL GROUP BY artist_name, album_name ORDER BY total_ms_played DESC');
+      return await _database.query('stream_history',
+          columns: [
+            'album_name',
+            'artist_name',
+            'SUM(ms_played) AS total_ms_played',
+            'COUNT(*) AS times_played',
+            'SUM(skipped) AS times_skipped'
+          ],
+          where: 'album_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+          groupBy: 'artist_name, album_name',
+          orderBy: 'total_ms_played DESC',
+          whereArgs: [
+            _dateRange.start.toUtc().toIso8601String(),
+            _dateRange.end
+                .add(const Duration(days: 1))
+                .toUtc()
+                .toIso8601String()
+          ]);
     }
-    return await _database.rawQuery(
-        'SELECT album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name IS NOT NULL GROUP BY artist_name, album_name ORDER BY total_ms_played DESC',
-        [artistName]);
+    return await _database.query('stream_history',
+        columns: [
+          'album_name',
+          'artist_name',
+          'SUM(ms_played) AS total_ms_played',
+          'COUNT(*) AS times_played',
+          'SUM(skipped) AS times_skipped'
+        ],
+        where:
+            'artist_name = ? AND album_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        groupBy: 'artist_name, album_name',
+        orderBy: 'total_ms_played DESC',
+        whereArgs: [
+          artistName,
+          _dateRange.start.toUtc().toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getTopTracks(
       [String? artistName, String? albumName]) async {
     if (artistName == null && albumName == null) {
-      return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC');
+      return await _database.query('stream_history',
+          columns: [
+            'track_name',
+            'artist_name',
+            'album_name',
+            'SUM(ms_played) AS total_ms_played',
+            'COUNT(*) AS times_played',
+            'SUM(skipped) AS times_skipped'
+          ],
+          where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+          groupBy: 'artist_name, album_name, track_name',
+          orderBy: 'total_ms_played DESC',
+          whereArgs: [
+            _dateRange.start.toUtc().toIso8601String(),
+            _dateRange.end
+                .add(const Duration(days: 1))
+                .toUtc()
+                .toIso8601String()
+          ]);
     }
     if (artistName != null && albumName == null) {
-      return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
-          [artistName]);
+      return await _database.query('stream_history',
+          columns: [
+            'track_name',
+            'artist_name',
+            'album_name',
+            'SUM(ms_played) AS total_ms_played',
+            'COUNT(*) AS times_played',
+            'SUM(skipped) AS times_skipped'
+          ],
+          where:
+              'artist_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+          groupBy: 'artist_name, album_name, track_name',
+          orderBy: 'total_ms_played DESC',
+          whereArgs: [
+            artistName,
+            _dateRange.start.toUtc().toIso8601String(),
+            _dateRange.end
+                .add(const Duration(days: 1))
+                .toUtc()
+                .toIso8601String()
+          ]);
     }
     if (artistName == null && albumName != null) {
-      return await _database.rawQuery(
-          'SELECT track_name, artist_name, album_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE album_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
-          [albumName]);
+      return await _database.query('stream_history',
+          columns: [
+            'track_name',
+            'artist_name',
+            'album_name',
+            'SUM(ms_played) AS total_ms_played',
+            'COUNT(*) AS times_played',
+            'SUM(skipped) AS times_skipped'
+          ],
+          where:
+              'album_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+          groupBy: 'artist_name, album_name, track_name',
+          orderBy: 'total_ms_played DESC',
+          whereArgs: [
+            albumName,
+            _dateRange.start.toUtc().toIso8601String(),
+            _dateRange.end
+                .add(const Duration(days: 1))
+                .toUtc()
+                .toIso8601String()
+          ]);
     }
-    return await _database.rawQuery(
-        'SELECT track_name, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played, SUM(skipped) AS times_skipped FROM stream_history WHERE artist_name = ? AND album_name = ? AND track_name IS NOT NULL GROUP BY artist_name, track_name ORDER BY total_ms_played DESC',
-        [artistName, albumName]);
+    return await _database.query('stream_history',
+        columns: [
+          'track_name',
+          'artist_name',
+          'album_name',
+          'SUM(ms_played) AS total_ms_played',
+          'COUNT(*) AS times_played',
+          'SUM(skipped) AS times_skipped'
+        ],
+        where:
+            'artist_name = ? AND album_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        groupBy: 'artist_name, album_name, track_name',
+        orderBy: 'total_ms_played DESC',
+        whereArgs: [
+          artistName,
+          albumName,
+          _dateRange.start.toUtc().toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getTotalTimePlayed() async {
-    return await _database.rawQuery(
-        'SELECT SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL');
+    return await _database.query('stream_history',
+        columns: ['SUM(ms_played) AS total_ms_played'],
+        where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        whereArgs: [
+          _dateRange.start.toUtc().toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getMostPlayedDay() async {
-    return await _database.rawQuery(
-        'SELECT strftime("%d/%m/%Y", timestamp) AS day, SUM(ms_played) AS total_ms_played, COUNT(*) AS times_played FROM stream_history WHERE track_name IS NOT NULL GROUP BY day ORDER BY times_played DESC LIMIT 1');
+    return await _database.query('stream_history',
+        columns: [
+          'strftime("%d/%m/%Y", timestamp, "localtime") AS day',
+          'SUM(ms_played) AS total_ms_played',
+          'COUNT(*) AS times_played'
+        ],
+        where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        groupBy: 'day',
+        orderBy: 'total_ms_played DESC',
+        limit: 1,
+        whereArgs: [
+          _dateRange.start.toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getAverageDay() async {
     return await _database.rawQuery(
-        'SELECT CAST(AVG(total_ms_played) AS int) AS average_ms_played FROM (SELECT strftime("%d/%m/%Y", timestamp) AS day, SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL GROUP BY day)');
+        'SELECT CAST(AVG(total_ms_played) AS int) AS average_ms_played FROM (SELECT strftime("%d/%m/%Y", timestamp, "localtime") AS day, SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL AND timestamp BETWEEN ? AND ? GROUP BY day)',
+        [
+          _dateRange.start.toIso8601String(),
+          _dateRange.end.add(const Duration(days: 1)).toIso8601String()
+        ]);
   }
 
   Future<List<Map<String, dynamic>>> getArtistMetadata(
