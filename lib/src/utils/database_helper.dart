@@ -7,8 +7,6 @@ import 'package:sqflite/sqflite.dart';
 
 import '../services/spotify_api_fetch.dart';
 
-enum OrderBy { totalMsPlayed, timesPlayed }
-
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
 
@@ -17,32 +15,6 @@ class DatabaseHelper {
   static late Database _database;
 
   DatabaseHelper._internal();
-
-  int _minTime = 0;
-
-  int get getMinTime => _minTime;
-
-  set setMinTime(int value) {
-    _minTime = value;
-  }
-
-  OrderBy _orderBy = OrderBy.totalMsPlayed;
-
-  OrderBy get getOrderBy => _orderBy;
-
-  set setOrderBy(OrderBy value) {
-    _orderBy = value;
-  }
-
-  DateTimeRange _dateRange = DateTimeRange(
-      start: DateTime.now().subtract(const Duration(days: 365)),
-      end: DateTime.now());
-
-  DateTimeRange get getDateRange => _dateRange;
-
-  set setDateRange(DateTimeRange value) {
-    _dateRange = value;
-  }
 
   static Future<void> initDatabase() async {
     _database = await openDatabase(
@@ -267,20 +239,20 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getStreamingHistory(
-      bool descending) async {
+      bool descending, DateTimeRange timeRange) async {
     return await _database.query('stream_history',
         where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         orderBy: descending ? 'timestamp DESC' : 'timestamp ASC',
         whereArgs: [
-          _dateRange.start.toUtc().toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+          timeRange.start.toUtc().toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
   Future<Map<String, List<StreamHistoryDBEntry>>> getStreamingHistoryByDay(
-      bool descending) async {
+      bool descending, DateTimeRange timeRange) async {
     final List<Map<String, dynamic>> streamingHistory =
-        await getStreamingHistory(descending);
+        await getStreamingHistory(descending, timeRange);
     final Map<String, List<StreamHistoryDBEntry>> streamingHistoryByDay = {};
     for (var entry in streamingHistory) {
       final DateTime date = DateTime.parse(entry['timestamp']).toLocal();
@@ -305,19 +277,21 @@ class DatabaseHelper {
     return streamingHistoryByDay;
   }
 
-  Future<List<Map<String, dynamic>>> getTopArtists() async {
+  Future<List<Map<String, dynamic>>> getTopArtists(
+      DateTimeRange timeRange) async {
     return await _database.query('stream_history',
         columns: ['artist_name', 'SUM(ms_played) AS total_ms_played'],
         where: 'artist_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         groupBy: 'artist_name',
         orderBy: 'total_ms_played DESC',
         whereArgs: [
-          _dateRange.start.toUtc().toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+          timeRange.start.toUtc().toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getTopAlbums([String? artistName]) async {
+  Future<List<Map<String, dynamic>>> getTopAlbums(DateTimeRange timeRange,
+      [String? artistName]) async {
     if (artistName == null) {
       return await _database.query('stream_history',
           columns: [
@@ -331,11 +305,8 @@ class DatabaseHelper {
           groupBy: 'artist_name, album_name',
           orderBy: 'total_ms_played DESC',
           whereArgs: [
-            _dateRange.start.toUtc().toIso8601String(),
-            _dateRange.end
-                .add(const Duration(days: 1))
-                .toUtc()
-                .toIso8601String()
+            timeRange.start.toUtc().toIso8601String(),
+            timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
           ]);
     }
     return await _database.query('stream_history',
@@ -352,12 +323,12 @@ class DatabaseHelper {
         orderBy: 'total_ms_played DESC',
         whereArgs: [
           artistName,
-          _dateRange.start.toUtc().toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+          timeRange.start.toUtc().toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getTopTracks(
+  Future<List<Map<String, dynamic>>> getTopTracks(DateTimeRange timeRange,
       [String? artistName, String? albumName]) async {
     if (artistName == null && albumName == null) {
       return await _database.query('stream_history',
@@ -373,11 +344,8 @@ class DatabaseHelper {
           groupBy: 'artist_name, album_name, track_name',
           orderBy: 'total_ms_played DESC',
           whereArgs: [
-            _dateRange.start.toUtc().toIso8601String(),
-            _dateRange.end
-                .add(const Duration(days: 1))
-                .toUtc()
-                .toIso8601String()
+            timeRange.start.toUtc().toIso8601String(),
+            timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
           ]);
     }
     if (artistName != null && albumName == null) {
@@ -396,11 +364,8 @@ class DatabaseHelper {
           orderBy: 'total_ms_played DESC',
           whereArgs: [
             artistName,
-            _dateRange.start.toUtc().toIso8601String(),
-            _dateRange.end
-                .add(const Duration(days: 1))
-                .toUtc()
-                .toIso8601String()
+            timeRange.start.toUtc().toIso8601String(),
+            timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
           ]);
     }
     if (artistName == null && albumName != null) {
@@ -419,11 +384,8 @@ class DatabaseHelper {
           orderBy: 'total_ms_played DESC',
           whereArgs: [
             albumName,
-            _dateRange.start.toUtc().toIso8601String(),
-            _dateRange.end
-                .add(const Duration(days: 1))
-                .toUtc()
-                .toIso8601String()
+            timeRange.start.toUtc().toIso8601String(),
+            timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
           ]);
     }
     return await _database.query('stream_history',
@@ -442,25 +404,27 @@ class DatabaseHelper {
         whereArgs: [
           artistName,
           albumName,
-          _dateRange.start.toUtc().toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+          timeRange.start.toUtc().toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getTotalTimePlayed() async {
+  Future<List<Map<String, dynamic>>> getTotalTimePlayed(
+      DateTimeRange timeRange) async {
     return await _database.query('stream_history',
         columns: ['SUM(ms_played) AS total_ms_played'],
         where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         whereArgs: [
-          _dateRange.start.toUtc().toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
+          timeRange.start.toUtc().toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getMostPlayedDay() async {
+  Future<List<Map<String, dynamic>>> getMostPlayedDay(
+      DateTimeRange timeRange) async {
     return await _database.query('stream_history',
         columns: [
-          'strftime("%d/%m/%Y", timestamp, "localtime") AS day',
+          "strftime('%d/%m/%Y', timestamp, 'localtime') AS day",
           'SUM(ms_played) AS total_ms_played',
           'COUNT(*) AS times_played'
         ],
@@ -469,17 +433,18 @@ class DatabaseHelper {
         orderBy: 'total_ms_played DESC',
         limit: 1,
         whereArgs: [
-          _dateRange.start.toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toIso8601String()
+          timeRange.start.toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getAverageDay() async {
+  Future<List<Map<String, dynamic>>> getAverageDay(
+      DateTimeRange timeRange) async {
     return await _database.rawQuery(
-        'SELECT CAST(AVG(total_ms_played) AS int) AS average_ms_played FROM (SELECT strftime("%d/%m/%Y", timestamp, "localtime") AS day, SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL AND timestamp BETWEEN ? AND ? GROUP BY day)',
+        "SELECT CAST(AVG(total_ms_played) AS int) AS average_ms_played FROM (SELECT strftime('%d/%m/%Y', timestamp, 'localtime') AS day, SUM(ms_played) AS total_ms_played FROM stream_history WHERE track_name IS NOT NULL AND timestamp BETWEEN ? AND ? GROUP BY day)",
         [
-          _dateRange.start.toIso8601String(),
-          _dateRange.end.add(const Duration(days: 1)).toIso8601String()
+          timeRange.start.toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toIso8601String()
         ]);
   }
 

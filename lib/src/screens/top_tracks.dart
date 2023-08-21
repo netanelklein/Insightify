@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../utils/database_helper.dart';
 import '../widgets/top_lists/track_tile.dart';
+import '../../app_state.dart';
 
 class TopTracks extends StatefulWidget {
   const TopTracks({super.key});
@@ -10,14 +13,17 @@ class TopTracks extends StatefulWidget {
 }
 
 class _TopTracksState extends State<TopTracks> {
-  final topTracks = DatabaseHelper().getTopTracks();
-
   @override
   Widget build(BuildContext context) {
+    final timeRange = Provider.of<AppState>(context).getTimeRange;
+    final topTracks = DatabaseHelper().getTopTracks(timeRange);
     return FutureBuilder(
         future: topTracks,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return const Center(child: Text('No tracks found'));
+            }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 return TrackTile(

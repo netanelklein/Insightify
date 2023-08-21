@@ -1,6 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
 import 'package:insightify/src/utils/database_helper.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/navigation/top_lists_navigation.dart';
 import '../../screens/settings.dart';
 import '../../screens/stats.dart';
@@ -25,19 +28,26 @@ class _RootNavigationState extends State<RootNavigation> {
     });
   }
 
-  void showPicker(DateTimeRange curr, DateTimeRange max) async {
+  void showPicker(DateTimeRange curr, DateTimeRange max, AppState state) async {
     await showDateRangePicker(
       context: context,
       initialEntryMode: DatePickerEntryMode.input,
       firstDate: max.start,
       lastDate: max.end,
       initialDateRange: curr,
-      keyboardType: TextInputType.datetime,
       helpText: 'Select a time range to view your stats.',
     ).then((value) {
       if (value != null) {
         setState(() {
-          DatabaseHelper().setDateRange = value;
+          state.setTimeRange = value;
+          if (DateFormat.yMd().format(value.start) ==
+                  DateFormat.yMd().format(max.start) &&
+              DateFormat.yMd().format(value.end) ==
+                  DateFormat.yMd().format(max.end)) {
+            state.setIsMaxRange = true;
+          } else {
+            state.setIsMaxRange = false;
+          }
         });
       }
     });
@@ -54,23 +64,14 @@ class _RootNavigationState extends State<RootNavigation> {
               SliverAppBar(
                 title: Row(
                   children: [
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                          gradient: RadialGradient(colors: [
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Theme.of(context).colorScheme.onBackground
-                                : Colors.transparent,
-                            Colors.transparent
-                          ], stops: const [
-                            0.95,
-                            1
-                          ]),
-                          color: Colors.white),
-                      child: Image.asset(
-                        'assets/icons/ChalkLogoR.png',
-                        height: 40,
-                      ),
-                    ),
+                    Material(
+                        borderRadius: BorderRadius.circular(40),
+                        elevation: 1,
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset(
+                          'assets/icons/NewLogoSquare.png',
+                          height: 40,
+                        )),
                     const SizedBox(width: 10),
                     const Text('Insightify',
                         style: TextStyle(
@@ -81,15 +82,19 @@ class _RootNavigationState extends State<RootNavigation> {
                 scrolledUnderElevation: 0,
                 forceElevated: innerBoxIsScrolled,
                 actions: [
-                  IconButton(
-                    onPressed: () async {
-                      final curr = DatabaseHelper().getDateRange;
-                      final max = await DatabaseHelper().getMaxDateRange();
-                      showPicker(curr, max);
-                    },
-                    icon: const Icon(Icons.date_range),
-                    tooltip: 'Time range',
-                  ),
+                  Consumer<AppState>(builder: (context, appState, _) {
+                    return IconButton(
+                      onPressed: () async {
+                        final max = await DatabaseHelper().getMaxDateRange();
+                        showPicker(appState.timeRange, max, appState);
+                      },
+                      icon: appState.getIsMaxRange
+                          ? const Icon(Icons.date_range)
+                          : const Badge(
+                              label: Text('!'), child: Icon(Icons.date_range)),
+                      tooltip: 'Time range',
+                    );
+                  }),
                   // TODO: Implement sorting
                   _selectedIndex == 1
                       ? PopupMenuButton(

@@ -58,13 +58,31 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  late DateTimeRange timeRange;
+
+  DateTimeRange get getTimeRange => timeRange;
+
+  set setTimeRange(DateTimeRange value) {
+    timeRange = value;
+    notifyListeners();
+  }
+
+  bool isMaxRange = true;
+
+  bool get getIsMaxRange => isMaxRange;
+
+  set setIsMaxRange(bool value) {
+    isMaxRange = value;
+    notifyListeners();
+  }
+
   Future<void> init() async {
     accessToken = await getAccessToken();
 
     if (await DatabaseHelper().isDatabaseEmpty()) {
       dataReady = false;
     } else {
-      DatabaseHelper().setDateRange = await DatabaseHelper().getMaxDateRange();
+      timeRange = await DatabaseHelper().getMaxDateRange();
       dataReady = true;
     }
     appReady = true;

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
 import 'package:insightify/src/screens/top_albums.dart';
 import 'package:insightify/src/screens/top_artists.dart';
 import 'package:insightify/src/screens/top_tracks.dart';
-import 'package:insightify/src/utils/database_helper.dart';
+import 'package:provider/provider.dart';
 
 enum SortBy { timePlayed, timesPlayed }
 
@@ -39,15 +40,13 @@ class TopLists extends StatelessWidget {
             ],
           ),
         ),
-        body: TabBarView(children: [
-          TopArtists(
-              key:
-                  Key('topArtists${DatabaseHelper().getDateRange.toString()}')),
-          TopAlbums(
-              key: Key('topAlbums${DatabaseHelper().getDateRange.toString()}')),
-          TopTracks(
-              key: Key('topTracks${DatabaseHelper().getDateRange.toString()}')),
-        ]),
+        body: Consumer<AppState>(builder: (context, state, _) {
+          return const TabBarView(children: [
+            TopArtists(),
+            TopAlbums(),
+            TopTracks(),
+          ]);
+        }),
       ),
     );
   }

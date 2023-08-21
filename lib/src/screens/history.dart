@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
+import 'package:provider/provider.dart';
 import '../utils/database_helper.dart';
 import '../widgets/history/history_group.dart';
 
@@ -16,12 +18,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final timeRange = Provider.of<AppState>(context).timeRange;
     final streamingHistoryByDay =
-        DatabaseHelper().getStreamingHistoryByDay(descending);
+        DatabaseHelper().getStreamingHistoryByDay(descending, timeRange);
     return FutureBuilder(
         future: streamingHistoryByDay,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
+            if (snapshot.data!.isEmpty) {
+              return const Center(child: Text('No history found'));
+            }
             final keys = snapshot.data!.keys.toList();
             if (keys.length < toIndex) {
               toIndex = keys.length;

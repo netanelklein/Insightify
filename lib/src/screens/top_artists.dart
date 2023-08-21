@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
+import 'package:provider/provider.dart';
 // import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 // import '../widgets/top_lists/search_bar.dart';
 import '../widgets/top_lists/artist_tile.dart';
@@ -12,16 +14,19 @@ class TopArtists extends StatefulWidget {
 }
 
 class _TopArtistsState extends State<TopArtists> {
-  final topArtists = DatabaseHelper().getTopArtists();
-
   @override
   Widget build(BuildContext context) {
     // ItemScrollController itemScrollController = ItemScrollController();
+    final timeRange = Provider.of<AppState>(context).getTimeRange;
+    final topArtists = DatabaseHelper().getTopArtists(timeRange);
 
     return FutureBuilder(
       future: topArtists,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (snapshot.data!.isEmpty) {
+            return const Center(child: Text('No artists found'));
+          }
           return ListView.builder(
             // itemScrollController: itemScrollController,
             itemBuilder: (BuildContext context, int index) {

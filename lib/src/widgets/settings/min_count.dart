@@ -9,13 +9,13 @@ class MinCount extends StatefulWidget {
 }
 
 class _MinCountState extends State<MinCount> {
-  double _value = DatabaseHelper().getMinTime.toDouble();
-  void _onChanged(double value) {
-    setState(() {
-      _value = value;
-      DatabaseHelper().setMinTime = value.toInt();
-    });
-  }
+  // double _value = DatabaseHelper().getMinTime.toDouble();
+  // void _onChanged(double value) {
+  //   setState(() {
+  //     _value = value;
+  //     DatabaseHelper().setMinTime = value.toInt();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +28,13 @@ class _MinCountState extends State<MinCount> {
         const SizedBox(height: 10),
         const Text(
             'Set the minimum time (in seconds) a song must be played to be counted as a play:'),
-        Slider(
-            value: _value,
-            onChanged: _onChanged,
-            min: 0,
-            max: 60,
-            divisions: 60,
-            label: _value.round().toString()),
+        // Slider(
+        //     value: _value,
+        //     onChanged: _onChanged,
+        //     min: 0,
+        //     max: 60,
+        //     divisions: 60,
+        //     label: _value.round().toString()),
       ],
     );
   }

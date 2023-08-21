@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
+import 'package:provider/provider.dart';
 import '../widgets/top_lists/album_tile.dart';
 import '../utils/database_helper.dart';
 
@@ -10,10 +12,10 @@ class TopAlbums extends StatefulWidget {
 }
 
 class _TopAlbumsState extends State<TopAlbums> {
-  final topAlbums = DatabaseHelper().getTopAlbums();
-
   @override
   Widget build(BuildContext context) {
+    final timeRange = Provider.of<AppState>(context).getTimeRange;
+    final topAlbums = DatabaseHelper().getTopAlbums(timeRange);
     return FutureBuilder(
         future: topAlbums,
         builder: (context, snapshot) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:insightify/app_state.dart';
 import 'package:insightify/src/utils/database_helper.dart';
 import 'package:insightify/src/widgets/top_lists/album_tile.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/functions.dart';
 import '../widgets/top_lists/track_tile.dart';
@@ -13,9 +15,10 @@ class ArtistPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topAlbums = DatabaseHelper().getTopAlbums(artistName);
-    final topTracks = DatabaseHelper().getTopTracks(artistName);
-    final totalTimePlayed = DatabaseHelper().getTotalTimePlayed();
+    final timeRange = Provider.of<AppState>(context).getTimeRange;
+    final topAlbums = DatabaseHelper().getTopAlbums(timeRange, artistName);
+    final topTracks = DatabaseHelper().getTopTracks(timeRange, artistName);
+    final totalTimePlayed = DatabaseHelper().getTotalTimePlayed(timeRange);
     return Scaffold(
         body: SafeArea(
       child: FutureBuilder(
