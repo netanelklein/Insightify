@@ -44,8 +44,8 @@ class HistoryTile extends StatelessWidget {
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Reason Started: ${entry.reasonStart}'),
-                Text('Reason Ended: ${entry.reasonEnd}'),
+                // Text('Reason Started: ${entry.reasonStart}'),
+                // Text('Reason Ended: ${entry.reasonEnd}'),
                 Row(children: [
                   entry.shuffle!
                       ? Icon(
