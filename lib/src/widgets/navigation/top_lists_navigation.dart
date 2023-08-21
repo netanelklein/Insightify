@@ -5,8 +5,6 @@ import 'package:insightify/src/screens/top_artists.dart';
 import 'package:insightify/src/screens/top_tracks.dart';
 import 'package:provider/provider.dart';
 
-enum SortBy { timePlayed, timesPlayed }
-
 class TopLists extends StatelessWidget {
   const TopLists({super.key});
 

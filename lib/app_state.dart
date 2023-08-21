@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'src/services/spotify_api_fetch.dart';
 import 'src/utils/database_helper.dart';
+import 'src/utils/constants.dart';
 
 class AppState extends ChangeNotifier {
   AppState() {
@@ -73,6 +74,24 @@ class AppState extends ChangeNotifier {
 
   set setIsMaxRange(bool value) {
     isMaxRange = value;
+    notifyListeners();
+  }
+
+  TopListsOrderBy listsSort = TopListsOrderBy.time;
+
+  TopListsOrderBy get getListsSort => listsSort;
+
+  set setListsSort(TopListsOrderBy value) {
+    listsSort = value;
+    notifyListeners();
+  }
+
+  HistoryOrderBy historySort = HistoryOrderBy.newestFirst;
+
+  HistoryOrderBy get getHistorySort => historySort;
+
+  set setHistorySort(HistoryOrderBy value) {
+    historySort = value;
     notifyListeners();
   }
 

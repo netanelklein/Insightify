@@ -18,7 +18,8 @@ class _TopArtistsState extends State<TopArtists> {
   Widget build(BuildContext context) {
     // ItemScrollController itemScrollController = ItemScrollController();
     final timeRange = Provider.of<AppState>(context).getTimeRange;
-    final topArtists = DatabaseHelper().getTopArtists(timeRange);
+    final orderBy = Provider.of<AppState>(context).getListsSort;
+    final topArtists = DatabaseHelper().getTopArtists(timeRange, orderBy);
 
     return FutureBuilder(
       future: topArtists,

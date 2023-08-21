@@ -20,8 +20,9 @@ class AlbumPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeRange = Provider.of<AppState>(context).getTimeRange;
-    final topTracks =
-        DatabaseHelper().getTopTracks(timeRange, artistName, albumName);
+    final orderBy = Provider.of<AppState>(context).getListsSort;
+    final topTracks = DatabaseHelper()
+        .getTopTracks(timeRange, orderBy, artistName, albumName);
     final totalTimePlayed = DatabaseHelper().getTotalTimePlayed(timeRange);
 
     return Scaffold(

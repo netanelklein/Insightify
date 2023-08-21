@@ -16,7 +16,8 @@ class _TopTracksState extends State<TopTracks> {
   @override
   Widget build(BuildContext context) {
     final timeRange = Provider.of<AppState>(context).getTimeRange;
-    final topTracks = DatabaseHelper().getTopTracks(timeRange);
+    final orderBy = Provider.of<AppState>(context).getListsSort;
+    final topTracks = DatabaseHelper().getTopTracks(timeRange, orderBy);
     return FutureBuilder(
         future: topTracks,
         builder: (context, snapshot) {

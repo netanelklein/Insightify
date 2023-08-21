@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:insightify/app_state.dart';
 import 'package:provider/provider.dart';
 import '../utils/database_helper.dart';
+import '../utils/constants.dart';
 import '../widgets/history/history_group.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -19,8 +20,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final timeRange = Provider.of<AppState>(context).timeRange;
-    final streamingHistoryByDay =
-        DatabaseHelper().getStreamingHistoryByDay(descending, timeRange);
+    final orderBy = Provider.of<AppState>(context).getHistorySort;
+    final streamingHistoryByDay = DatabaseHelper().getStreamingHistoryByDay(
+        orderBy == HistoryOrderBy.newestFirst ? true : false, timeRange);
     return FutureBuilder(
         future: streamingHistoryByDay,
         builder: (context, snapshot) {
@@ -63,47 +65,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 group: snapshot.data![day]!,
                                 day: DateTime.parse(day)))
                             .toList()),
-                    Positioned(
-                        top: 10,
-                        right: 0,
-                        child: PopupMenuButton(
-                          icon: const Icon(Icons.sort),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: 'desc',
-                              child: Row(children: [
-                                Radio(
-                                    value: true,
-                                    groupValue: descending,
-                                    onChanged: (_) {}),
-                                const Text('Newest first')
-                              ]),
-                            ),
-                            PopupMenuItem(
-                              value: 'asc',
-                              child: Row(children: [
-                                Radio(
-                                    value: false,
-                                    groupValue: descending,
-                                    onChanged: (_) {}),
-                                const Text('Oldest first')
-                              ]),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            setState(() {
-                              descending = value == 'desc' ? true : false;
-                              fromIndex = 0;
-                              toIndex = 3;
-                              if (keys.length < toIndex) {
-                                toIndex = keys.length;
-                              }
-                              shownKeys = keys.sublist(fromIndex, toIndex);
-                              controller
-                                  .jumpTo(controller.position.minScrollExtent);
-                            });
-                          },
-                        )),
                     Positioned(
                         bottom: 0,
                         right: 0,

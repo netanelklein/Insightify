@@ -22,3 +22,7 @@ const List<String> months = [
   'November',
   'December'
 ];
+
+enum TopListsOrderBy { time, timesPlayed }
+
+enum HistoryOrderBy { oldestFirst, newestFirst }

@@ -6,6 +6,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../services/spotify_api_fetch.dart';
+import '../utils/constants.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -278,19 +279,22 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getTopArtists(
-      DateTimeRange timeRange) async {
+      DateTimeRange timeRange, TopListsOrderBy sort) async {
     return await _database.query('stream_history',
         columns: ['artist_name', 'SUM(ms_played) AS total_ms_played'],
         where: 'artist_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         groupBy: 'artist_name',
-        orderBy: 'total_ms_played DESC',
+        orderBy: sort == TopListsOrderBy.time
+            ? 'total_ms_played DESC'
+            : 'COUNT(*) DESC',
         whereArgs: [
           timeRange.start.toUtc().toIso8601String(),
           timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getTopAlbums(DateTimeRange timeRange,
+  Future<List<Map<String, dynamic>>> getTopAlbums(
+      DateTimeRange timeRange, TopListsOrderBy sort,
       [String? artistName]) async {
     if (artistName == null) {
       return await _database.query('stream_history',
@@ -303,7 +307,9 @@ class DatabaseHelper {
           ],
           where: 'album_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
           groupBy: 'artist_name, album_name',
-          orderBy: 'total_ms_played DESC',
+          orderBy: sort == TopListsOrderBy.time
+              ? 'total_ms_played DESC'
+              : 'times_played DESC',
           whereArgs: [
             timeRange.start.toUtc().toIso8601String(),
             timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
@@ -320,7 +326,9 @@ class DatabaseHelper {
         where:
             'artist_name = ? AND album_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         groupBy: 'artist_name, album_name',
-        orderBy: 'total_ms_played DESC',
+        orderBy: sort == TopListsOrderBy.time
+            ? 'total_ms_played DESC'
+            : 'times_played DESC',
         whereArgs: [
           artistName,
           timeRange.start.toUtc().toIso8601String(),
@@ -328,7 +336,8 @@ class DatabaseHelper {
         ]);
   }
 
-  Future<List<Map<String, dynamic>>> getTopTracks(DateTimeRange timeRange,
+  Future<List<Map<String, dynamic>>> getTopTracks(
+      DateTimeRange timeRange, TopListsOrderBy sort,
       [String? artistName, String? albumName]) async {
     if (artistName == null && albumName == null) {
       return await _database.query('stream_history',
@@ -342,7 +351,9 @@ class DatabaseHelper {
           ],
           where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
           groupBy: 'artist_name, album_name, track_name',
-          orderBy: 'total_ms_played DESC',
+          orderBy: sort == TopListsOrderBy.time
+              ? 'total_ms_played DESC'
+              : 'times_played DESC',
           whereArgs: [
             timeRange.start.toUtc().toIso8601String(),
             timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
@@ -361,7 +372,9 @@ class DatabaseHelper {
           where:
               'artist_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
           groupBy: 'artist_name, album_name, track_name',
-          orderBy: 'total_ms_played DESC',
+          orderBy: sort == TopListsOrderBy.time
+              ? 'total_ms_played DESC'
+              : 'times_played DESC',
           whereArgs: [
             artistName,
             timeRange.start.toUtc().toIso8601String(),
@@ -381,7 +394,9 @@ class DatabaseHelper {
           where:
               'album_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
           groupBy: 'artist_name, album_name, track_name',
-          orderBy: 'total_ms_played DESC',
+          orderBy: sort == TopListsOrderBy.time
+              ? 'total_ms_played DESC'
+              : 'times_played DESC',
           whereArgs: [
             albumName,
             timeRange.start.toUtc().toIso8601String(),
@@ -400,7 +415,9 @@ class DatabaseHelper {
         where:
             'artist_name = ? AND album_name = ? AND track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
         groupBy: 'artist_name, album_name, track_name',
-        orderBy: 'total_ms_played DESC',
+        orderBy: sort == TopListsOrderBy.time
+            ? 'total_ms_played DESC'
+            : 'times_played DESC',
         whereArgs: [
           artistName,
           albumName,

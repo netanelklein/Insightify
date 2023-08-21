@@ -15,7 +15,8 @@ class _TopAlbumsState extends State<TopAlbums> {
   @override
   Widget build(BuildContext context) {
     final timeRange = Provider.of<AppState>(context).getTimeRange;
-    final topAlbums = DatabaseHelper().getTopAlbums(timeRange);
+    final orderBy = Provider.of<AppState>(context).getListsSort;
+    final topAlbums = DatabaseHelper().getTopAlbums(timeRange, orderBy);
     return FutureBuilder(
         future: topAlbums,
         builder: (context, snapshot) {

@@ -5,6 +5,8 @@ import 'package:insightify/src/utils/database_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/navigation/top_lists_navigation.dart';
+import '../../widgets/top_lists/top_lists_sort.dart';
+import '../../widgets/history/history_sort.dart';
 import '../../screens/settings.dart';
 import '../../screens/stats.dart';
 import '../../screens/history.dart';
@@ -20,7 +22,6 @@ class RootNavigation extends StatefulWidget {
 
 class _RootNavigationState extends State<RootNavigation> {
   int _selectedIndex = 0;
-  SortBy _sortBy = SortBy.timePlayed;
 
   void setSelecteIndex(int index) {
     setState(() {
@@ -95,40 +96,8 @@ class _RootNavigationState extends State<RootNavigation> {
                       tooltip: 'Time range',
                     );
                   }),
-                  // TODO: Implement sorting
-                  _selectedIndex == 1
-                      ? PopupMenuButton(
-                          position: PopupMenuPosition.under,
-                          tooltip: 'Sort by',
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry>[
-                            PopupMenuItem(
-                              value: SortBy.timePlayed,
-                              child: Row(children: [
-                                Radio(
-                                    value: SortBy.timePlayed,
-                                    groupValue: _sortBy,
-                                    onChanged: (_) {}),
-                                const Text('Total play time')
-                              ]),
-                            ),
-                            PopupMenuItem(
-                              value: SortBy.timesPlayed,
-                              child: Row(children: [
-                                Radio(
-                                    value: SortBy.timesPlayed,
-                                    groupValue: _sortBy,
-                                    onChanged: (_) {}),
-                                const Text('Amount of times played')
-                              ]),
-                            ),
-                          ],
-                          onSelected: (value) => setState(() {
-                            _sortBy = value as SortBy;
-                          }),
-                          icon: const Icon(Icons.sort),
-                        )
-                      : const SizedBox(),
+                  _selectedIndex == 1 ? const TopListsSort() : const SizedBox(),
+                  _selectedIndex == 2 ? const HistorySort() : const SizedBox(),
                   PopupMenuButton(
                     key: const Key('settings_menu'),
                     onSelected: (value) {
@@ -232,7 +201,11 @@ class _RootNavigationState extends State<RootNavigation> {
               ),
             ];
           },
-          body: <Widget>[Stats(), TopLists(), HistoryScreen()][_selectedIndex],
+          body: <Widget>[
+            const Stats(),
+            const TopLists(),
+            const HistoryScreen()
+          ][_selectedIndex],
         ),
       ),
       bottomNavigationBar: BottomNavigator(
