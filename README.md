@@ -33,13 +33,14 @@ Insightify includes the following features:
 - Clear your data to start fresh.
 - Dedicated page for each artist and album.
 - Avarage listening time per day statistics.
+- View your entire listening history.
+- View your top lists and history by time period.
+- Sort your top lists by different metrics.
 
 ### Planned Features
 
 - Dedicated page for each track.
 - Search your top lists.
-- View your top lists by time period.
-- View your entire listening history.
 - Time of the Day statistics.
 - View a timeline of your listening history.
 - Data visualizations in artist, album and track pages.
