@@ -98,23 +98,14 @@ class WelcomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Row(
           children: [
-            DecoratedBox(
-              decoration: BoxDecoration(
-                  gradient: RadialGradient(colors: [
-                    Theme.of(context).brightness == Brightness.dark
-                        ? Theme.of(context).colorScheme.onBackground
-                        : Colors.transparent,
-                    Colors.transparent
-                  ], stops: const [
-                    0.95,
-                    1
-                  ]),
-                  color: Colors.white),
-              child: Image.asset(
-                'assets/icons/ChalkLogoR.png',
-                height: 40,
-              ),
-            ),
+            Material(
+                borderRadius: BorderRadius.circular(40),
+                elevation: 1,
+                clipBehavior: Clip.hardEdge,
+                child: Image.asset(
+                  'assets/icons/NewLogoSquare.png',
+                  height: 40,
+                )),
             const SizedBox(width: 10),
             const Text('Insightify',
                 style: TextStyle(fontFamily: 'DancingScript', fontSize: 30)),
