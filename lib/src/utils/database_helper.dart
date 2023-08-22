@@ -286,7 +286,7 @@ class DatabaseHelper {
         groupBy: 'artist_name',
         orderBy: sort == TopListsOrderBy.time
             ? 'total_ms_played DESC'
-            : 'COUNT(*) DESC',
+            : 'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) DESC',
         whereArgs: [
           timeRange.start.toUtc().toIso8601String(),
           timeRange.end.add(const Duration(days: 1)).toUtc().toIso8601String()
@@ -302,7 +302,7 @@ class DatabaseHelper {
             'album_name',
             'artist_name',
             'SUM(ms_played) AS total_ms_played',
-            'COUNT(*) AS times_played',
+            'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
             'SUM(skipped) AS times_skipped'
           ],
           where: 'album_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
@@ -320,7 +320,7 @@ class DatabaseHelper {
           'album_name',
           'artist_name',
           'SUM(ms_played) AS total_ms_played',
-          'COUNT(*) AS times_played',
+          'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
           'SUM(skipped) AS times_skipped'
         ],
         where:
@@ -346,7 +346,7 @@ class DatabaseHelper {
             'artist_name',
             'album_name',
             'SUM(ms_played) AS total_ms_played',
-            'COUNT(*) AS times_played',
+            'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
             'SUM(skipped) AS times_skipped'
           ],
           where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
@@ -366,7 +366,7 @@ class DatabaseHelper {
             'artist_name',
             'album_name',
             'SUM(ms_played) AS total_ms_played',
-            'COUNT(*) AS times_played',
+            'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
             'SUM(skipped) AS times_skipped'
           ],
           where:
@@ -388,7 +388,7 @@ class DatabaseHelper {
             'artist_name',
             'album_name',
             'SUM(ms_played) AS total_ms_played',
-            'COUNT(*) AS times_played',
+            'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
             'SUM(skipped) AS times_skipped'
           ],
           where:
@@ -409,7 +409,7 @@ class DatabaseHelper {
           'artist_name',
           'album_name',
           'SUM(ms_played) AS total_ms_played',
-          'COUNT(*) AS times_played',
+          'COUNT(CASE WHEN skipped = 0 THEN 1 ELSE NULL END) AS times_played',
           'SUM(skipped) AS times_skipped'
         ],
         where:
