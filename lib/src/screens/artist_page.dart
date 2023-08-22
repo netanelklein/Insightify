@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:insightify/app_state.dart';
 import 'package:insightify/src/utils/database_helper.dart';
 import 'package:insightify/src/widgets/top_lists/album_tile.dart';
+import 'package:insightify/src/widgets/top_lists/top_lists_sort.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/functions.dart';
@@ -16,6 +18,7 @@ class ArtistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final timeRange = Provider.of<AppState>(context).getTimeRange;
+    final isMaxTimeRange = Provider.of<AppState>(context).getIsMaxRange;
     final orderBy = Provider.of<AppState>(context).getListsSort;
     final topAlbums =
         DatabaseHelper().getTopAlbums(timeRange, orderBy, artistName);
@@ -37,6 +40,7 @@ class ArtistPage extends StatelessWidget {
                           title: Text(artistName),
                           floating: true,
                           forceElevated: innerBoxIsScrolled,
+                          actions: const [TopListsSort()],
                         ),
                         SliverToBoxAdapter(
                           child: Card(
@@ -44,7 +48,7 @@ class ArtistPage extends StatelessWidget {
                               title: const Text('Total Time Played:'),
                               subtitle: Center(
                                   child: Text(
-                                      '${msToTimeString(timePlayed)}. This is ${((timePlayed / snapshot.data![2][0]['total_ms_played']) * 100).toStringAsFixed(2)}% of your total streaming time.')),
+                                      '${msToTimeString(timePlayed)}. This is ${((timePlayed / snapshot.data![2][0]['total_ms_played']) * 100).toStringAsFixed(2)}% of your total streaming time${isMaxTimeRange ? '.' : ' between ${DateFormat.yMd().format(timeRange.start)} and ${DateFormat.yMd().format(timeRange.end)}.'}')),
                             ),
                           ),
                         ),
