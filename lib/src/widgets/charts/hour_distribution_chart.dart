@@ -42,39 +42,8 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
                 children: [
                   BarChart(
                     BarChartData(
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          tooltipBgColor: Theme.of(context).colorScheme.primary,
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            return BarTooltipItem(
-                              '${group.x.toString().padLeft(2, '0')}:00:\n${msToTimeStringShort(rod.toY.toInt())}',
-                              TextStyle(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      titlesData: FlTitlesData(
-                          leftTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (value, meta) {
-                              if (value.toInt() % 2 == 0) {
-                                return Text(
-                                    value.toInt().toString().padLeft(2, '0'));
-                              } else {
-                                return const SizedBox();
-                              }
-                            },
-                          ))),
+                      barTouchData: _barTouchData(context),
+                      titlesData: _titlesData(),
                       maxY: fromMorningToNight.reduce((curr, next) =>
                               curr['total_ms_played'] > next['total_ms_played']
                                   ? curr
@@ -135,6 +104,42 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  FlTitlesData _titlesData() {
+    return FlTitlesData(
+        leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles:
+            const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+          showTitles: true,
+          getTitlesWidget: (value, meta) {
+            if (value.toInt() % 2 == 0) {
+              return Text(value.toInt().toString().padLeft(2, '0'));
+            } else {
+              return const SizedBox();
+            }
+          },
+        )));
+  }
+
+  BarTouchData _barTouchData(BuildContext context) {
+    return BarTouchData(
+      touchTooltipData: BarTouchTooltipData(
+        tooltipBgColor: Theme.of(context).colorScheme.primary,
+        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+          return BarTooltipItem(
+            '${group.x.toString().padLeft(2, '0')}:00 - ${(group.x < 23 ? ((group.x) + 1) : 0).toString().padLeft(2, '0')}:00:\n${msToTimeStringShort(rod.toY.toInt())}',
+            TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        },
       ),
     );
   }
