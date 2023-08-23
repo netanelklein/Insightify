@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
 import 'package:provider/provider.dart';
-import '../widgets/top_lists/album_tile.dart';
+
+import '../../app_state.dart';
 import '../utils/database_helper.dart';
+import '../widgets/top_lists/album_tile.dart';
 
 class TopAlbums extends StatefulWidget {
   const TopAlbums({super.key});

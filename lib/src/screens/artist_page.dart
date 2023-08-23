@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
-import 'package:insightify/src/utils/database_helper.dart';
-import 'package:insightify/src/widgets/top_lists/album_tile.dart';
-import 'package:insightify/src/widgets/top_lists/top_lists_sort.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../app_state.dart';
+import '../utils/database_helper.dart';
 import '../utils/functions.dart';
+import '../widgets/top_lists/album_tile.dart';
+import '../widgets/top_lists/top_lists_sort.dart';
 import '../widgets/top_lists/track_tile.dart';
 
 class ArtistPage extends StatelessWidget {

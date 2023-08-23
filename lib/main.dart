@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
-import 'src/screens/welcome.dart';
 
-import 'src/utils/database_helper.dart';
-import 'src/screens/loading_screen.dart';
-import 'src/widgets/navigation/root_navigation.dart';
-import 'src/styles/color_schemes.g.dart';
 import 'app_state.dart';
+import 'src/screens/loading_screen.dart';
+import 'src/screens/welcome.dart';
+import 'src/styles/color_schemes.g.dart';
+import 'src/utils/database_helper.dart';
+import 'src/widgets/navigation/root_navigation.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

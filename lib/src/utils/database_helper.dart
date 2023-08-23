@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:insightify/src/models/stream_history.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../models/stream_history.dart';
 import '../services/spotify_api_fetch.dart';
 import '../utils/constants.dart';
 

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
 import 'package:provider/provider.dart';
+
+import '../../app_state.dart';
+import '../utils/database_helper.dart';
 // import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 // import '../widgets/top_lists/search_bar.dart';
 import '../widgets/top_lists/artist_tile.dart';
-import '../utils/database_helper.dart';
 
 class TopArtists extends StatefulWidget {
   const TopArtists({super.key});

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
-import 'package:insightify/src/screens/top_albums.dart';
-import 'package:insightify/src/screens/top_artists.dart';
-import 'package:insightify/src/screens/top_tracks.dart';
 import 'package:provider/provider.dart';
+
+import '../../../app_state.dart';
+import '../../screens/top_albums.dart';
+import '../../screens/top_artists.dart';
+import '../../screens/top_tracks.dart';
 
 class TopLists extends StatelessWidget {
   const TopLists({super.key});

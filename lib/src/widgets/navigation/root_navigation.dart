@@ -1,16 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
-import 'package:insightify/src/utils/database_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../../widgets/navigation/top_lists_navigation.dart';
-import '../../widgets/top_lists/top_lists_sort.dart';
-import '../../widgets/history/history_sort.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../../../app_state.dart';
+import '../../screens/history.dart';
 import '../../screens/settings.dart';
 import '../../screens/stats.dart';
-import '../../screens/history.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../utils/database_helper.dart';
+import '../../widgets/history/history_sort.dart';
+import '../../widgets/navigation/top_lists_navigation.dart';
+import '../../widgets/top_lists/top_lists_sort.dart';
 import 'bottom_navigator.dart';
 
 class RootNavigation extends StatefulWidget {

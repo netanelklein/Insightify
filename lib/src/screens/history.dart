@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
 import 'package:provider/provider.dart';
-import '../utils/database_helper.dart';
+
+import '../../app_state.dart';
 import '../utils/constants.dart';
+import '../utils/database_helper.dart';
 import '../widgets/history/history_group.dart';
 
 class HistoryScreen extends StatefulWidget {

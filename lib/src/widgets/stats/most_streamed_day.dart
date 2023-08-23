@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/src/utils/functions.dart';
+
+import '../../utils/functions.dart';
 
 class MostStreamedDay extends StatelessWidget {
   const MostStreamedDay({

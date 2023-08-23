@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app_state.dart';
 import '../utils/database_helper.dart';
 import '../widgets/top_lists/track_tile.dart';
-import '../../app_state.dart';
 
 class TopTracks extends StatefulWidget {
   const TopTracks({super.key});

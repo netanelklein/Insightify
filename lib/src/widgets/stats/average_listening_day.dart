@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/src/utils/functions.dart';
+
+import '../../utils/functions.dart';
 
 class AverageListeningDay extends StatelessWidget {
   const AverageListeningDay({

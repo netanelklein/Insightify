@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'src/services/spotify_api_fetch.dart';
-import 'src/utils/database_helper.dart';
 import 'src/utils/constants.dart';
+import 'src/utils/database_helper.dart';
 
 class AppState extends ChangeNotifier {
   AppState() {

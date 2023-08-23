@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:insightify/app_state.dart';
-import 'package:insightify/src/utils/database_helper.dart';
 import 'package:intl/intl.dart';
+
+import '../../../app_state.dart';
+import '../../utils/database_helper.dart';
 
 class StatsTimeRange extends StatelessWidget {
   const StatsTimeRange({

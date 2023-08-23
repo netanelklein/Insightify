@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
-import '../../widgets/history/history_tile.dart';
 import '../../models/stream_history.dart';
 import '../../utils/functions.dart';
+import '../../widgets/history/history_tile.dart';
 
 class HistoryGroup extends MultiSliver {
   HistoryGroup({super.key, required this.group, required this.day})

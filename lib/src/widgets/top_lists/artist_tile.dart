@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../../../app_state.dart';
 import '../../screens/artist_page.dart';
-import '../../utils/functions.dart';
 import '../../utils/database_helper.dart';
+import '../../utils/functions.dart';
 import '../../widgets/common/spotify_button.dart';
 
 class ArtistTile extends StatelessWidget {
