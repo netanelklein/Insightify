@@ -465,6 +465,23 @@ class DatabaseHelper {
         ]);
   }
 
+  Future<List<Map<String, dynamic>>> getTimeOfDay(
+      DateTimeRange timeRange) async {
+    return await _database.query('stream_history',
+        columns: [
+          "strftime('%H', timestamp, 'localtime') AS hour",
+          'SUM(ms_played) AS total_ms_played',
+          'COUNT(*) AS times_played'
+        ],
+        where: 'track_name IS NOT NULL AND timestamp BETWEEN ? AND ?',
+        groupBy: 'hour',
+        orderBy: 'hour ASC',
+        whereArgs: [
+          timeRange.start.toIso8601String(),
+          timeRange.end.add(const Duration(days: 1)).toIso8601String()
+        ]);
+  }
+
   Future<List<Map<String, dynamic>>> getArtistMetadata(
       String artistName, AccessToken token) async {
     final metadata = await _database.rawQuery(
