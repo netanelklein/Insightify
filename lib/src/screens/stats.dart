@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app_state.dart';
+import '../utils/database_helper.dart';
 import '../widgets/stats/average_listening_day.dart';
 import '../widgets/stats/favourite_time_of_day.dart';
 import '../widgets/stats/most_streamed_day.dart';
 import '../widgets/stats/stats_time_range.dart';
 import '../widgets/stats/total_play_time.dart';
-import '../utils/database_helper.dart';
-import '../../app_state.dart';
 
 class Stats extends StatefulWidget {
   const Stats({super.key});
