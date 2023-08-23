@@ -36,12 +36,12 @@ Insightify includes the following features:
 - View your entire listening history.
 - View your top lists and history by time period.
 - Sort your top lists by different metrics.
+- Time of the Day statistics and charts.
 
 ### Planned Features
 
 - Dedicated page for each track.
 - Search your top lists.
-- Time of the Day statistics.
 - View a timeline of your listening history.
 - Data visualizations in artist, album and track pages.
 - Connect to your Spotify account to continuously update your data.
