@@ -84,13 +84,12 @@ class FavouriteTimeOfDay extends StatelessWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: ListView(children: [
-                Text('Time of Day Charts',
+                const Text('Time of Day Charts',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color:
-                            Theme.of(context).colorScheme.onTertiaryContainer)),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    )),
                 const SizedBox(
                   height: 16,
                 ),
