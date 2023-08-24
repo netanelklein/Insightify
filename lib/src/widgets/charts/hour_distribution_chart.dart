@@ -17,9 +17,23 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> hoursOfDay = widget.hoursOfDay.toList();
+
+    if (hoursOfDay.length < 24) {
+      for (var i = 0; i < 24; i++) {
+        if (int.parse(hoursOfDay[i]['hour']) != i) {
+          hoursOfDay.insert(i, {
+            'hour': i.toString().padLeft(2, '0'),
+            'total_ms_played': 0,
+            'times_played': 0
+          });
+        }
+      }
+    }
+
     final List<Map<String, dynamic>> fromMorningToNight = [
-      ...widget.hoursOfDay.sublist(6),
-      ...widget.hoursOfDay.sublist(0, 6)
+      ...hoursOfDay.sublist(6),
+      ...hoursOfDay.sublist(0, 6)
     ];
 
     return Card(
@@ -57,9 +71,8 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
                         show: false,
                       ),
                       barGroups: [
-                        for (var hour in _morningFirst
-                            ? fromMorningToNight
-                            : widget.hoursOfDay)
+                        for (var hour
+                            in _morningFirst ? fromMorningToNight : hoursOfDay)
                           BarChartGroupData(
                             x: int.parse(hour['hour']),
                             barRods: [
@@ -91,8 +104,8 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
                             ? 'Show Night First'
                             : 'Show Morning First',
                         icon: _morningFirst
-                            ? const Icon(Icons.nights_stay)
-                            : const Icon(Icons.sunny),
+                            ? const Icon(Icons.sunny)
+                            : const Icon(Icons.nights_stay),
                         onPressed: () {
                           setState(() {
                             _morningFirst = !_morningFirst;
@@ -133,7 +146,8 @@ class _HourDistributionChartState extends State<HourDistributionChart> {
         tooltipBgColor: Theme.of(context).colorScheme.primary,
         getTooltipItem: (group, groupIndex, rod, rodIndex) {
           return BarTooltipItem(
-            '${group.x.toString().padLeft(2, '0')}:00 - ${(group.x < 23 ? ((group.x) + 1) : 0).toString().padLeft(2, '0')}:00:\n${msToTimeStringShort(rod.toY.toInt())}',
+            '${group.x.toString().padLeft(2, '0')}:00 - ${(group.x < 23 ? ((group.x) + 1) : 0).toString().padLeft(2, '0')}:00:'
+            '\n${msToTimeStringShort(rod.toY.toInt())}',
             TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
