@@ -441,7 +441,7 @@ class DatabaseHelper {
       DateTimeRange timeRange) async {
     return await _database.query('stream_history',
         columns: [
-          "strftime('%d/%m/%Y', timestamp, 'localtime') AS day",
+          "strftime('%Y-%m-%d', timestamp, 'localtime') AS day",
           'SUM(ms_played) AS total_ms_played',
           'COUNT(*) AS times_played'
         ],
