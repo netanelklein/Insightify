@@ -82,26 +82,32 @@ class FavouriteTimeOfDay extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
-              child: ListView(children: [
-                const Text('Time of Day Charts',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    )),
-                const SizedBox(
-                  height: 16,
-                ),
-                TimeOfDayChart(
-                  timeOfDay: timeOfDay,
-                  totalMsPlayed: totalMsPlayed,
-                ),
-                const SizedBox(height: 16),
-                HourDistributionChart(
-                  hoursOfDay: hoursOfDay,
-                ),
-              ]),
+              height: MediaQuery.of(context).size.height * 0.8,
+              child: Column(
+                children: [
+                  const Text('Time of Day Charts',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Expanded(
+                    child: ListView(children: [
+                      TimeOfDayChart(
+                        timeOfDay: timeOfDay,
+                        totalMsPlayed: totalMsPlayed,
+                      ),
+                      const SizedBox(height: 16),
+                      HourDistributionChart(
+                        hoursOfDay: hoursOfDay,
+                      ),
+                    ]),
+                  ),
+                ],
+              ),
             ),
           );
         });
