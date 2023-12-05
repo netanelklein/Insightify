@@ -60,14 +60,8 @@ If you would like to contribute to Insightify, please follow these steps:
 
 If you would like to support the development of Insightify, you can donate to me via [PayPal](https://paypal.me/kleinetanel).
 
-<form action="https://www.paypal.com/donate" method="post" target="_top">
-<input type="hidden" name="business" value="QZLWDZNVRV53C" />
-<input type="hidden" name="no_recurring" value="0" />
-<input type="hidden" name="item_name" value="Fuel app development! Your donation shapes personalized Spotify insights. Join the melody-making community! 🎵 " />
-<input type="hidden" name="currency_code" value="ILS" />
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-<img alt="" border="0" src="https://www.paypal.com/en_IL/i/scr/pixel.gif" width="1" height="1" />
-</form>
+[![Donate with PayPal button](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?business=QZLWDZNVRV53C&no_recurring=0&item_name=Fuel%20app%20development!%20Your%20donation%20shapes%20personalized%20Spotify%20insights.%20Join%20the%20melody-making%20community!%20%F0%9F%8E%B5&currency_code=ILS)
+
 
 
 ## License
