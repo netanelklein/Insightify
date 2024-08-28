@@ -26,7 +26,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
+  final MaterialTheme theme = const MaterialTheme(TextTheme());
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +42,8 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [
         Locale('en', 'GB'),
       ],
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: theme.light(),
+      darkTheme: theme.dark(),
       home: Consumer<AppState>(
           builder: (context, appState, _) => appState.dataReady
               ? const RootNavigation()
