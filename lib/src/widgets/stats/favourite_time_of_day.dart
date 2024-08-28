@@ -48,8 +48,8 @@ class FavouriteTimeOfDay extends StatelessWidget {
 
     final String favouriteTimeOfDay = timeOfDay.entries
         .reduce((curr, next) => curr.value > next.value ? curr : next)
-        .key
-        .capitalize();
+        .key;
+    // .capitalize();
 
     final int msPlayed = timeOfDay.entries
         .reduce((curr, next) => curr.value > next.value ? curr : next)
