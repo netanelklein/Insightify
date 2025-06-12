@@ -1,0 +1,155 @@
+name: Insightify
+description: A Flutter app for analyzing Spotify listening history data.
+tech_stack: Flutter, Dart, SQLite
+architecture: Provider pattern for state management
+
+## Project Overview
+
+Insightify is a Flutter mobile application that allows users to analyze their Spotify listening data. The app imports user's downloaded Spotify data files (either Extended or Account data) and provides visualizations and statistics about their listening habits, including top artists, tracks, albums, and listening patterns.
+
+## Key Features
+
+- Import and parse Spotify data from JSON files
+- View top artists, tracks, and albums based on listening history
+- View total streaming time and most streamed days
+- Display average listening time per day statistics
+- View listening history with sorting options
+- Time of day listening pattern visualization
+- Dedicated pages for artists and albums with detailed statistics
+- Filter data by custom time ranges
+
+## Core Technical Components
+
+1. **Data Models**:
+   - StreamHistoryEntry - Represents basic streaming history
+   - ExtendedStreamHistoryEntry - Extended data with detailed information
+   - StreamHistoryDBEntry - Database representation of streaming history
+
+2. **State Management**:
+   - Uses the Provider package for application state management
+   - AppState class manages core state like time ranges, loading state, and filtering options
+
+3. **Database**:
+   - Uses SQLite through the sqflite package
+   - DatabaseHelper manages database operations including querying statistics
+   - Stores stream history, artists, and albums information
+
+4. **API Integration**:
+   - Connects to Spotify Web API for additional metadata
+   - Fetches artist and album information not available in user data
+
+5. **UI Components**:
+   - Material design with custom theme
+   - Charts and visualizations using fl_chart
+   - World map visualization with countries_world_map
+
+## Project Structure
+
+- lib/
+  - main.dart - Application entry point
+  - app_state.dart - Global state management
+  - auth/ - Spotify API authentication
+  - src/
+    - models/ - Data models
+    - screens/ - Main application screens
+    - services/ - API services
+    - styles/ - Theme and styling
+    - utils/ - Helper functions and constants
+    - widgets/ - Reusable UI components
+
+## Development Considerations
+
+- The app processes potentially large JSON files
+- Performance optimization for data querying is important
+- User privacy is maintained by processing all data locally
+- Future plans include expanded visualizations and direct Spotify account integration
+
+## Critical Issues Identified
+
+### High Priority (Immediate Action Required)
+1. **Error Handling**: Limited try-catch blocks throughout the codebase - API calls and file operations need robust error handling
+2. **Test Coverage**: Only basic widget test exists - needs comprehensive unit/integration tests
+3. **User Feedback**: No loading indicators or error messages for failed data imports
+4. **Memory Management**: Large JSON file processing could cause memory issues on low-end devices
+
+### Medium Priority (Phase 1)
+1. **Code Organization**: Some TODOs remain unaddressed in codebase
+2. **API Efficiency**: Spotify API calls noted as inefficient (multiple TODO comments)
+3. **Data Validation**: Limited validation of imported JSON file structure
+4. **Performance**: No pagination for large datasets in UI components
+
+### Development Workflow Recommendations
+
+#### Git Branching Strategy
+1. **Main Branch**: Production-ready code only
+2. **Dev Branch**: Integration branch for all feature development
+3. **Feature Branches**: Individual branches for each feature (e.g., `feature/track-pages`, `feature/search-functionality`)
+4. **Hotfix Branches**: For critical bug fixes that need immediate deployment
+
+#### Suggested Branch Naming Convention
+- `feature/description` (e.g., `feature/dedicated-track-pages`)
+- `bugfix/description` (e.g., `bugfix/json-import-error`)
+- `hotfix/description` (e.g., `hotfix/database-crash`)
+- `chore/description` (e.g., `chore/update-dependencies`)
+
+#### Development Process
+1. Create feature branch from dev
+2. Implement feature with tests
+3. Code review via pull request
+4. Merge to dev branch
+5. Integration testing
+6. Merge dev to main for releases
+
+## Improvement Roadmap
+
+### Phase 1: Foundation & Stability (Immediate - 1 month)
+**Branch: `dev` → `feature/foundation-improvements`**
+- **Error Handling & Validation**: Add comprehensive try-catch blocks and user feedback
+- **Test Infrastructure**: Set up testing framework with unit/integration tests
+- **Performance Optimization**: Implement pagination and optimize database queries
+- **User Experience**: Add loading indicators, progress bars, and error dialogs
+- **Code Cleanup**: Address existing TODOs and improve API efficiency
+
+### Phase 2: Core Feature Enhancements (1-2 months)
+**Branches from `dev`:**
+- `feature/dedicated-track-pages`: Detailed view of individual tracks with listening history
+- `feature/search-functionality`: Global search across top lists, history, artists, and albums
+- `feature/time-visualizations`: Timeline view showing listening evolution over time
+- `feature/genre-analysis`: Genre categorization and distribution visualizations
+
+### Phase 3: Technical Improvements (2-3 months)
+**Branches from `dev`:**
+- `feature/offline-caching`: Local caching of artist and album images
+- `feature/data-import-enhancement`: Background processing with validation and progress
+- `feature/repository-pattern`: Implement repository pattern for better data abstraction
+- `feature/accessibility`: Screen reader support and visual accessibility improvements
+
+### Phase 4: Advanced Features & Integration (3-4 months)
+**Branches from `dev`:**
+- `feature/spotify-integration`: OAuth authentication and real-time data syncing
+- `feature/data-export`: Export analysis results as images or PDFs
+- `feature/ui-personalization`: Customizable dashboard and theme options
+- `feature/playlist-analysis`: Visualization and cross-analysis of playlist data
+
+### Phase 5: Future Vision (4+ months)
+**Branches from `dev`:**
+- `feature/social-features`: Friend comparison capabilities (privacy-respecting)
+- `feature/ml-integration`: Mood analysis and personalized insights
+- `feature/advanced-visualizations`: Interactive charts with animations
+- `feature/mobile-optimization`: Platform-specific optimizations
+
+## Technical Debt & Code Quality
+
+### Immediate Actions Needed
+1. **Add secrets.dart template**: Create `lib/auth/secrets.dart.template` for new developers
+2. **Implement proper logging**: Replace print statements with structured logging
+3. **Add input sanitization**: Validate all user inputs and API responses
+4. **Create error reporting**: Implement crash reporting for production builds
+5. **Add performance monitoring**: Track app performance and memory usage
+
+### Code Quality Standards
+1. **Documentation**: Add comprehensive code comments and README updates
+2. **Linting**: Ensure all code passes Flutter linting rules
+3. **Type Safety**: Add explicit types where missing
+4. **Constants Management**: Centralize magic numbers and strings
+5. **Widget Decomposition**: Break down large widgets into smaller, reusable components

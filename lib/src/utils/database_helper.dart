@@ -73,13 +73,29 @@ class DatabaseHelper {
     } else if (data.keys.toSet().containsAll(nonExtendedDataKeys)) {
       return 'non-extended';
     } else {
-      return 'unknown';
+      // Check if it's a partial match for extended data (core fields)
+      final commonExtendedKeys = ['ts', 'master_metadata_track_name', 'master_metadata_album_artist_name', 'ms_played'];
+      final commonNonExtendedKeys = ['endTime', 'trackName', 'artistName', 'msPlayed'];
+      
+      if (data.keys.toSet().containsAll(commonExtendedKeys)) {
+        return 'extended';
+      } else if (data.keys.toSet().containsAll(commonNonExtendedKeys)) {
+        return 'non-extended';
+      } else {
+        return 'unknown';
+      }
     }
   }
 
   Future<int> insertDataBatch(List<dynamic> data) async {
+    // Check if data is empty
+    if (data.isEmpty) {
+      return 0;
+    }
+    
     // Validate all data is of the same type
     final type = _getDataType(data[0]);
+    
     for (final Map<String, dynamic> item in data) {
       if (_getDataType(item) != type) {
         return 0;
@@ -101,8 +117,13 @@ class DatabaseHelper {
       default:
         return 0;
     }
-    await batch.commit(noResult: true);
-    return 1;
+    
+    try {
+      await batch.commit(noResult: true);
+      return 1;
+    } catch (e) {
+      return 0;
+    }
   }
 
   Future<int> insertData(Map<String, dynamic> data) async {

@@ -52,45 +52,123 @@ class WelcomeScreen extends StatelessWidget {
         } else if (entry.keys.toSet().containsAll(nonExtendedDataKeys)) {
           type = 'non-extended';
         } else {
-          type = 'unknown';
-          return type;
+          // Check if it's a partial match for extended data
+          final commonExtendedKeys = ['ts', 'master_metadata_track_name', 'master_metadata_album_artist_name', 'ms_played'];
+          final commonNonExtendedKeys = ['endTime', 'trackName', 'artistName', 'msPlayed'];
+          
+          if (entry.keys.toSet().containsAll(commonExtendedKeys)) {
+            type = 'extended';
+          } else if (entry.keys.toSet().containsAll(commonNonExtendedKeys)) {
+            type = 'non-extended';
+          } else {
+            type = 'unknown';
+            return type;
+          }
         }
       } else {
-        if (type == 'extended' &&
-            !entry.keys.toSet().containsAll(extendedDataKeys)) {
-          return 'unknown';
-        } else if (type == 'non-extended' &&
-            !entry.keys.toSet().containsAll(nonExtendedDataKeys)) {
-          return 'unknown';
+        // For subsequent entries, just check the core required keys
+        if (type == 'extended') {
+          final coreKeys = ['ts', 'master_metadata_track_name', 'ms_played'];
+          if (!entry.keys.toSet().containsAll(coreKeys)) {
+            return 'unknown';
+          }
+        } else if (type == 'non-extended') {
+          final coreKeys = ['endTime', 'trackName', 'msPlayed'];
+          if (!entry.keys.toSet().containsAll(coreKeys)) {
+            return 'unknown';
+          }
         }
       }
     }
     return type;
   }
 
-  void _uploadData(AppState state) async {
-    final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['json'],
-        allowMultiple: true);
-    if (result != null) {
-      state.setLoading = true;
+  void _uploadData(BuildContext context, AppState state) async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['json'],
+          allowMultiple: true);
+      
+      if (result != null) {
+        state.setLoading = true;
 
-      List<dynamic> data = [];
-      for (var file in result.files) {
-        final contents = jsonDecode(File(file.path!).readAsStringSync());
-        if (contents is List<dynamic>) {
-          final type = _getDataType(contents);
-          if (type == 'extended' || type == 'non-extended') {
-            data.addAll(contents);
+        List<dynamic> data = [];
+        List<String> errorMessages = [];
+        
+        for (var file in result.files) {
+          try {
+            if (file.path == null) {
+              errorMessages.add('File ${file.name}: Path is null');
+              continue;
+            }
+            
+            print('Processing file: ${file.name} at ${file.path}');
+            final contents = jsonDecode(File(file.path!).readAsStringSync());
+            
+            if (contents is List<dynamic>) {
+              final type = _getDataType(contents);
+              
+              if (type == 'extended' || type == 'non-extended') {
+                data.addAll(contents);
+                print('Added ${contents.length} records from ${file.name}');
+              } else {
+                errorMessages.add('File ${file.name}: Unsupported data format ($type)');
+              }
+            } else {
+              errorMessages.add('File ${file.name}: Content is not a JSON array');
+            }
+          } catch (e) {
+            errorMessages.add('File ${file.name}: Error processing - $e');
           }
         }
+        
+        if (data.isNotEmpty) {
+          try {
+            final result = await DatabaseHelper().insertDataBatch(data);
+            if (result > 0) {
+              state.timeRange = await DatabaseHelper().getMaxDateRange();
+              state.setLoading = false;
+              state.setDataReady = true;
+            } else {
+              state.setLoading = false;
+              _showErrorDialog(context, 'Failed to insert data into database');
+            }
+          } catch (e) {
+            state.setLoading = false;
+            _showErrorDialog(context, 'Database error: $e');
+          }
+        } else {
+          state.setLoading = false;
+          String errorMsg = 'No valid data was found in the selected files.';
+          if (errorMessages.isNotEmpty) {
+            errorMsg += '\n\nErrors:\n${errorMessages.join('\n')}';
+          }
+          _showErrorDialog(context, errorMsg);
+        }
       }
-      await DatabaseHelper().insertDataBatch(data);
-      state.timeRange = await DatabaseHelper().getMaxDateRange();
+    } catch (e) {
       state.setLoading = false;
-      state.setDataReady = true;
+      _showErrorDialog(context, 'Unexpected error: $e');
     }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Upload Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -134,7 +212,7 @@ class WelcomeScreen extends StatelessWidget {
               Consumer<AppState>(
                   builder: (context, appState, _) => FilledButton(
                       key: const Key('uploadDataButton'),
-                      onPressed: () => _uploadData(appState),
+                      onPressed: () => _uploadData(context, appState),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
