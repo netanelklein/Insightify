@@ -10,6 +10,10 @@ Create feature branches with descriptive names like feature/contact-form-api or 
 
 Configure git as GitHub Copilot with semantic commits and Signed-off-by: GitHub Copilot.
 
+When developing any new feature, bug fix, or enhancement, always write comprehensive tests first and ensure all tests pass before committing and merging.
+
+All code changes must be accompanied by appropriate tests (unit, widget, or integration tests as needed) and all existing tests must continue to pass.
+
 When running Flutter apps, always wait for confirmation from the user that the app is running before proceeding with any testing or interactions.
 
 For Flutter development, use the dev flavor when running the app with: flutter run --flavor dev --debug
