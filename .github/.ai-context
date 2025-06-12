@@ -184,9 +184,10 @@ Insightify is a Flutter mobile application that allows users to analyze their Sp
    - Fixed RegExp Unicode handling and AppState context issues in tests
 
 ### High Priority (Next Phase)
-1. **Memory Management**: Large JSON file processing could cause memory issues on low-end devices
-2. **API Efficiency**: Spotify API calls noted as inefficient (multiple TODO comments)
-3. **Performance Monitoring**: Add real-time performance tracking and memory usage monitoring
+1. **CI/CD Pipeline Setup**: Implement automated testing and Google Play deployment infrastructure
+2. **Memory Management**: Large JSON file processing could cause memory issues on low-end devices
+3. **API Efficiency**: Spotify API calls noted as inefficient (multiple TODO comments)
+4. **Performance Monitoring**: Add real-time performance tracking and memory usage monitoring
 
 ### Medium Priority (Phase 1)
 1. **Code Organization**: Some TODOs remain unaddressed in codebase
@@ -233,6 +234,7 @@ This is not urgent but represents good practice for long-term maintainability an
 - ✅ **Error Handling & Validation**: COMPLETED - Added comprehensive error handling and user feedback for file uploads
 - ✅ **Test Infrastructure**: COMPLETED - Set up testing framework with unit/integration tests
 - ✅ **Input Validation & Security**: COMPLETED - Implemented comprehensive input validation and secrets management
+- **CI/CD Pipeline**: HIGH PRIORITY - Implement automated testing and Google Play deployment pipeline
 - **Performance Optimization**: Implement pagination and optimize database queries
 - **Code Cleanup**: Address existing TODOs and improve API efficiency
 - **Proper Logging**: Replace print statements with structured logging framework
@@ -264,6 +266,156 @@ This is not urgent but represents good practice for long-term maintainability an
 - `feature/ml-integration`: Mood analysis and personalized insights
 - `feature/advanced-visualizations`: Interactive charts with animations
 - `feature/mobile-optimization`: Platform-specific optimizations
+
+## CI/CD Pipeline & Deployment Infrastructure
+
+### Priority: High - Production Deployment Pipeline
+
+**Objective**: Implement a comprehensive CI/CD pipeline for automated testing, building, and deployment to Google Play Store.
+
+#### **Phase 1: Core CI/CD Setup**
+**Branch: `feature/cicd-pipeline`**
+
+##### **GitHub Actions Workflows:**
+1. **Continuous Integration (`ci.yml`)**:
+   - Triggered on all PRs and pushes to `dev` and `main`
+   - Flutter environment setup (stable channel)
+   - Dependency installation (`flutter pub get`)
+   - Code quality checks:
+     - `flutter analyze` (static analysis)
+     - `dart format --set-exit-if-changed .` (formatting)
+     - `flutter test` (run all 61+ tests)
+     - Coverage reporting with codecov integration
+   - Build verification for Android APK
+
+2. **Continuous Deployment (`cd.yml`)**:
+   - Triggered on pushes to `main` branch (production releases)
+   - Automated versioning (semantic versioning)
+   - Build signed Android App Bundle (AAB)
+   - Deploy to Google Play Console:
+     - Internal testing track (automatic)
+     - Beta track (manual approval)
+     - Production track (manual approval with staged rollout)
+
+##### **Security & Secrets Management:**
+- **GitHub Secrets** for sensitive configuration:
+  - `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`: Service account for Play Console API
+  - `ANDROID_KEYSTORE_BASE64`: Base64 encoded signing keystore
+  - `ANDROID_KEYSTORE_PASSWORD`: Keystore password
+  - `ANDROID_KEY_ALIAS`: Key alias for signing
+  - `ANDROID_KEY_PASSWORD`: Key password
+  - `SPOTIFY_CLIENT_ID`: Production Spotify API credentials
+  - `SPOTIFY_CLIENT_SECRET`: Production Spotify API secret
+
+##### **Build Configuration:**
+- **Flavors Setup**:
+  - `dev`: Development builds with debug features
+  - `staging`: Pre-production testing with production-like config
+  - `prod`: Production builds for Google Play release
+- **Automated Version Management**:
+  - Semantic versioning based on conventional commits
+  - Automatic changelog generation
+  - Build number increment for each release
+
+##### **Code Quality Gates:**
+- **Required Checks**:
+  - All tests must pass (61+ tests)
+  - Code coverage threshold: 80%+ for new code
+  - No critical security vulnerabilities (using dart audit)
+  - Performance benchmarks (app startup time, memory usage)
+  - No breaking changes in public APIs
+
+#### **Phase 2: Advanced Deployment Features**
+**Branch: `feature/advanced-deployment`**
+
+##### **Release Management:**
+- **Automated Release Notes**: Generate from conventional commits
+- **Staged Rollouts**: Start with 1% → 5% → 20% → 50% → 100%
+- **Rollback Capabilities**: Automatic rollback on crash rate increase
+- **A/B Testing Infrastructure**: Support for feature flags and experiments
+
+##### **Monitoring & Analytics:**
+- **Crash Reporting**: Firebase Crashlytics integration
+- **Performance Monitoring**: Firebase Performance integration
+- **User Analytics**: Privacy-focused analytics for usage patterns
+- **Release Health Metrics**: Track adoption, crash rates, and user satisfaction
+
+##### **Quality Assurance:**
+- **Automated Testing**:
+  - End-to-end testing with integration test suite
+  - Visual regression testing for UI components
+  - Performance testing (memory leaks, battery usage)
+  - Accessibility testing (screen reader compatibility)
+- **Manual Testing Workflows**:
+  - Internal testing checklist automation
+  - Beta tester feedback collection
+  - Release candidate validation process
+
+#### **Phase 3: Production Operations**
+**Branch: `feature/production-ops`**
+
+##### **Infrastructure as Code:**
+- **Google Cloud Platform Setup**:
+  - Cloud Build for advanced build pipelines
+  - Cloud Storage for build artifacts and app bundles
+  - Cloud Functions for webhook processing
+  - IAM roles and service accounts management
+
+##### **Release Pipeline:**
+- **Multi-Environment Strategy**:
+  - `dev` → Internal testing (automatic)
+  - `staging` → Beta testing (manual approval)
+  - `main` → Production release (manual approval + staged rollout)
+- **Feature Branch Previews**: Build preview APKs for feature branches
+- **Hotfix Pipeline**: Fast-track critical bug fixes to production
+
+##### **Compliance & Security:**
+- **Security Scanning**:
+  - Dependency vulnerability scanning
+  - Static application security testing (SAST)
+  - Secret scanning prevention
+- **Compliance Requirements**:
+  - GDPR compliance validation
+  - Google Play policy compliance checks
+  - Privacy policy automation
+
+#### **Required Setup Tasks:**
+
+##### **Google Play Console Configuration:**
+1. **App Registration**: Register Insightify in Google Play Console
+2. **Service Account**: Create service account with Play Developer API access
+3. **Signing Key**: Generate and configure app signing key
+4. **Store Listing**: Prepare app description, screenshots, and metadata
+5. **Content Rating**: Complete content rating questionnaire
+6. **Privacy Policy**: Deploy privacy policy and link in Play Console
+
+##### **GitHub Repository Setup:**
+1. **Branch Protection Rules**: Require PR reviews and status checks for `main`
+2. **Secrets Configuration**: Add all required secrets to repository settings
+3. **Workflow Files**: Create `.github/workflows/` directory with CI/CD workflows
+4. **Issue Templates**: Create templates for bug reports and feature requests
+5. **Pull Request Template**: Standardize PR descriptions and checklists
+
+##### **Development Environment:**
+1. **Android Signing**: Generate production keystore and configure signing
+2. **Flavor Configuration**: Set up build flavors in `android/app/build.gradle`
+3. **Environment Variables**: Configure different API endpoints per flavor
+4. **Version Management**: Implement automated version bumping strategy
+
+#### **Success Metrics:**
+- **Deployment Frequency**: Multiple deployments per week to beta, weekly to production
+- **Lead Time**: < 2 hours from code commit to production availability
+- **Change Failure Rate**: < 5% of deployments require hotfix or rollback
+- **Mean Time to Recovery**: < 4 hours for critical issues
+- **Test Coverage**: Maintain > 80% code coverage for all new features
+- **User Satisfaction**: App store rating > 4.5 stars
+
+#### **Risk Mitigation:**
+- **Automated Rollbacks**: Trigger rollback on crash rate > 2% increase
+- **Canary Releases**: Test with small user percentage before full rollout
+- **Feature Flags**: Ability to disable features without app update
+- **Emergency Procedures**: Documented process for critical hotfixes
+- **Backup Strategy**: Regular backups of signing keys and configuration
 
 ## Technical Debt & Code Quality
 
