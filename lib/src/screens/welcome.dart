@@ -54,9 +54,19 @@ class WelcomeScreen extends StatelessWidget {
           type = 'non-extended';
         } else {
           // Check if it's a partial match for extended data
-          final commonExtendedKeys = ['ts', 'master_metadata_track_name', 'master_metadata_album_artist_name', 'ms_played'];
-          final commonNonExtendedKeys = ['endTime', 'trackName', 'artistName', 'msPlayed'];
-          
+          final commonExtendedKeys = [
+            'ts',
+            'master_metadata_track_name',
+            'master_metadata_album_artist_name',
+            'ms_played'
+          ];
+          final commonNonExtendedKeys = [
+            'endTime',
+            'trackName',
+            'artistName',
+            'msPlayed'
+          ];
+
           if (entry.keys.toSet().containsAll(commonExtendedKeys)) {
             type = 'extended';
           } else if (entry.keys.toSet().containsAll(commonNonExtendedKeys)) {
@@ -86,21 +96,21 @@ class WelcomeScreen extends StatelessWidget {
 
   void _uploadData(BuildContext context, AppState state) async {
     final errorReporting = ErrorReportingService();
-    
+
     try {
       errorReporting.info('Starting file upload process');
-      
+
       final result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: ['json'],
           allowMultiple: true);
-      
+
       if (result != null) {
         state.setLoading = true;
 
         List<dynamic> data = [];
         List<String> errorMessages = [];
-        
+
         for (var file in result.files) {
           try {
             if (file.path == null) {
@@ -109,18 +119,20 @@ class WelcomeScreen extends StatelessWidget {
               errorReporting.fileError(errorMsg, file.name);
               continue;
             }
-            
-            errorReporting.debug('Processing file: ${file.name}', context: {'filePath': file.path});
+
+            errorReporting.debug('Processing file: ${file.name}',
+                context: {'filePath': file.path});
             final fileContents = File(file.path!).readAsStringSync();
-            
+
             // Validate JSON structure before parsing
             if (!InputValidator.validateJsonStructure(fileContents)) {
-              final errorMsg = 'File ${file.name}: Invalid or potentially unsafe JSON structure';
+              final errorMsg =
+                  'File ${file.name}: Invalid or potentially unsafe JSON structure';
               errorMessages.add(errorMsg);
               errorReporting.fileError(errorMsg, file.name);
               continue;
             }
-            
+
             final contents = InputValidator.safeJsonParse(fileContents);
             if (contents == null) {
               final errorMsg = 'File ${file.name}: Failed to parse JSON safely';
@@ -128,16 +140,20 @@ class WelcomeScreen extends StatelessWidget {
               errorReporting.fileError(errorMsg, file.name);
               continue;
             }
-            
+
             if (contents is List<dynamic>) {
               final type = _getDataType(contents);
-              
+
               if (type == 'extended' || type == 'non-extended') {
                 data.addAll(contents);
-                errorReporting.info('Successfully processed file: ${file.name}', 
-                    context: {'recordCount': contents.length, 'dataType': type});
+                errorReporting.info('Successfully processed file: ${file.name}',
+                    context: {
+                      'recordCount': contents.length,
+                      'dataType': type
+                    });
               } else {
-                final errorMsg = 'File ${file.name}: Unsupported data format ($type)';
+                final errorMsg =
+                    'File ${file.name}: Unsupported data format ($type)';
                 errorMessages.add(errorMsg);
                 errorReporting.fileError(errorMsg, file.name);
               }
@@ -149,13 +165,15 @@ class WelcomeScreen extends StatelessWidget {
           } catch (e, stackTrace) {
             final errorMsg = 'File ${file.name}: Error processing - $e';
             errorMessages.add(errorMsg);
-            errorReporting.fileError(errorMsg, file.name, error: e, stackTrace: stackTrace);
+            errorReporting.fileError(errorMsg, file.name,
+                error: e, stackTrace: stackTrace);
           }
         }
-        
+
         if (data.isNotEmpty) {
           try {
-            errorReporting.info('Attempting to insert ${data.length} records into database');
+            errorReporting.info(
+                'Attempting to insert ${data.length} records into database');
             final result = await DatabaseHelper().insertDataBatch(data);
             if (result > 0) {
               state.timeRange = await DatabaseHelper().getMaxDateRange();
@@ -164,12 +182,15 @@ class WelcomeScreen extends StatelessWidget {
               errorReporting.info('Successfully inserted data into database');
             } else {
               state.setLoading = false;
-              errorReporting.databaseError('Failed to insert data into database', operation: 'insertDataBatch');
+              errorReporting.databaseError(
+                  'Failed to insert data into database',
+                  operation: 'insertDataBatch');
               _showErrorDialog(context, 'Failed to insert data into database');
             }
           } catch (e, stackTrace) {
             state.setLoading = false;
-            errorReporting.databaseError('Database error during insertion', error: e, stackTrace: stackTrace, operation: 'insertDataBatch');
+            errorReporting.databaseError('Database error during insertion',
+                error: e, stackTrace: stackTrace, operation: 'insertDataBatch');
             _showErrorDialog(context, 'Database error: $e');
           }
         } else {
@@ -178,13 +199,17 @@ class WelcomeScreen extends StatelessWidget {
           if (errorMessages.isNotEmpty) {
             errorMsg += '\n\nErrors:\n${errorMessages.join('\n')}';
           }
-          errorReporting.warning('No valid data found in uploaded files', context: {'errorCount': errorMessages.length});
+          errorReporting.warning('No valid data found in uploaded files',
+              context: {'errorCount': errorMessages.length});
           _showErrorDialog(context, errorMsg);
         }
       }
     } catch (e, stackTrace) {
       state.setLoading = false;
-      errorReporting.critical('Unexpected error during file upload', error: e, stackTrace: stackTrace, category: ErrorCategory.fileProcessing);
+      errorReporting.critical('Unexpected error during file upload',
+          error: e,
+          stackTrace: stackTrace,
+          category: ErrorCategory.fileProcessing);
       _showErrorDialog(context, 'Unexpected error: $e');
     }
   }

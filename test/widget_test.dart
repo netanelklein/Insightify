@@ -11,12 +11,13 @@ import 'package:insightify/main.dart';
 import 'package:insightify/app_state.dart';
 
 void main() {
-  testWidgets('MyApp widget renders without error', (WidgetTester tester) async {
+  testWidgets('MyApp widget renders without error',
+      (WidgetTester tester) async {
     // Create a test AppState
     final appState = AppState(skipInit: true);
     appState.appReady = true;
     appState.dataReady = false;
-    
+
     // Build our app wrapped in a Provider and trigger a frame.
     await tester.pumpWidget(
       ChangeNotifierProvider<AppState>.value(
@@ -27,16 +28,17 @@ void main() {
 
     // Verify that the app renders without throwing an exception
     expect(find.byType(MaterialApp), findsOneWidget);
-    
+
     // Since the app starts with dataReady = false and loading = false,
     // it should show the WelcomeScreen
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 
-  testWidgets('App shows LoadingScreen when loading', (WidgetTester tester) async {
+  testWidgets('App shows LoadingScreen when loading',
+      (WidgetTester tester) async {
     final appState = AppState(skipInit: true);
     appState.setLoading = true;
-    
+
     await tester.pumpWidget(
       ChangeNotifierProvider<AppState>.value(
         value: appState,
@@ -45,7 +47,7 @@ void main() {
     );
 
     await tester.pump(); // Let the widget build
-    
+
     // The app should be showing some form of loading indication
     expect(find.byType(MaterialApp), findsOneWidget);
   });

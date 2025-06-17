@@ -1,0 +1,224 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'internal'
+        type: choice
+        options:
+        - internal
+        - production
+
+env:
+  FLUTTER_VERSION: '3.24.x'
+
+jobs:
+  version:
+    name: Generate Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      build_number: ${{ steps.version.outputs.build_number }}
+      
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install semantic-release
+      run: |
+        npm install -g semantic-release @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
+        
+    - name: Generate version
+      id: version
+      run: |
+        # Get the last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+        
+        # Get current version from pubspec.yaml
+        CURRENT_VERSION=$(grep "version:" pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+        
+        # Calculate build number (commits since first commit)
+        BUILD_NUMBER=$(git rev-list --count HEAD)
+        
+        # For now, use current version + build number
+        VERSION="${CURRENT_VERSION}+${BUILD_NUMBER}"
+        
+        echo "version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+        echo "build_number=${BUILD_NUMBER}" >> $GITHUB_OUTPUT
+        
+        echo "Generated version: ${VERSION}"
+
+  build:
+    name: Build App Bundle
+    runs-on: ubuntu-latest
+    needs: version
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        channel: 'stable'
+        cache: true
+        
+    - name: Create secrets file
+      run: |
+        mkdir -p lib/auth
+        cat > lib/auth/secrets.dart << EOF
+        class Secrets {
+          static const String spotifyClientId = '${{ secrets.SPOTIFY_CLIENT_ID }}';
+          static const String spotifyClientSecret = '${{ secrets.SPOTIFY_CLIENT_SECRET }}';
+          static const String spotifyRedirectUri = 'insightify://callback';
+        }
+        EOF
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Update version in pubspec.yaml
+      run: |
+        sed -i "s/version:.*/version: ${{ needs.version.outputs.version }}+${{ needs.version.outputs.build_number }}/" pubspec.yaml
+        
+    - name: Build App Bundle
+      run: |
+        # Determine flavor based on branch or manual input
+        if [ "${{ github.event.inputs.environment }}" = "production" ] || [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          FLAVOR="prod"
+          BUILD_MODE="--release"
+        else
+          FLAVOR="dev"
+          BUILD_MODE="--release"
+        fi
+        
+        echo "Building with flavor: $FLAVOR"
+        flutter build appbundle $BUILD_MODE --flavor $FLAVOR
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-bundle-${{ needs.version.outputs.version }}
+        path: build/app/outputs/bundle/*/release/*.aab
+        retention-days: 30
+
+  deploy_internal:
+    name: Deploy to Internal Testing
+    runs-on: ubuntu-latest
+    needs: [version, build]
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'internal'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-bundle-${{ needs.version.outputs.version }}
+        path: build/app/outputs/bundle/
+        
+    - name: Setup Google Play CLI
+      run: |
+        echo '${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}' > google-play-key.json
+        
+    - name: Deploy to Internal Testing
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        packageName: com.netanelk.insightify
+        releaseFiles: build/app/outputs/bundle/**/*.aab
+        track: internal
+        status: completed
+        inAppUpdatePriority: 2
+        userFraction: 1.0
+        whatsNewDirectory: distribution/whatsnew
+        mappingFile: build/app/outputs/mapping/*/release/mapping.txt
+
+  deploy_production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [version, build, deploy_internal]
+    if: github.event.inputs.environment == 'production'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: app-bundle-${{ needs.version.outputs.version }}
+        path: build/app/outputs/bundle/
+        
+    - name: Deploy to Production (Staged Rollout)
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        packageName: com.netanelk.insightify
+        releaseFiles: build/app/outputs/bundle/**/*.aab
+        track: production
+        status: completed
+        inAppUpdatePriority: 5
+        userFraction: 0.01  # Start with 1% rollout
+        whatsNewDirectory: distribution/whatsnew
+        mappingFile: build/app/outputs/mapping/*/release/mapping.txt
+
+  release_notes:
+    name: Generate Release Notes
+    runs-on: ubuntu-latest
+    needs: [version, deploy_internal]
+    if: always() && needs.deploy_internal.result == 'success'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Generate Release Notes
+      run: |
+        # Generate release notes from commits
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        
+        if [ -z "$LAST_TAG" ]; then
+          echo "## What's New in v${{ needs.version.outputs.version }}" > release_notes.md
+          echo "" >> release_notes.md
+          echo "Initial release of Insightify - Spotify Data Analyzer" >> release_notes.md
+        else
+          echo "## What's New in v${{ needs.version.outputs.version }}" > release_notes.md
+          echo "" >> release_notes.md
+          git log ${LAST_TAG}..HEAD --pretty=format:"- %s" --grep="feat\|fix\|perf" >> release_notes.md
+        fi
+        
+        cat release_notes.md
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ needs.version.outputs.version }}
+        name: Release v${{ needs.version.outputs.version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -78,6 +78,7 @@ android {
             dimension "default"
             resValue "string", "app_name", "Insightify Dev"
             applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
         }
         prod {
             dimension "default"

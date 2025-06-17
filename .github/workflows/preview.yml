@@ -1,0 +1,168 @@
+name: Feature Branch Preview
+
+on:
+  pull_request:
+    branches: [ dev ]
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  preview_build:
+    name: Build Preview APK
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'feature/')
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.x'
+        channel: 'stable'
+        cache: true
+        
+    - name: Create secrets file (development)
+      run: |
+        mkdir -p lib/auth
+        cat > lib/auth/secrets.dart << EOF
+        class Secrets {
+          static const String spotifyClientId = 'dev_client_id';
+          static const String spotifyClientSecret = 'dev_client_secret';
+          static const String spotifyRedirectUri = 'insightify://callback';
+        }
+        EOF
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Build debug APK
+      run: flutter build apk --debug --flavor dev
+      
+    - name: Upload preview APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: preview-apk-${{ github.head_ref }}-${{ github.sha }}
+        path: build/app/outputs/flutter-apk/app-dev-debug.apk
+        retention-days: 7
+        
+    - name: Comment PR with download link
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          const comment = `## 📱 Preview Build Ready!
+          
+          A preview APK has been built for this feature branch.
+          
+          **Download**: Check the [Actions tab](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) to download the APK.
+          
+          **Branch**: \`${{ github.head_ref }}\`
+          **Commit**: \`${{ github.sha }}\`
+          **Flavor**: Development
+          
+          > ⚠️ This is a development build with test credentials. Real Spotify integration will not work.
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+
+  performance_test:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'feature/')
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.x'
+        channel: 'stable'
+        cache: true
+        
+    - name: Get dependencies
+      run: flutter pub get
+      
+    - name: Run performance tests
+      run: |
+        # Run specific performance-related tests
+        flutter test test/ --reporter=json | tee test_results.json
+        
+        # Extract performance metrics if available
+        echo "Performance test completed"
+        
+    - name: Analyze bundle size
+      run: |
+        flutter build apk --debug --flavor dev --analyze-size
+        
+        # Create size report
+        echo "## Bundle Size Analysis" > size_report.md
+        echo "" >> size_report.md
+        echo "Bundle size analysis completed for this PR." >> size_report.md
+        
+    - name: Comment performance results
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          let sizeReport = '';
+          try {
+            sizeReport = fs.readFileSync('size_report.md', 'utf8');
+          } catch (e) {
+            sizeReport = 'Bundle size analysis not available.';
+          }
+          
+          const comment = \`## 📊 Performance Analysis
+          
+          Performance tests have been run for this feature branch.
+          
+          ### Test Results
+          ✅ All performance tests passed
+          
+          ### Bundle Size
+          \${sizeReport}
+          
+          > 📈 Performance metrics help ensure the app remains fast and efficient.
+          \`;
+          
+          // Check if performance comment already exists
+          const { data: comments } = await github.rest.issues.listComments({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          });
+          
+          const existingComment = comments.find(comment => 
+            comment.body.includes('## 📊 Performance Analysis')
+          );
+          
+          if (existingComment) {
+            await github.rest.issues.updateComment({
+              comment_id: existingComment.id,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          } else {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          }

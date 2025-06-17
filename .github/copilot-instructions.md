@@ -2,7 +2,18 @@ Always read the relevant ai-context.md file for the repository first to understa
 
 If such a file does not exist, create one with the current project state and update it as you work.
 
+PLANNING AND APPROVAL WORKFLOW:
+- For any significant changes, infrastructure setup, or new features: first create a detailed plan
+- Present the plan to the user for approval before implementing any code changes
+- Only proceed with implementation after explicit user approval
+- This includes CI/CD pipelines, major refactoring, new dependencies, or architectural changes
+
 Always update the relevant ai-context.md file after completing work and ask for user approval before committing.
+
+TESTING BEFORE MERGING:
+- All CI/CD pipelines and infrastructure changes must be tested before merging to main branches
+- Run local tests and verify functionality before requesting merge approval
+- Document any manual testing steps required for validation
 
 For new features, always create a new branch from the main branch and ensure it is up to date with the latest changes.
 

@@ -25,7 +25,7 @@ void main() async {
     await DatabaseHelper.initDatabase();
     errorReporting.info('Database initialized successfully');
   } catch (e, stackTrace) {
-    errorReporting.critical('Failed to initialize database', 
+    errorReporting.critical('Failed to initialize database',
         error: e, stackTrace: stackTrace, category: ErrorCategory.database);
   }
 

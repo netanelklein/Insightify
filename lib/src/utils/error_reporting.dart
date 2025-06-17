@@ -1,5 +1,5 @@
 /// Error reporting and structured logging utility
-/// 
+///
 /// Provides comprehensive error handling, crash reporting, and logging
 /// capabilities for production builds with privacy considerations.
 library;
@@ -47,8 +47,8 @@ class ErrorReport {
     required this.level,
     required this.category,
     Map<String, dynamic>? context,
-  }) : timestamp = DateTime.now(),
-       context = context ?? {};
+  })  : timestamp = DateTime.now(),
+        context = context ?? {};
 
   Map<String, dynamic> toJson() {
     return {
@@ -65,16 +65,17 @@ class ErrorReport {
 
 /// Main error reporting and logging service
 class ErrorReportingService {
-  static final ErrorReportingService _instance = ErrorReportingService._internal();
+  static final ErrorReportingService _instance =
+      ErrorReportingService._internal();
   factory ErrorReportingService() => _instance;
   ErrorReportingService._internal();
 
   final List<ErrorReport> _errorHistory = [];
   static const int maxErrorHistory = 100;
-  
+
   /// Whether to enable debug logging in development
   bool debugLoggingEnabled = true;
-  
+
   /// Whether to collect error reports for analytics (with user consent)
   bool errorCollectionEnabled = false;
 
@@ -89,12 +90,15 @@ class ErrorReportingService {
   }
 
   /// Log a warning
-  void warning(String message, {ErrorCategory? category, Map<String, dynamic>? context}) {
-    _log(LogLevel.warning, category ?? ErrorCategory.unknown, message, context: context);
+  void warning(String message,
+      {ErrorCategory? category, Map<String, dynamic>? context}) {
+    _log(LogLevel.warning, category ?? ErrorCategory.unknown, message,
+        context: context);
   }
 
   /// Log an error
-  void error(String message, {
+  void error(
+    String message, {
     Object? error,
     StackTrace? stackTrace,
     ErrorCategory? category,
@@ -105,7 +109,8 @@ class ErrorReportingService {
   }
 
   /// Log a critical error that may require immediate attention
-  void critical(String message, {
+  void critical(
+    String message, {
     Object? error,
     StackTrace? stackTrace,
     ErrorCategory? category,
@@ -116,7 +121,9 @@ class ErrorReportingService {
   }
 
   /// Log file processing errors
-  void fileError(String message, String? fileName, {
+  void fileError(
+    String message,
+    String? fileName, {
     Object? error,
     StackTrace? stackTrace,
     Map<String, dynamic>? context,
@@ -125,13 +132,14 @@ class ErrorReportingService {
       'fileName': fileName,
       ...?context,
     };
-    
+
     _log(LogLevel.error, ErrorCategory.fileProcessing, message,
         error: error, stackTrace: stackTrace, context: enrichedContext);
   }
 
   /// Log database errors
-  void databaseError(String message, {
+  void databaseError(
+    String message, {
     Object? error,
     StackTrace? stackTrace,
     String? operation,
@@ -141,13 +149,14 @@ class ErrorReportingService {
       'operation': operation,
       ...?context,
     };
-    
+
     _log(LogLevel.error, ErrorCategory.database, message,
         error: error, stackTrace: stackTrace, context: enrichedContext);
   }
 
   /// Log network/API errors
-  void networkError(String message, {
+  void networkError(
+    String message, {
     Object? error,
     StackTrace? stackTrace,
     String? endpoint,
@@ -159,13 +168,14 @@ class ErrorReportingService {
       'statusCode': statusCode,
       ...?context,
     };
-    
+
     _log(LogLevel.error, ErrorCategory.network, message,
         error: error, stackTrace: stackTrace, context: enrichedContext);
   }
 
   /// Log user input validation errors
-  void inputValidationError(String message, {
+  void inputValidationError(
+    String message, {
     String? fieldName,
     String? inputValue,
     Map<String, dynamic>? context,
@@ -176,12 +186,16 @@ class ErrorReportingService {
       'hasInputValue': inputValue != null,
       ...?context,
     };
-    
-    _log(LogLevel.warning, ErrorCategory.userInput, message, context: enrichedContext);
+
+    _log(LogLevel.warning, ErrorCategory.userInput, message,
+        context: enrichedContext);
   }
 
   /// Internal logging method
-  void _log(LogLevel level, ErrorCategory category, String message, {
+  void _log(
+    LogLevel level,
+    ErrorCategory category,
+    String message, {
     Object? error,
     StackTrace? stackTrace,
     Map<String, dynamic>? context,
@@ -214,8 +228,9 @@ class ErrorReportingService {
 
   /// Log to console with proper formatting
   void _logToConsole(ErrorReport report) {
-    final prefix = '[${report.level.name.toUpperCase()}] [${report.category.name}]';
-    
+    final prefix =
+        '[${report.level.name.toUpperCase()}] [${report.category.name}]';
+
     developer.log(
       '$prefix ${report.message}',
       time: report.timestamp,
@@ -293,9 +308,10 @@ class ErrorReportingService {
     for (final report in _errorHistory) {
       final levelKey = report.level.name;
       final categoryKey = report.category.name;
-      
+
       stats['byLevel'][levelKey] = (stats['byLevel'][levelKey] ?? 0) + 1;
-      stats['byCategory'][categoryKey] = (stats['byCategory'][categoryKey] ?? 0) + 1;
+      stats['byCategory'][categoryKey] =
+          (stats['byCategory'][categoryKey] ?? 0) + 1;
     }
 
     return stats;
