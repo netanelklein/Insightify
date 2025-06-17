@@ -44,7 +44,7 @@ dependencies:
   localstorage: ^4.0.1+4
   sqflite: ^2.3.0
   path: ^1.8.3
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.3.1
   scrollable_positioned_list: ^0.3.8
   flutter_sticky_header: ^0.6.5
