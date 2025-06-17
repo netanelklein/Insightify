@@ -185,13 +185,18 @@ class WelcomeScreen extends StatelessWidget {
               errorReporting.databaseError(
                   'Failed to insert data into database',
                   operation: 'insertDataBatch');
-              _showErrorDialog(context, 'Failed to insert data into database');
+              if (context.mounted) {
+                _showErrorDialog(
+                    context, 'Failed to insert data into database');
+              }
             }
           } catch (e, stackTrace) {
             state.setLoading = false;
             errorReporting.databaseError('Database error during insertion',
                 error: e, stackTrace: stackTrace, operation: 'insertDataBatch');
-            _showErrorDialog(context, 'Database error: $e');
+            if (context.mounted) {
+              _showErrorDialog(context, 'Database error: $e');
+            }
           }
         } else {
           state.setLoading = false;
@@ -201,7 +206,9 @@ class WelcomeScreen extends StatelessWidget {
           }
           errorReporting.warning('No valid data found in uploaded files',
               context: {'errorCount': errorMessages.length});
-          _showErrorDialog(context, errorMsg);
+          if (context.mounted) {
+            _showErrorDialog(context, errorMsg);
+          }
         }
       }
     } catch (e, stackTrace) {
@@ -210,7 +217,9 @@ class WelcomeScreen extends StatelessWidget {
           error: e,
           stackTrace: stackTrace,
           category: ErrorCategory.fileProcessing);
-      _showErrorDialog(context, 'Unexpected error: $e');
+      if (context.mounted) {
+        _showErrorDialog(context, 'Unexpected error: $e');
+      }
     }
   }
 

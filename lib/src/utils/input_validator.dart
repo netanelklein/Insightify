@@ -13,10 +13,6 @@ class InputValidator {
   /// Maximum length for general text input fields
   static const int maxTextLength = 1000;
 
-  /// Regex pattern for basic text sanitization (allows alphanumeric, spaces, and common punctuation)
-  static final RegExp _safeTextPattern =
-      RegExp(r'''^[a-zA-Z0-9\s\-_.,!?'"()&@#%]+$''');
-
   /// Regex pattern for artist/track names (allows Unicode characters for international names)
   static final RegExp _musicNamePattern =
       RegExp(r'''^[a-zA-Z0-9\u00C0-\u017F\u0100-\u024F\s\-_.,!?'"()&@#%/]+$''');
