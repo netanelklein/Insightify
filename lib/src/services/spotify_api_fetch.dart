@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../auth/secrets.dart';
+import '../utils/input_validator.dart';
 
 class AccessToken {
   String accessToken;
@@ -45,15 +46,28 @@ Future<AccessToken> getAccessToken() async {
 
 Future<List<String>> getTrackData(
     String artistName, String trackName, AccessToken token) async {
-  if (token.accessToken == '') {
+  // Validate and sanitize input parameters
+  final sanitizedArtist = InputValidator.sanitizeMusicName(artistName);
+  final sanitizedTrack = InputValidator.sanitizeMusicName(trackName);
+
+  if (token.accessToken == '' ||
+      sanitizedArtist == null ||
+      sanitizedTrack == null) {
     return ['', ''];
   }
+
   String trackUri = '';
   String albumName = '';
+
+  // URL encode the sanitized parameters
+  final encodedArtist = Uri.encodeComponent(sanitizedArtist);
+  final encodedTrack = Uri.encodeComponent(sanitizedTrack);
+
   var response = await http.get(
       Uri.parse(
-          "https://api.spotify.com/v1/search?q=remaster%20artist:$artistName%20track:$trackName&type=track&limit=1"),
+          "https://api.spotify.com/v1/search?q=remaster%20artist:$encodedArtist%20track:$encodedTrack&type=track&limit=1"),
       headers: {"Authorization": "${token.tokenType} ${token.accessToken}"});
+
   if (response.statusCode == 200) {
     Map<String, dynamic> data = json.decode(response.body);
     if (data['tracks']['items'].isNotEmpty) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import '../../utils/input_validator.dart';
 
 class BottomSearchBar extends StatefulWidget {
   const BottomSearchBar({
@@ -35,10 +36,13 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
   }
 
   search(String value) {
-    if (value.isNotEmpty) {
+    // Validate and sanitize the search input
+    final sanitizedValue = InputValidator.sanitizeSearchQuery(value);
+
+    if (sanitizedValue != null && sanitizedValue.isNotEmpty) {
       setState(() {
         indexes.clear();
-        getIndexes(value);
+        getIndexes(sanitizedValue);
       });
       if (indexes.isNotEmpty) {
         scrollTo(indexes[_currentIndex]);
@@ -109,15 +113,18 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
               constraints: const BoxConstraints(maxHeight: 65),
             ),
             onChanged: (value) {
-              if (value.isEmpty) {
+              // Sanitize input before processing
+              final sanitizedValue = InputValidator.sanitizeSearchQuery(value);
+
+              if (sanitizedValue == null || sanitizedValue.isEmpty) {
                 setState(() {
                   _searchText = '';
                   _currentIndex = 0;
                   indexes.clear();
                 });
               } else {
-                setState(() => _searchText = value);
-                search(value);
+                setState(() => _searchText = sanitizedValue);
+                search(sanitizedValue);
               }
             },
           )),

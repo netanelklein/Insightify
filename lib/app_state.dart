@@ -5,8 +5,10 @@ import 'src/utils/constants.dart';
 import 'src/utils/database_helper.dart';
 
 class AppState extends ChangeNotifier {
-  AppState() {
-    init();
+  AppState({bool skipInit = false}) {
+    if (!skipInit) {
+      init();
+    }
   }
 
   AccessToken accessToken = AccessToken.empty();

@@ -124,14 +124,14 @@ class _RootNavigationState extends State<RootNavigation> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground)),
+                                                  .onSurface)),
                                       TextSpan(
                                           text:
                                               'This app is still in development. If you have any suggestions or feedback, please email me at: ',
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground)),
+                                                  .onSurface)),
                                       TextSpan(
                                           text: 'insightify@netanelk.com',
                                           style: TextStyle(
@@ -150,7 +150,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground)),
+                                                  .onSurface)),
                                       TextSpan(
                                           text: 'GitHub',
                                           style: TextStyle(
@@ -171,7 +171,7 @@ class _RootNavigationState extends State<RootNavigation> {
                                           style: TextStyle(
                                               color: Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground)),
+                                                  .onSurface)),
                                     ])),
                                     actions: [
                                       TextButton(

@@ -51,7 +51,7 @@ class _TimeOfDayChartState extends State<TimeOfDayChart> {
                       size: touchedIndex == 0 ? 18 : 16,
                       textColor: touchedIndex == 0
                           ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onBackground,
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                     Indicator(
                       color: Colors.primaries[1],
@@ -60,7 +60,7 @@ class _TimeOfDayChartState extends State<TimeOfDayChart> {
                       size: touchedIndex == 1 ? 18 : 16,
                       textColor: touchedIndex == 1
                           ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onBackground,
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                   ],
                 ),
@@ -75,7 +75,7 @@ class _TimeOfDayChartState extends State<TimeOfDayChart> {
                         size: touchedIndex == 2 ? 18 : 16,
                         textColor: touchedIndex == 2
                             ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onBackground,
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                       Indicator(
                         color: Colors.primaries[3],
@@ -84,7 +84,7 @@ class _TimeOfDayChartState extends State<TimeOfDayChart> {
                         size: touchedIndex == 3 ? 18 : 16,
                         textColor: touchedIndex == 3
                             ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.onBackground,
+                            : Theme.of(context).colorScheme.onSurface,
                       ),
                     ]),
               ],
