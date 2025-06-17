@@ -1,8 +1,8 @@
-Always read the relevant .ai-context.md file for the repository first to understand current project state.
+Always read the relevant ai-context.md file for the repository first to understand current project state.
 
 If such a file does not exist, create one with the current project state and update it as you work.
 
-Always update the relevant .ai-context.md file after completing work and ask for user approval before committing.
+Always update the relevant ai-context.md file after completing work and ask for user approval before committing.
 
 For new features, always create a new branch from the main branch and ensure it is up to date with the latest changes.
 
