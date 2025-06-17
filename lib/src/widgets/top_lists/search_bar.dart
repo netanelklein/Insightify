@@ -38,7 +38,7 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
   search(String value) {
     // Validate and sanitize the search input
     final sanitizedValue = InputValidator.sanitizeSearchQuery(value);
-    
+
     if (sanitizedValue != null && sanitizedValue.isNotEmpty) {
       setState(() {
         indexes.clear();
@@ -115,7 +115,7 @@ class _BottomSearchBarState extends State<BottomSearchBar> {
             onChanged: (value) {
               // Sanitize input before processing
               final sanitizedValue = InputValidator.sanitizeSearchQuery(value);
-              
+
               if (sanitizedValue == null || sanitizedValue.isEmpty) {
                 setState(() {
                   _searchText = '';

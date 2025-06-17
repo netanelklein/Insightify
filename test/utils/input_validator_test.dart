@@ -11,7 +11,8 @@ void main() {
       });
 
       test('should trim whitespace', () {
-        expect(InputValidator.sanitizeSearchQuery('  hello  '), equals('hello'));
+        expect(
+            InputValidator.sanitizeSearchQuery('  hello  '), equals('hello'));
       });
 
       test('should limit length to maxSearchLength', () {
@@ -27,10 +28,12 @@ void main() {
       });
 
       test('should handle normal search queries', () {
-        expect(InputValidator.sanitizeSearchQuery('The Beatles'), equals('The Beatles'));
-        expect(InputValidator.sanitizeSearchQuery("Rock 'n' Roll"), equals("Rock 'n' Roll"));
-        expect(InputValidator.sanitizeSearchQuery('Song Title (feat. Artist)'), 
-               equals('Song Title (feat. Artist)'));
+        expect(InputValidator.sanitizeSearchQuery('The Beatles'),
+            equals('The Beatles'));
+        expect(InputValidator.sanitizeSearchQuery("Rock 'n' Roll"),
+            equals("Rock 'n' Roll"));
+        expect(InputValidator.sanitizeSearchQuery('Song Title (feat. Artist)'),
+            equals('Song Title (feat. Artist)'));
       });
     });
 
@@ -47,7 +50,8 @@ void main() {
       });
 
       test('should handle valid music names', () {
-        expect(InputValidator.sanitizeMusicName('The Beatles'), equals('The Beatles'));
+        expect(InputValidator.sanitizeMusicName('The Beatles'),
+            equals('The Beatles'));
         expect(InputValidator.sanitizeMusicName('Björk'), equals('Björk'));
         expect(InputValidator.sanitizeMusicName('AC/DC'), equals('AC/DC'));
       });
@@ -55,7 +59,10 @@ void main() {
       test('should sanitize invalid characters', () {
         const input = 'Song<script>alert("xss")</script>';
         final result = InputValidator.sanitizeMusicName(input);
-        expect(result, equals('Songscriptalert("xss")/script')); // Remove < and > but keep valid chars like /
+        expect(
+            result,
+            equals(
+                'Songscriptalert("xss")/script')); // Remove < and > but keep valid chars like /
       });
     });
 
@@ -125,7 +132,8 @@ void main() {
       test('should return true for valid HTTP URLs', () {
         expect(InputValidator.isValidUrl('http://example.com'), isTrue);
         expect(InputValidator.isValidUrl('https://example.com'), isTrue);
-        expect(InputValidator.isValidUrl('https://api.spotify.com/v1/tracks'), isTrue);
+        expect(InputValidator.isValidUrl('https://api.spotify.com/v1/tracks'),
+            isTrue);
       });
 
       test('should return false for non-HTTP protocols', () {
@@ -153,9 +161,11 @@ void main() {
       });
 
       test('should check file extensions', () {
-        expect(InputValidator.sanitizeFilePath('file.json', ['json']), equals('file.json'));
+        expect(InputValidator.sanitizeFilePath('file.json', ['json']),
+            equals('file.json'));
         expect(InputValidator.sanitizeFilePath('file.txt', ['json']), isNull);
-        expect(InputValidator.sanitizeFilePath('file.JSON', ['json']), equals('file.JSON'));
+        expect(InputValidator.sanitizeFilePath('file.JSON', ['json']),
+            equals('file.JSON'));
       });
     });
 
