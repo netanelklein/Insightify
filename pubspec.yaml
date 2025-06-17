@@ -41,7 +41,7 @@ dependencies:
   http: ^1.1.0
   provider: ^6.0.5
   url_launcher: ^6.1.12
-  localstorage: ^4.0.1+4
+  localstorage: ^6.0.0
   sqflite: ^2.3.0
   path: ^1.8.3
   flutter_launcher_icons: ^0.13.1
