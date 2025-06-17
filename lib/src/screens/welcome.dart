@@ -7,8 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../app_state.dart';
 import '../utils/database_helper.dart';
-import '../utils/input_validator.dart';
 import '../utils/error_reporting.dart';
+import '../utils/input_validator.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
