@@ -48,10 +48,16 @@ jobs:
     - name: Build debug APK
       run: flutter build apk --debug --flavor dev
       
+    - name: Sanitize branch name for artifact
+      id: sanitize
+      run: |
+        SANITIZED_BRANCH=$(echo "${{ github.head_ref }}" | sed 's/[^a-zA-Z0-9._-]/-/g')
+        echo "branch_name=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
+      
     - name: Upload preview APK
       uses: actions/upload-artifact@v4
       with:
-        name: preview-apk-${{ github.head_ref }}-${{ github.sha }}
+        name: preview-apk-${{ steps.sanitize.outputs.branch_name }}-${{ github.sha }}
         path: build/app/outputs/flutter-apk/app-dev-debug.apk
         retention-days: 7
         
