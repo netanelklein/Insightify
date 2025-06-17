@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/cli_commands.dart';
 
 import '../../utils/functions.dart';
 import '../charts/hour_distribution_chart.dart';

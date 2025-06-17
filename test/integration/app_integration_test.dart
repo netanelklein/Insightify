@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:insightify/main.dart';
+
 import 'package:insightify/app_state.dart';
+import 'package:insightify/main.dart';
 import 'package:insightify/src/utils/input_validator.dart';
 
 void main() {

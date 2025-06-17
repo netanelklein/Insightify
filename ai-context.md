@@ -88,7 +88,36 @@ Insightify is a Flutter mobile application that allows users to analyze their Sp
 - `test/integration/app_integration_test.dart` - 10 integration tests for app workflows
 - `test/widget_test.dart` - Provider-based widget tests for UI components
 
-**Branch & Development State**: `feature/immediate-improvements` - Ready for merge with all 61 tests passing.
+**Branch & Development State**: `feature/immediate-improvements` - Merged to `dev` with all 61 tests passing.
+
+### 🚧 CI/CD Pipeline Implementation - IN PROGRESS (June 2025)
+**Goal**: Implement comprehensive CI/CD pipeline with automated testing, quality checks, and deployment
+**Progress**: 
+- ✅ Created GitHub Actions workflows (CI, CD, Preview, Dependencies)
+- ✅ Added repository configuration (issue templates, PR template, Dependabot)
+- ✅ Simplified Android build flavors to dev/prod only
+- ✅ Implemented secrets management for CI/CD environments  
+- ✅ Fixed workflow errors: secrets format, bundle analysis, performance testing
+- ✅ Local CI simulation passed: formatting, analysis, 61 tests passed
+- 🔄 Remote testing in progress after error fixes
+
+**Current State**: 
+- All workflows deployed and error fixes committed (`aa915a1`)
+- Testing pipeline on GitHub Actions with corrected secrets format
+- Ready for final validation and merge to main
+
+**Files Created/Modified**:
+- `.github/workflows/ci.yml` - Continuous Integration workflow
+- `.github/workflows/cd.yml` - Continuous Deployment workflow  
+- `.github/workflows/preview.yml` - Feature branch preview builds
+- `.github/workflows/dependencies.yml` - Dependency management
+- `.github/ISSUE_TEMPLATE/` - Bug report and feature request templates
+- `.github/pull_request_template.md` - PR template with checklist
+- `.github/dependabot.yml` - Automated dependency updates
+- `.github/SETUP.md` - Repository setup and configuration guide
+- `android/app/build.gradle` - Simplified flavors, fixed app icons
+- `scripts/local-ci.sh` - Local CI simulation script
+- `distribution/whatsnew/whatsnew-en-US` - Play Store release notes
   - auth/ - Spotify API authentication
   - src/
     - models/ - Data models
