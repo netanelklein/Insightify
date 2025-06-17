@@ -66,11 +66,9 @@ create_dev_secrets() {
     
     if [ ! -f "lib/auth/secrets.dart" ]; then
         cat > lib/auth/secrets.dart << EOF
-class Secrets {
-  static const String spotifyClientId = 'dev_client_id';
-  static const String spotifyClientSecret = 'dev_client_secret';
-  static const String spotifyRedirectUri = 'insightify://callback';
-}
+const String spotifyClientID = 'dev_client_id';
+const String spotifyClientSecret = 'dev_client_secret';
+const String spotifyRedirectUri = 'insightify://callback';
 EOF
         print_success "Development secrets file created"
     else

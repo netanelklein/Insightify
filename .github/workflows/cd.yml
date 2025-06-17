@@ -86,11 +86,9 @@ jobs:
       run: |
         mkdir -p lib/auth
         cat > lib/auth/secrets.dart << EOF
-        class Secrets {
-          static const String spotifyClientId = '${{ secrets.SPOTIFY_CLIENT_ID }}';
-          static const String spotifyClientSecret = '${{ secrets.SPOTIFY_CLIENT_SECRET }}';
-          static const String spotifyRedirectUri = 'insightify://callback';
-        }
+        const String spotifyClientID = '${{ secrets.SPOTIFY_CLIENT_ID }}';
+        const String spotifyClientSecret = '${{ secrets.SPOTIFY_CLIENT_SECRET }}';
+        const String spotifyRedirectUri = 'insightify://callback';
         EOF
         
     - name: Get dependencies
