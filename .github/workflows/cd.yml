@@ -81,6 +81,9 @@ jobs:
         flutter-version: ${{ env.FLUTTER_VERSION }}
         channel: 'stable'
         cache: true
+    
+    - name: Increase Gradle Heap Size
+      run: echo "org.gradle.jvmargs=-Xmx4096m" >> android/gradle.properties
         
     - name: Create secrets file
       run: |
