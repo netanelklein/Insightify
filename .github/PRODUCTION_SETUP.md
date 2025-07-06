@@ -13,24 +13,36 @@ Before deploying to production, ensure you have:
 
 ## 🚀 Production Deployment Checklist
 
-### 1. Google Play Console Setup
+### 1. Google Play Console Setup (App Already Exists)
 
-#### A. Create App in Play Console
+Since your app already exists in Google Play Console, you'll need to:
+
+#### A. Access Your Existing App
 1. Go to [Google Play Console](https://play.google.com/console)
-2. Create new app: "Insightify - Spotify Data Analyzer"
-3. Complete app information:
-   - **Category**: Music & Audio
-   - **Content Rating**: Everyone
-   - **Privacy Policy**: Required (create one)
-   - **Target Audience**: All ages
+2. Select your existing "Insightify" or "Spotify Analyzer" app
+3. Navigate to the main dashboard for your app
 
-#### B. Generate Service Account for CI/CD
-1. Go to Setup → API access in Play Console
-2. Create new service account in Google Cloud Console
-3. Download JSON key file
-4. Grant permissions in Play Console:
-   - Release manager
-   - Editor (for app info updates)
+#### B. Generate Service Account for CI/CD (Current UI)
+**Note**: Google Play Console UI changes frequently. Look for these sections:
+
+**Method 1 - Via Setup Menu:**
+1. In your app dashboard, look for "Setup" in the left sidebar
+2. Find "API access" or "Play Console API access"
+3. Click "Create new service account" or "Link Google Cloud project"
+
+**Method 2 - Via Google Cloud Console Directly:**
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create or select a project
+3. Go to "IAM & Admin" → "Service accounts"
+4. Create service account with these roles:
+   - Service Account User
+   - Storage Admin (for uploading APKs)
+5. Generate and download JSON key
+
+**Method 3 - Via Play Console Settings:**
+1. Look for "Settings" gear icon (usually top right)
+2. Find "Developer account" → "API access"
+3. Follow the service account setup flow
 
 #### C. Prepare Store Listing
 - **App Description**: Ready in `distribution/store_listing/`
@@ -246,3 +258,47 @@ Before first production release:
 **Status**: Production infrastructure ready, waiting for significant feature addition before first release.
 **Last Updated**: June 17, 2025
 **Next Review**: Before first production deployment
+
+## 🔧 Troubleshooting Common UI Issues
+
+### Google Play Console Interface Changes
+The Google Play Console interface changes frequently. If the documentation doesn't match:
+
+#### Finding API Access:
+- **Look for**: "Setup", "Settings", "API access", "Play Console API"
+- **Common locations**: Left sidebar, settings gear icon, or under "Publishing overview"
+- **Alternative**: Go directly to [Google Cloud Console](https://console.cloud.google.com) for service account creation
+
+#### Service Account Permissions:
+After creating the service account, ensure these permissions in Play Console:
+- **Release manager**: Can upload and release APKs
+- **Editor**: Can modify app information
+- **Viewer**: Can view app data (minimum required)
+
+#### Upload Key vs App Signing Key:
+- **Upload Key**: What you'll use to sign APKs for upload
+- **App Signing Key**: Google manages this for distribution
+- **Migration**: If your app uses legacy app signing, you may need to migrate
+
+### Current Step-by-Step Process:
+
+1. **Tell me what screen you're currently seeing** in Google Play Console
+2. **I'll provide updated instructions** based on the current UI
+3. **We'll get the service account JSON** for GitHub secrets
+4. **Set up the signing configuration** for automated releases
+
+### What Information Do You Need to Gather:
+
+From Google Play Console:
+- [ ] Service account JSON file (for GitHub secrets)
+- [ ] Package name (should be `com.example.spotify_analyzer` or similar)
+- [ ] Current app signing status (Google-managed or legacy)
+
+From Your Development Environment:
+- [ ] Production keystore file (if not using Google-managed signing)
+- [ ] Keystore passwords and alias information
+- [ ] Spotify API production credentials
+
+---
+
+**Next Steps**: Can you describe what you're seeing in the Google Play Console right now? I'll provide specific instructions for the current interface.
