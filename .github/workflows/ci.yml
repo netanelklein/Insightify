@@ -24,12 +24,15 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.x'
+        flutter-version: '3.32.x'
         channel: 'stable'
         cache: true
         
     - name: Get dependencies
       run: flutter pub get
+    
+    - name: Increase Gradle Heap Size
+      run: echo "org.gradle.jvmargs=-Xmx4096m" >> android/gradle.properties
       
     - name: Create secrets file for testing
       run: |
@@ -69,7 +72,7 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.x'
+        flutter-version: '3.32.x'
         channel: 'stable'
         cache: true
         
