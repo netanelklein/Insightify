@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   countries_world_map: ^1.1.0
-  fl_chart: ^1.0.0
+  fl_chart: ^1.1.1
   file_picker: ^10.2.0
 
 
